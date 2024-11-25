@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-  ini_set('display_errors', 1);
-     ini_set('display_startup_errors', 1);
-     error_reporting(E_ALL);   
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
