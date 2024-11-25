@@ -2587,6 +2587,7 @@ SET tax = TRIM(BOTH ',' FROM tax)";
     public function employee_create() {
         $decodedId = decodeBase64UrlParameter($this->input->post('company_id'));
         $admin_id  = decodeBase64UrlParameter($this->input->post('admin_id'));
+
         if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
             $no_files = count($_FILES["files"]['name']);
             for ($i = 0; $i < $no_files; $i++) {
@@ -2649,6 +2650,7 @@ SET tax = TRIM(BOTH ',' FROM tax)";
                 }
             }
         }
+
         $data_empolyee['last_name']              = $this->input->post('last_name');
         $data_empolyee['designation']            = $this->input->post('designation');
         $data_empolyee['first_name']             = $this->input->post('first_name');
@@ -2659,6 +2661,7 @@ SET tax = TRIM(BOTH ',' FROM tax)";
         $data_empolyee['employee_type']          = $this->input->post('employee_type');
         $data_empolyee['rate_type']              = $this->input->post('paytype');
         $data_empolyee['payroll_type']           = $this->input->post('payroll_type');
+        $data_empolyee['payroll_freq']           = $this->input->post('payroll_freq');
         $data_empolyee['choice']                 = $this->input->post('choice');
         $data_empolyee['email']                  = $this->input->post('email');
         $data_empolyee['hrate']                  = $this->input->post('hrate');

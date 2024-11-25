@@ -9,10 +9,10 @@ $active_record = TRUE;//ci version 2.x
 
 $db['default'] = array(
     'dsn'   => '',
-        'hostname' => 'localhost',
-     'username' => 'amoriotech_stockeai',
-    'password' => 'Amorio@2022',
-    'database' => 'amoriotech_stockeai',
+    'hostname' => 'localhost',
+    'username' => 'root',//amoriotech_stockeai
+    'password' => '',//Amorio@2022
+    'database' => 'wagers_new',//amoriotech_stockeai
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
