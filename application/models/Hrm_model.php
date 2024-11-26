@@ -140,20 +140,22 @@ public function get_employee_sal($id , $tax){
          }
         return true;
     }
-public function total_unemployment($id){
+
+    public function total_unemployment($id, $user_id)
+    {
         $user_id = $this->session->userdata('user_id');
-         $this->db->select('SUM(u_tax) as unempltotal');
+        $this->db->select('SUM(u_tax) as unempltotal');
         $this->db->from('tax_history_employer');
         $this->db->where('employee_id', $id);
-            $this->db->where('tax', 'Unemployment');
+        $this->db->where('tax', 'Unemployment');
         $this->db->where('created_by', $user_id);
         $query = $this->db->get();
-  echo $this->db->last_query();
         if ($query->num_rows() > 0) {
             return $query->row_array();
         }
         return false;
     }
+
 public function get_employee_sal_ytd($id) {
     $user_id = $this->session->userdata('user_id');
     $this->db->select('SUM(total_amount) as overalltotal, sc');
@@ -1586,7 +1588,7 @@ public function state_tax(){
 // Retrieve Federal Tax - Madhu
 public function federal_tax_info($tax_type,$employee_status,$final,$federal_range, $user_id)
 {
-    $this->db->select('employee, employer');
+    $this->db->select('employee, employer, details');
     $this->db->from('federal_tax');
     $this->db->like('tax',$tax_type);
     $this->db->where($employee_status,$federal_range);
@@ -3477,6 +3479,7 @@ if ($query->num_rows() > 0) {
 }
 return [];
 }
+
 // To get the state tax details - Used in payslip and time_list functions
 public function get_state_details($find, $table, $where, $state, $user_id)
 {
@@ -3488,10 +3491,11 @@ public function get_state_details($find, $table, $where, $state, $user_id)
     }
     return [];
 }
+
 // To get the state tax details - Used in state_tax function
 public function working_state_tax($taxname,$employee_status,$final,$local_tax_range, $stateTax="",$user_id,$payroll)
 {
-    $this->db->select('employee,employer,tax');
+    $this->db->select('employee,employer,tax,details,single,tax_filling,married,head_household');
     if (strpos($taxname, 'Income') !== false) {
     if($payroll =='Hourly'){
     $this->db->from('state_localtax');

@@ -928,22 +928,20 @@ class Chrm extends CI_Controller {
         $this_period_statetax = [];
         $table = '';
     
-
-        foreach ($tax_split as $tax) {
-   if (strpos($tax, 'Income') !== false) {
-    if($payroll =='Hourly'){
-    $table ='state_localtax';
-    }else if($payroll == 'Salaried-weekly'){
-$table ='weekly_tax_info';
-    }else if($payroll == 'Salaried-BiWeekly'){
-        $table ='biweekly_tax_info';
-    }else if ($payroll == 'Salaried-Monthly') {
-      $table ='monthly_tax_info';
-} 
-}else{
-    $table ='state_localtax';
-}
-
+            foreach ($tax_split as $tax) {
+               if (strpos($tax, 'Income') !== false) {
+                if($payroll =='Hourly'){
+                $table ='state_localtax';
+                }else if($payroll == 'Salaried-weekly'){
+            $table ='weekly_tax_info';
+                }else if($payroll == 'Salaried-BiWeekly'){
+                    $table ='biweekly_tax_info';
+                }else if ($payroll == 'Salaried-Monthly') {
+                  $table ='monthly_tax_info';
+            } 
+            }else{
+                $table ='state_localtax';
+            }
 
             $tax_data = $this->Hrm_model->get_state_details('*', $table, 'tax', $state_tax[0]['state'] . "-" . $tax, $user_id);
          
@@ -954,12 +952,21 @@ $table ='weekly_tax_info';
                         $range               = $split[0] . "-" . $split[1];
 
                         $data['working_tax'] = $this->Hrm_model->working_state_tax($tax_data[0]['tax'],$employee_tax, $this_period, $range, $state_tax[0]['state'], $user_id,$payroll);
+
                        if (!empty($data['working_tax'])) {
                             foreach ($data['working_tax'] as $contribution) {
                                 $employee              = $contribution['employee'];
                                 $employer              = $contribution['employer'];
-                                $employee_contribution = ($employee / 100) * $this_period;
-                                $employer_contribution = ($employer / 100) * $this_period;
+
+                                // Tax Add amount
+                                $employeeTax           = $contribution[$employee_tax];
+                                $employeeTaxExplode    = explode('-', $employeeTax);
+                                $checkFinalAmount      = floatval($this_period - $employeeTaxExplode[0]);
+
+                                $employee_contribution = floatval(($employee / 100) * $checkFinalAmount + $contribution['details']);
+                                 
+                                $employer_contribution = floatval(($employer / 100) * $this_period);
+
                                 $row                   = $this->db->select('*')->from($table)->where('employee', $employee)->where('tax', $tax_data[0]['tax'])->where($employee_tax, $range)->where('created_by', $user_id)->count_all_results();
                                 $employee_tax_key      = "'employee_" . $tax_data[0]['tax'] . "'";
                                 $employer_tax_key      = "'employer_" . $tax_data[0]['tax'] . "'";
@@ -995,7 +1002,7 @@ $table ='weekly_tax_info';
                                                 'amount'        => round($employee_contribution, 3),
                                                 'created_by'    => $user_id,
                                             );
-                                            $this->db->insert('tax_history', $tax_history_employee);echo $this->db->last_query();
+                                            $this->db->insert('tax_history', $tax_history_employee);
 
                                         }
                                         if ($employer_contribution) {
@@ -1058,7 +1065,7 @@ $table ='weekly_tax_info';
             'this_perid_state_tax' => $this_period_statetax,
             'overall_state_tax'    => $overall_state_tax,
         );
-
+       
         return $data;
     }
     public function time_list() {
@@ -1952,7 +1959,9 @@ $table ='weekly_tax_info';
     }
 // Country Tax - Madhu
     public function countryTax($tax_type, $employee_tax_column, $final, $templ_name, $tax_history_column, $user_id, $endDate, $timesheet_id) {
+        echo 
         $tax                = $this->db->select('*')->from('federal_tax')->where('tax', $tax_type)->where('created_by', $user_id)->get()->result_array();
+        echo $this->db->last_query(); 
         $tax_range          = '';
         $ytd                = [];
         $tax_value          = 0;
@@ -1970,15 +1979,26 @@ $table ='weekly_tax_info';
         $tax_info_method = strtolower(str_replace(' ', '_', $tax_type)) . '_tax_info';
 
         $data[$tax_type] = $this->Hrm_model->federal_tax_info($tax_type, $employee_tax_column, $final, $tax_range, $user_id);
+        print_r($data[$tax_type]);
 
         if (isset($data[$tax_type][0]['employee']) && is_numeric($data[$tax_type][0]['employee'])) {
             $tax_employee = $data[$tax_type][0]['employee'];
             $tax_value    = round(($tax_employee / 100) * $final, 3);
         }
 
+        // Calculate total unemployment
+        $total_unemployment = $this->Hrm_model->total_unemployment($templ_name, $user_id);
+        $total_unemployment_rounded = round($total_unemployment['unempltotal']);
+
         if (isset($data[$tax_type][0]['employer']) && is_numeric($data[$tax_type][0]['employer'])) {
-            $tax_employer       = $data[$tax_type][0]['employer'];
-            $tax_value_employer = round(($tax_employer / 100) * $final, 3);
+            $tax_employer = $data[$tax_type][0]['employer'];
+
+            // Set Cap Amount For Unemployment
+            if ($total_unemployment_rounded <= $data[$tax_type][0]['details']) {
+                $tax_value_employer = round(($tax_employer / 100) * $final, 3);
+            } else {
+                $tax_value_employer = 0; 
+            }
         }
 
         $sum_of_country_tax = $this->Hrm_model->sum_of_country_tax($endDate, $templ_name, $timesheet_id, $user_id);
@@ -1997,6 +2017,7 @@ $table ='weekly_tax_info';
             $data['t_f_tax'] = $sum_of_country_tax[0]['t_f_tax'] ?? 0;
             $data['t_u_tax'] = $sum_of_country_tax[0]['t_u_tax'] ?? 0;
         }
+
 
         return [
             'ytd'                => $ytd,
