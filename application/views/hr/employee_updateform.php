@@ -264,23 +264,30 @@
                               <input name="sc" class="form-control" type="text" value="<?= html_escape($employee_data[0]['sc']);?>" placeholder="<?= 'sales commission' ?>"  oninput="exitsalecommission(this, 2)">
                            </div>
                         </div>
-                     <div class="form-group row" id="payment_from">
+                     
+                        <div class="form-group row" id="payment_from">
                            <label for="payroll_type" class="col-sm-4 col-form-label"> Payroll Type <i class="text-danger">*</i></label>
                            <div class="col-sm-8">
                               <select  name="payroll_type" id="payroll_type"  requried class="form-control" >
                                  <option value="<?= html_escape($employee_data[0]['payroll_type'])?>"><?= html_escape($employee_data[0]['payroll_type'])?></option>
-                                 <option value="Hourly">Hourly</option>
-                                 <!--<option value="Salaried-weekly">Salaried-Weekly</option>-->
-                                 <!--<option value="Salaried-BiWeekly">Salaried-BiWeekly</option>-->
-                                 <!--<option value="Salaried-Monthly">Salaried-Monthly</option>-->
-                                 <!--<option value="Salaried-BiMonthly">Salaried-BiMonthly</option>-->
-                                 <!--<option value="SalesCommission">SalesCommission</option>-->
-                                 <!--<?php foreach($payroll_data as $prolltype){ ?>-->
-                                 <!--<option value="<?= $prolltype['payroll_type'] ;?>"><?= $prolltype['payroll_type'] ;?></option>-->
-                                 <!--<?php  } ?>-->
+                                 <option value="Hourly" <?= ($employee_data[0]['payroll_type'] == "Hourly") ? 'selected' : ''; ?> >Hourly</option>
+                                 <option value="Fixed" <?= ($employee_data[0]['payroll_type'] == "Fixed") ? 'selected' : ''; ?> >Salaried/Fixed</option>
                               </select>
                            </div>
                         </div>
+
+                        <div class="form-group row" id="">
+                           <label for="payroll_freq" class="col-sm-4 col-form-label"> Payroll Frequency <i class="text-danger">*</i></label>
+                           <div class="col-sm-8">
+                              <select  name="payroll_freq" id="payroll_freq" class="form-control">
+                                 <option value="">Select the Payroll Frequency</option>
+                                 <option value="Weekly" <?= ($employee_data[0]['payroll_freq'] == "Weekly") ? 'selected' : ''; ?> >Weekly</option>
+                                 <option value="Bi-Weekly" <?= ($employee_data[0]['payroll_freq'] == "Bi-Weekly") ? 'selected' : ''; ?> >Bi-Weekly</option>
+                                 <option value="Monthly"<?= ($employee_data[0]['payroll_freq'] == "Monthly") ? 'selected' : ''; ?> >Monthly</option>
+                              </select>
+                           </div>
+                        </div>
+
                         <div class="form-group row">
                            <label for="hour_rate_or_salary"  id="cost" class="col-sm-4 col-form-div">Pay rate(<?= $currency; ?>)  <i class="text-danger">*</i></label>
                            <div class="col-sm-8">

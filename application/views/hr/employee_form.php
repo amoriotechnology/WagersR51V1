@@ -281,24 +281,26 @@
                         <input type="radio" name="choice" value="No">No
                         </div>
                   </div>
-              <div class="form-group row" id="payment_from">
+                  <div class="form-group row" id="payment_from">
                      <label for="payroll_type" class="col-sm-4 col-form-label"> Payroll Type <i class="text-danger">*</i></label>
                      <div class="col-sm-8">
                         <select  name="payroll_type" id="payroll_type" requried class="form-control"  >
                            <option value="">Select the Payroll Type</option>
                            <option value="Hourly">Hourly</option>
-                           <option value="Salaried-weekly">Salaried-Weekly</option>
-                           <option value="Salaried-BiWeekly">Salaried-BiWeekly</option>
-                           <option value="Salaried-Monthly">Salaried-Monthly</option>
-                           <!--<option value="Salaried-BiMonthly">Salaried-BiMonthly</option>-->
-                           <!--<option value="SalesCommission">SalesCommission</option>-->
-                           <?php foreach($payroll_data as $prolltype){ ?>
-                           <option value="<?php  echo $prolltype['payroll_type'] ;?>"><?php  echo $prolltype['payroll_type'] ;?></option>
-                           <!--<?php  } ?>-->
+                           <option value="Fixed">Salaried/Fixed</option>
+                           
                         </select>
                      </div>
-                     <div class="col-sm-1">
-                        <!-- <a  class="client-add-btn btn btnclr" aria-hidden="true"   data-toggle="modal" data-target="#proll_type" ><i class="fa fa-plus"></i></a> -->
+                  </div>
+                  <div class="form-group row" id="">
+                     <label for="payroll_freq" class="col-sm-4 col-form-label"> Payroll Frequency <i class="text-danger">*</i></label>
+                     <div class="col-sm-8">
+                        <select  name="payroll_freq" id="payroll_freq" requried class="form-control">
+                           <option value="">Select the Payroll Frequency</option>
+                           <option value="Weekly">Weekly</option>
+                           <option value="Bi-Weekly">Bi-Weekly</option>
+                           <option value="Monthly">Monthly</option>
+                        </select>
                      </div>
                   </div>
                   <div class="form-group row">
