@@ -140,20 +140,22 @@ public function get_employee_sal($id , $tax){
          }
         return true;
     }
-public function total_unemployment($id){
+
+    public function total_unemployment($id, $user_id)
+    {
         $user_id = $this->session->userdata('user_id');
-         $this->db->select('SUM(u_tax) as unempltotal');
+        $this->db->select('SUM(u_tax) as unempltotal');
         $this->db->from('tax_history_employer');
         $this->db->where('employee_id', $id);
-            $this->db->where('tax', 'Unemployment');
+        $this->db->where('tax', 'Unemployment');
         $this->db->where('created_by', $user_id);
         $query = $this->db->get();
-  echo $this->db->last_query();
         if ($query->num_rows() > 0) {
             return $query->row_array();
         }
         return false;
     }
+
 public function get_employee_sal_ytd($id) {
     $user_id = $this->session->userdata('user_id');
     $this->db->select('SUM(total_amount) as overalltotal, sc');
@@ -1586,7 +1588,7 @@ public function state_tax(){
 // Retrieve Federal Tax - Madhu
 public function federal_tax_info($tax_type,$employee_status,$final,$federal_range, $user_id)
 {
-    $this->db->select('employee, employer');
+    $this->db->select('employee, employer, details');
     $this->db->from('federal_tax');
     $this->db->like('tax',$tax_type);
     $this->db->where($employee_status,$federal_range);
@@ -3477,46 +3479,72 @@ if ($query->num_rows() > 0) {
 }
 return [];
 }
+
 // To get the state tax details - Used in payslip and time_list functions
 public function get_state_details($find, $table, $where, $state, $user_id)
 {
     $this->db->select($find)->from($table)->where($where, $state)->where('created_by', $user_id);
     $query = $this->db->get();
+    
+    if ($query === false) {
+        return [];
+    }
+    
     if ($query->num_rows() > 0) {
-        $result = $query->result_array();
-        return $result;
+        return $query->result_array();
     }
     return [];
 }
+
+
 // To get the state tax details - Used in state_tax function
-public function working_state_tax($taxname,$employee_status,$final,$local_tax_range, $stateTax="",$user_id,$payroll)
+public function working_state_tax($taxname, $employee_status, $final, $local_tax_range, $stateTax = "", $user_id, $payroll, $payroll_frequency)
 {
-    $this->db->select('employee,employer,tax');
+    $this->db->select('employee, employer, tax, details, single, tax_filling, married, head_household');
+    
     if (strpos($taxname, 'Income') !== false) {
-    if($payroll =='Hourly'){
-    $this->db->from('state_localtax');
-    }else if($payroll == 'Salaried-weekly'){
-    $this->db->from('weekly_tax_info');
-    }else if($payroll == 'Salaried-BiWeekly'){
-        $this->db->from('biweekly_tax_info');
-    }else if ($payroll == 'Salaried-Monthly') {
-        $this->db->from('monthly_tax_info');
-} 
-}else{
-    $this->db->from('state_localtax');
-}
-    $this->db->where($employee_status,$local_tax_range);
-    if($stateTax !=""){
+        if ($payroll == 'Hourly' || $payroll == 'Fixed') {
+            switch ($payroll_frequency) {
+                case 'Weekly':
+                    $this->db->from('weekly_tax_info');
+                    break;
+                case 'Bi-Weekly':
+                    $this->db->from('biweekly_tax_info');
+                    break;
+                case 'Monthly':
+                    $this->db->from('monthly_tax_info');
+                    break;
+                default:
+                    $this->db->from('state_localtax');
+                    break;
+            }
+        }
+    } else {
+        $this->db->from('state_localtax');  
+    }
+
+    
+    $this->db->where($employee_status, $local_tax_range);
+    
+    if ($stateTax != "") {
         $this->db->like('tax', $stateTax);
     }
+    
     $this->db->where('created_by', $user_id);
+
     $query = $this->db->get();
-  
-   if ($query->num_rows() > 0) {
-       return $query->result_array();
+    
+    if ($query === false) {
+        return false;
     }
-     return true;
- }
+
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    
+    return true; 
+}
+
 //To get the tax amount of current timesheet_id
 public function get_tax_history($tax_type,$tax,$timesheet){
     $this->db->select('amount')->from('tax_history')
@@ -3539,7 +3567,7 @@ public function get_cumulative_tax_amount($tax, $end, $employee, $tax_type) {
         ->where('timesheet_info.templ_name', $employee)
         ->where('tax_history.tax', $tax)
         ->where('tax_history.tax_type', $tax_type)
-        ->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%m/%d/%Y') <= STR_TO_DATE('$end', '%m/%d/%Y')", NULL, FALSE);
+        ->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%d/%m/%Y') <= STR_TO_DATE('$end', '%d/%m/%Y')", NULL, FALSE);
     $query = $this->db->get();
    if ($query->num_rows() > 0) {
         $result = $query->row_array();
@@ -3563,7 +3591,7 @@ $this->db->join('info_payslip', 'timesheet_info.timesheet_id = info_payslip.time
 $this->db->where('info_payslip.templ_name',$empid);
 $this->db->where('info_payslip.create_by', $user_id);
 if($end_date){
-$this->db->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%m/%d/%Y') <= STR_TO_DATE(' $end_date', '%m/%d/%Y')", NULL, FALSE);
+    $this->db->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%d/%m/%Y') <= STR_TO_DATE('$end_date', '%d/%m/%Y')", NULL, FALSE);
 }
 $query = $this->db->get();
     if ($query->num_rows() > 0) {
