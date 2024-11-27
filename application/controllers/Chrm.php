@@ -1512,6 +1512,7 @@ class Chrm extends CI_Controller {
         $emp_data     = [];
         $setting      = $this->CI->Web_settings->retrieve_setting_editdata();
         $company_info = $this->CI->Web_settings->retrieve_companysetting_editdata();
+
         if ($type == 'emp_data') {
             $id       = $this->input->get('employee');
             $emp_data = $this->Hrm_model->getDatas('employee_history', '*', ['id' => $id]);
@@ -1535,9 +1536,10 @@ class Chrm extends CI_Controller {
             'type'         => $type,
             'emp_datas'    => $emp_data,
         );
+
         if (!empty($timesheet_data)) {
             $fname = 'Timesheet';
-            $data  = array(
+            $data['time_data']  = array(
                 'id'             => $timesheet_data[0]['id'],
                 'first_name'     => $timesheet_data[0]['first_name'],
                 'last_name'      => $timesheet_data[0]['last_name'],
@@ -1548,10 +1550,12 @@ class Chrm extends CI_Controller {
                 'cheque_no'      => $timesheet_data[0]['cheque_no'],
                 'payment_method' => $timesheet_data[0]['payment_method'],
                 'timesheet_data' => $timesheet_details,
+                'currency'     => $company_info[0]['currency'],
                 'total_hours'    => $timesheet_data[0]['total_hours'],
-                'admin_name'     => $admin_name[0]['adm_name'],
+                'admin_name'     => (!empty($admin_name[0]['adm_name']) ? $admin_name[0]['adm_name'] : ''),
             );
         }
+
         $content = $this->load->view('hr/emp_timesheet_html', $data, true);
         $PDF     = new Dompdf();
         $PDF->loadHtml($content);
@@ -1800,6 +1804,7 @@ class Chrm extends CI_Controller {
         $edit       = "";
         $delete     = "";
         foreach ($items as $item) {
+
             $row = [
                 "table_id"    => $i,
                 "first_name"  => $item["first_name"] . ' ' . $item["middle_name"] . ' ' . $item["last_name"],
@@ -1807,9 +1812,9 @@ class Chrm extends CI_Controller {
                 "month"       => $item["month"],
                 "cheque_date" => $item["cheque_date"],
                 "total_hours" => (!empty($item['total_hours']) ? $item['total_hours'] : 0),
-                "tot_amt"     => (!empty($item['extra_hour']) ? ($item['amount'] + $item['extra_amount']) : $item['extra_amount']),
-                "overtime"    => !empty($item['extra_hour']) ? $item['hour'] : '0',
-                "sales_comm"  => $item['sales_c_amount'],
+                "tot_amt"     => (!empty($item['extra_amount']) ? ($item['total_period'] + $item['extra_amount']) : $item['total_period']),
+                "overtime"    => (!empty($item['extra_hour']) ? $item['extra_hour'] : 0),
+                "sales_comm"  => (!empty($item['sales_c_amount']) ? $item['sales_c_amount'] : 0),
                 "action"      => "<a href='" . base_url('Chrm/time_list?id=' . $encodedId . '&admin_id=' . $admin_id . '&timesheet_id=' . $item['timesheet_id'] . '&templ_name=' . $item['templ_name']) . "' class='btnclr btn btn-success btn-sm'> <i class='fa fa-window-restore'></i> </a>",
             ];
             $data[] = $row;
@@ -2914,6 +2919,7 @@ SET tax = TRIM(BOTH ',' FROM tax)";
         $content                    = $this->parser->parse('hr/resumepdf', $data, true);
         $this->template->full_admin_html_view($content);
     }
+
     // create employee
     public function create_employee() {
         $this->load->model('Hrm_model');
