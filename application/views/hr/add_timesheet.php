@@ -298,6 +298,11 @@ $(document).on('select change'  ,'#templ_name', function () {
                 $('#job_title').val(result[0]['designation']);
                 $('#payroll_type').val(result[0]['payroll_type']);
                 $('#payroll_freq').val(result[0]['payroll_freq']);
+
+                if(result[0]['payroll_freq'] != "") {
+                    getDatePicker(result[0]['payroll_freq']);
+                }
+
             } else {
                 $('#job_title').val("Sales Partner");
                 $('#payroll_type').val("Sales Partner");
@@ -321,54 +326,123 @@ $split=explode("to",$dat);
 
 var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
-$(function() {
+
+function diffDays(startday, endday) {
+    var res = 7;
+    if(startday > endday) {
+        if(endday == 0) {
+            res = (7 - startday);
+        } else {
+            res = (endday + parseInt(startday - endday));
+        }
+    } else if(endday > startday) {
+        res = parseInt(endday - startday);
+    }
+    return res;
+}
+
+var weeks = {'Sunday' : 0, 'Monday' : 1, 'Tuesday': 2, 'Wednesday' : 3, 'Thusday' : 4, 'Friday' : 5, 'Saturday' : 6};
+
+function getDatePicker(payroll_freq) {
+
     var start = moment().startOf('isoWeek'); 
     var end = moment().endOf('isoWeek'); 
     var startOfLastWeek = moment().subtract(1, 'week').startOf('week');
     var endOfLastWeek = moment().subtract(1, 'week').endOf('week').add(1, 'day'); 
+
+    var start_week = $('#week_setting').data('start');
+    var end_week = $('#week_setting').data('end');
+
+    var btwDays = diffDays(weeks[start_week], weeks[end_week]);
+    var sDate = moment().weekday(weeks[start_week]).startOf();
+    if(payroll_freq == "Weekly") {
+        var eDate = moment(sDate).add(btwDays, 'days');
+    } else if(payroll_freq == "Bi-Weekly") {
+        var eDate = moment(sDate).add((btwDays * 2), 'days');
+    } else {
+        var eDate = moment().endOf('isoWeek');
+    }
+    
     function cb(start, end) {
         $('#reportrange').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
     }
 
-    var start_week = "<?php echo (!empty($setting_detail[0]['start_week'])) ? $setting_detail[0]['start_week'] : 'Monday'; ?>";
-    var end_week = "<?php echo (!empty($setting_detail[0]['end_week']) ? $setting_detail[0]['end_week'] : 'Friday'); ?>";
-    var weeks = {'Sunday' : 0, 'Monday' : 1, 'Tuesday': 2, 'Wednesday' : 3, 'Thusday' : 4, 'Friday' : 5, 'Saturday' : 6};
     var ThisWeekStart = moment().weekday(weeks[start_week]).startOf()._d;
     var LastWeekStart = moment().subtract(1,  'week').startOf().weekday(weeks[start_week])._d;
     var BeforeLastWeekStart = moment().subtract(2,  'week').startOf().weekday(weeks[start_week])._d;
-    
-    function diffDays(startday, endday) {
-        var res = 7;
-        if(startday > endday) {
-            if(endday == 0) {
-                res = (7 - startday);
-            } else {
-                res = (endday + parseInt(startday - endday));
+
+    var date_range = {};
+    if(payroll_freq == "Weekly") {
+        date_range = {
+            maxDate: 0,
+            startDate: start,
+            endDate: end,
+            ThisWeek: ThisWeekStart,
+            LastWeek: LastWeekStart,
+            beforeWeek:BeforeLastWeekStart,
+            ranges: {
+                'Last Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+                'Last Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+                'This Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+            },
+            locale: {
+                firstDay: 1
+            },
+            isInvalidDate: function(date) {
+                return date.day() !== weeks[start_week];
             }
-        } else if(endday > startday) {
-            res = parseInt(endday - startday);
         }
-        return res;
+    }
+
+    if(payroll_freq == "Bi-Weekly") {
+        date_range = {
+            startDate: start,
+            endDate: end,
+            ThisWeek: ThisWeekStart,
+            LastWeek: LastWeekStart,
+            beforeWeek:BeforeLastWeekStart,
+            ranges: {
+                'Last Bi Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+                'Last Bi Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+                'This Bi Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
+            },
+            locale: {
+                firstDay: 1
+            },
+            isInvalidDate: function(date) {
+                return date.day() !== weeks[start_week];
+            }
+        }
+    }
+
+    if(payroll_freq == "Monthly") {
+        date_range = {
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }
     }
     
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ThisWeek: ThisWeekStart,
-        LastWeek: LastWeekStart,
-        beforeWeek:BeforeLastWeekStart,
-        ranges: {
-           
-            'Last Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'Last Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'This Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-    }, cb);
+    $('#reportrange').daterangepicker(date_range, cb);
 
 
   $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+
+    var startDate = $('#week_setting').data('start');
+    var endDate = $('#week_setting').data('end');
+    var btwDays = diffDays(weeks[startDate], weeks[endDate]);
+    var sDate = moment(picker.startDate._d);
+    var eDate = moment(picker.startDate._d).add(btwDays, 'days');
+
+    var payroll_freq = $('#payroll_freq').val();
+    if(payroll_freq == "Weekly") {
+
+    }
+
+    $('#reportrange').val(sDate.format('MM/DD/YYYY') + ' - ' + eDate.format('MM/DD/YYYY'));
       
     var data= {
         selectedDate: $('#reportrange').val(),
@@ -391,12 +465,35 @@ $(function() {
     });
 });
 
-cb(start, end);
-});
+cb(sDate, eDate);
+
+}
 
 
 $('body').on('input select change','#reportrange',function() {
-    var date = $(this).val();
+
+    var selectdate = $(this).val();
+    var start = selectdate.split(" - ");
+
+    var startDate = $('#week_setting').data('start');
+    var endDate = $('#week_setting').data('end');
+    var btwDays = diffDays(weeks[startDate], weeks[endDate]);
+
+    var pay_freq = $('#payroll_freq').val();
+    var sDate = moment(start[0]).weekday(weeks[startDate]).startOf('day');
+
+    if(pay_freq == "Weekly") {
+        var eDate = moment(sDate).add(btwDays, 'days');
+        var date = (sDate.format('MM/DD/YYYY') + ' - ' + eDate.format('MM/DD/YYYY'));
+
+    } else if(pay_freq == "Bi-Weekly") {
+        var eDate = moment(sDate).add((btwDays * 2), 'days');
+        var date = (sDate.format('MM/DD/YYYY') + ' - ' + eDate.format('MM/DD/YYYY'));
+    
+    } else {
+        var date = selectdate;
+    }
+
     $('#tBody').empty();
     $('#tHead').empty();  
     $('#tFoot').empty();
