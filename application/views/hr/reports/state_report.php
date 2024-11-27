@@ -352,14 +352,14 @@ $found_employer_state_tax        = $merged_reports_employer[$time_sheet_id]['sta
     $found_employer_living_state_tax = $merged_reports_employer[$time_sheet_id]['living_state_tax'];
 
     foreach ($found_employer_state_tax as $employer_state_tax): ?>
-                <td><?php echo isset($employer_state_tax['amount']) ? $employer_state_tax['amount'] : '0'; ?></td>
+                <td><?php echo isset($employer_state_tax['amount']) ? $employer_state_tax['amount'] : '0'; break; ?></td>
             <?php endforeach;?>
 
             <?php if (empty($found_employer_living_state_tax)): ?>
                 <td>0</td>
             <?php else: ?>
                 <?php foreach ($found_employer_living_state_tax as $employer_living_state_tax): ?>
-                    <td><?php echo isset($employer_living_state_tax['amount']) ? $employer_living_state_tax['amount'] : '0'; ?></td>
+                    <td><?php echo isset($employer_living_state_tax['amount']) ? $employer_living_state_tax['amount'] : '0'; break;?></td>
                 <?php endforeach;?>
             <?php endif;?>
         </tr>
@@ -372,25 +372,13 @@ $found_employer_state_tax        = $merged_reports_employer[$time_sheet_id]['sta
             <td><?php echo $d; ?></td>
             <td><?php echo $state_tax['first_name'] . ' ' . $state_tax['middle_name'] . ' ' . $state_tax['last_name']; ?></td>
             <td><?php echo $state_tax['employee_tax']; ?></td>
-            <td><?php echo $state_tax['state_tx']; ?></td>
+            <td><?php echo $state_tax['working_state_tax']; ?></td>
             <td><?php echo $state_tax['living_state_tax']; ?></td>
             <td><?php echo $state_tax['time_sheet_id']; ?></td>
             <td><?php echo $state_tax['month']; ?></td>
             <td>
                 <?php
-$final_amount = '';
-
-    if ($state_tax['weekly'] > 0) {
-        $final_amount = $state_tax['weekly'];
-    } elseif ($state_tax['biweekly'] > 0) {
-        $final_amount = $state_tax['biweekly'];
-    } elseif ($state_tax['monthly'] > 0) {
-        $final_amount = $state_tax['monthly'];
-    } else {
-        $final_amount = $state_tax['amount'];
-    }
-
-    echo '0';
+ echo '0';
     ?>
             </td>
 
@@ -418,14 +406,17 @@ $living_state_tax_found = false;
 
     // Display employer state tax data
     foreach ($found_employer_state_tax as $employer_state_tax): ?>
-                <td><?php echo isset($employer_state_tax['amount']) ? number_format($employer_state_tax['amount'], 3) : '0'; ?></td>
-            <?php endforeach;?>
+                <td><?php echo isset($employer_state_tax['amount']) ? number_format($employer_state_tax['amount'], 3) : '0';         break;?></td>
+           
+                <?php endforeach;?>
 
             <?php if (empty($found_employer_living_state_tax)): ?>
                 <td>0</td>
             <?php else: ?>
                 <?php foreach ($found_employer_living_state_tax as $employer_living_state_tax): ?>
-                    <td><?php echo isset($employer_living_state_tax['amount']) ? number_format($employer_living_state_tax['amount'], 3) : '0'; ?></td>
+                    <td><?php echo isset($employer_living_state_tax['amount']) ? number_format($employer_living_state_tax['amount'], 3) : '0'; 
+                    break;
+                    ?></td>
                 <?php endforeach;?>
             <?php endif;?>
         </tr>
