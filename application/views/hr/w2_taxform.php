@@ -352,13 +352,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -771,13 +771,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -1107,13 +1107,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -1516,13 +1516,13 @@ echo '$'.$S_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -1916,13 +1916,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -2211,13 +2211,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }
@@ -2312,13 +2312,13 @@ echo '$'.$t_tax;
                 
                 $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax0']) ? number_format($stateTax[0]['overalltotal_statetax0'], 2) : '0';
 
-                }else if ($gettaxdata[0]['payroll_type'] == 'Salaried-weekly' ) {
+                }else if ($gettaxdata[0]['payroll_type'] == 'Weekly' ) {
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax1']) ? number_format($stateTax[0]['overalltotal_statetax1'], 2) : '0';
 
-                } else if($gettaxdata[0]['payroll_type'] == 'Salaried-BiWeekly' ){
+                } else if($gettaxdata[0]['payroll_type'] == 'Bi-Weekly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax2']) ? number_format($stateTax[0]['overalltotal_statetax2'], 2) : '0';
 
-                }else if($gettaxdata[0]['payroll_type'] == 'Salaried-Monthly' ){
+                }else if($gettaxdata[0]['payroll_type'] == 'Monthly' ){
                   $overalltotal_statetax = isset($stateTax[0]['overalltotal_statetax3']) ? number_format($stateTax[0]['overalltotal_statetax3'], 2) : '0';
 
                 }

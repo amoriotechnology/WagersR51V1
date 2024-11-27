@@ -112,31 +112,32 @@ function add_time($time1, $time2) {
           <table class="table" style='margin-bottom:0px;'>
             <tr class='btnclr'>
               <th style='font-size:12px;'>EARNINGS</th>
-              <th> <?php if (
-                $employee_info[0]["payroll_type"] ==
-                    "Hourly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-weekly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-BiWeekly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-Monthly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-BiMonthly"
+              <th> <?php
+                if (
+                    ($employee_info[0]["payroll_type"] == "Hourly") ||
+                    ($employee_info[0]["payroll_type"] == "Fixed" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"]))
                 ) {
-                echo "DAYS";
+                    echo "DAYS";
                 } else {
-                echo "HRS/ UNITS";
-                } ?> </th>
+                    echo "HRS/ UNITS";
+                }
+                ?>
+              </th>
               <th>RATE</th>
               <th>THIS PERIOD(<?php echo $setting[0]["currency"]; ?>)</th>
-              <th> <?php if ($employee_info[0]["payroll_type"] =="Hourly" ||$employee_info[0]["payroll_type"] =="Salaried-weekly" ||
-                $employee_info[0]["payroll_type"] == "Salaried-BiWeekly" ||$employee_info[0]["payroll_type"] =="Salaried-Monthly" ||
-                $employee_info[0]["payroll_type"] =="Salaried-BiMonthly") {
-                echo "YTD DAYS";
+              <th> <?php
+                if (
+                    $employee_info[0]["payroll_type"] == "Hourly" || 
+                    ($employee_info[0]["payroll_type"] == "Fixed" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"]))
+                ) {
+                    echo "YTD DAYS";
                 } else {
-                echo "HRS/HOURS";
-                } ?> </th>
+                    echo "HRS/HOURS";
+                }
+                ?>
+              </th>
               <th>YTD(<?php echo $setting[0]["currency"]; ?>)</th>
             </tr>
             <tr>
@@ -146,14 +147,19 @@ function add_time($time1, $time2) {
               <td id="total_period"><?php echo round($timesheet_info[0]["amount"],2); ?></td>
               <td style="display:none;" id="total_period"><?php echo $ytd["ytd_salary"]; ?></td>
               <td><?php 
-            if ($employee_info[0]["payroll_type"] == "Hourly") {
-               $hours = substr($ytd["ytd_hours_excl_overtime_in_time"], 0, 5);
-              echo  isset($hours) ?  $hours : "00:00";
-            }else{  
-              echo $ytd["ytd_hours_excl_overtime"];
-            }
-               ?></td>
-              <td id="total_ytd"><?php echo $ytd["ytd_salary" ]; ?></td>
+              if (
+                  $employee_info[0]["payroll_type"] == "Hourly" || 
+                  ($employee_info[0]["payroll_type"] == "Fixed" && 
+                  in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"]))
+              ) {
+                  $hours = substr($ytd["ytd_hours_excl_overtime_in_time"], 0, 5);
+                  echo isset($hours) ? $hours : "00:00";
+              } else {  
+                  echo $ytd["ytd_hours_excl_overtime"];
+              }
+              ?>
+            </td>
+            <td id="total_ytd"><?php echo $ytd["ytd_salary" ]; ?></td>
            </tr>
             <?php if ($employee_info[0]["payroll_type"] == "Hourly") { ?> 
             <tr>
@@ -174,7 +180,7 @@ echo "00:00";
     ?> </td>
             </tr>
             <?php } ?> 
-            <?php if ($employee_info[0]["payroll_type"] == "Hourly") { ?> 
+            <?php if ($employee_info[0]["payroll_type"] == "Hourly" || $employee_info[0]["payroll_type"] == "Fixed") { ?> 
             <tr>
               <th><strong>TOTAL :</strong></td>
               <th> <?php echo $timesheet_info[0]["total_hours"];?> </th>
@@ -227,22 +233,27 @@ echo "00:00";
                 <th>YTD(<?php echo $setting[0]["currency" ]; ?>)</th>
               </tr>
               <?php if (
-                $employee_info[0]["payroll_type"] == "Hourly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-weekly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-BiWeekly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "Salaried-Monthly" ||
-                $employee_info[0]["payroll_type"] ==
-                    "SalesCommission"
-                ) { ?> <?php if ($this_social["tax_data"]["t_s_tax"]) { ?> 
+                $employee_info[0]["payroll_type"] == "Hourly" || 
+                $employee_info[0]["payroll_type"] == "Fixed" ||
+                $employee_info[0]["payroll_freq"] == "Weekly" || 
+                $employee_info[0]["payroll_freq"] == "Bi-Weekly" || 
+                $employee_info[0]["payroll_freq"] == "Monthly" || 
+                $employee_info[0]["payroll_freq"] == "SalesCommission"
+              ) { ?>
+                <?php if ($this_social["tax_data"]["t_s_tax"]) { ?> 
               <tr>
                 <td style="text-align:left;"> Social Security</td>
                 <td>S O</td>
-                <td class="current"><?php if ($this_social["tax_value"] ) { echo "-" . round($this_social["tax_value"], 3); } ?></td>
-                <td class="ytd"><?php if ($this_social["tax_data"]["t_s_tax"] ) { echo round( $this_social["tax_data"]["t_s_tax"],3);
-                  } ?></td>
+                <td class="current">
+                  <?php if ($this_social["tax_value"]) { 
+                    echo "-" . round($this_social["tax_value"], 3); 
+                  } ?>
+                </td>
+                <td class="ytd">
+                  <?php if ($this_social["tax_data"]["t_s_tax"]) { 
+                    echo round($this_social["tax_data"]["t_s_tax"], 3); 
+                  } ?>
+                </td>
               </tr>
               <?php } ?> <?php if ($this_medicare["tax_data"]["t_m_tax"]) { ?> 
               <tr>

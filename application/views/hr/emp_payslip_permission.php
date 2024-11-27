@@ -38,7 +38,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height:50px;">
                         <div class="panel-title">
-                            <a style="float:right;background-color:#38469f;color:white;" href="<?php echo base_url('Chrm/manage_timesheet') ?>" class="btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
                     <!-- <?php// echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?> -->
@@ -56,8 +56,7 @@
                                 <div class="col-sm-8">
 
 <input  type="hidden"   readonly id="tsheet_id" value="<?php echo $time_sheet_data[0]['timesheet_id'];?>" name="tsheet_id" />
-<input  type="hidden"   readonly id="unique_id" value="<?php echo $time_sheet_data[0]['unique_id'];?>" name="unique_id" />
-                                        
+<input  type="hidden"   readonly id="unique_id" value="<?php echo $time_sheet_data[0]['unique_id'];?>" name="unique_id" />                                        
          <select name="templ_name" id="templ_name" class="form-control"    tabindex="3" style="width100">
 <?php if (empty($employee_name[0]['id'])): ?>
     <option value="<?php echo $employee[0]['id'];  ?>"><?php echo $employee[0]['first_name'] . " " . $employee[0]['last_name']; ?></option>
@@ -81,12 +80,10 @@
                             </div>
 
 
-
                          <div class="col-sm-6">
                                 <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                               <div class="col-sm-8">
                               <input type="text" name="job_title" id="job_title" readonly placeholder="Job title" value="<?php echo empty($employee_name[0]['designation']) ? 'Sales Partner' : $employee_name[0]['designation']; ?>" class="form-control">
-
                                 </div>
                             </div>
                         </div>
@@ -101,7 +98,9 @@
                              <div class="col-sm-6">
                              <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Type <i class="text-danger"></i></label>
                              <div class="col-sm-8">
-                             <input id="payroll_type" name="payroll_type" type="text" value="<?php echo $time_sheet_data[0]['payroll_type'] ; ?>" style="margin-left: -4px;width: 493px;" readonly class="form-control"/>
+                             <input id="payroll_type" name="payroll_freq" type="text" value="<?php echo $time_sheet_data[0]['payroll_freq']; ?>" style="margin-left: -4px;width: 493px;" readonly class="form-control"/>
+
+                            <input  type="hidden"  value="<?php echo $employee[0]['payroll_type'];?>" name="payroll_type" />
                             </div>
                              </div>
                             </div>
@@ -112,66 +111,22 @@
 		                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
 								<thead class="btnclr">
 									<tr style="text-align:center;">
-
- 
-  
                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-2">Date</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
-    <th style='height:25px;' class="col-md-2">Date</th>
-    <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
- 
-                                        <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-1">Day</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
-    <th style='height:25px;' class="col-md-1">Day</th>
-    <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
- 
-                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th class="col-md-1">Daily Break in mins</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
- <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
- 
-                                        <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-2">Start Time (HH:MM)</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
- <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
- 
-                                        <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
- <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
- 
-                                     
-                                        <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
-    <th style='height:25px; ' class="col-md-5">Hours</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
-    <th style='height:25px; ' class="col-md-5">Present / Absence</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
-
- 
-                                        <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
+                                            <th style='height:25px; ' class="col-md-5">Hours</th>
                                             <th style='height:25px;' class="col-md-5">Action</th>
-<?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
-  
-<?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-    <!-- Your code for 'SalesCommission' payroll type here, if any -->
-<?php } ?>
+                                        <?php }
 
-
-									</tr>
+                                        elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
+                                            <th style='height:25px;' class="col-md-2">Date</th>
+                                            <th style='height:25px;' class="col-md-1">Day</th>
+                                            <th style='height:25px; ' class="col-md-5">Present / Absence</th>
+                                        <?php } ?>
+                                    </tr>
 								</thead>
 
 
@@ -211,7 +166,7 @@
                 <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                     <td class="date">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Date']) ? 'readonly' : $tsheet['Date']; ?>" name="date[]">
-                </td><?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                </td><?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td class="date">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Date']) ? 'readonly' : $tsheet['Date']; ?>" name="date[]">
                 </td><?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
@@ -223,7 +178,7 @@
     <td class="day">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['Day']; ?>" name="day[]">
                 </td>
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td class="day">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['Day']; ?>" name="day[]">
                 </td>
@@ -243,7 +198,7 @@
                     </select>
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
@@ -254,7 +209,7 @@
                     <input <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> name="start[]" class="hasTimepicker start" value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['time_start']; ?>" type="time">
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
@@ -265,13 +220,13 @@
                     <input <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> name="end[]" class="hasTimepicker end" value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['time_end']; ?>" type="time">
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
 <?php } ?>
 
-                <?php if ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php if ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
     <td class="hours-worked">
 
 
@@ -292,7 +247,7 @@
                     <a style='color:white;' class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
          </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                    
 
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
@@ -342,7 +297,7 @@
                 <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                     <td class="date">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Date']) ? 'readonly' : $tsheet['Date']; ?>" name="date[]">
-                </td><?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                </td><?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td class="date">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Date']) ? 'readonly' : $tsheet['Date']; ?>" name="date[]">
                 </td><?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
@@ -354,7 +309,7 @@
     <td class="day">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['Day']; ?>" name="day[]">
                 </td>
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td class="day">
                     <input type="text" <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['Day']; ?>" name="day[]">
                 </td>
@@ -374,7 +329,7 @@
                     </select>
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
@@ -385,7 +340,7 @@
                     <input <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> name="start[]" class="hasTimepicker start" value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['time_start']; ?>" type="time">
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
@@ -396,7 +351,7 @@
                     <input <?php if ($tsheet['uneditable'] == 1) { echo 'readonly'; } ?> name="end[]" class="hasTimepicker end" value="<?php echo empty($tsheet['Day']) ? 'readonly' : $tsheet['time_end']; ?>" type="time">
                 </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                   
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
     <!-- Your code for 'SalesCommission' payroll type here, if any -->
@@ -404,7 +359,7 @@
 
 
 
-    <?php if ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+    <?php if ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
 <td class="hours-worked">
     <label class="switch" style="width:100px;">
         <input type="checkbox" class="timeSum present checkbox switch-input" id="blockcheck_<?php echo $i; ?>" name="present[]" <?php echo (isset($tsheet['present']) && $tsheet['present'] === 'present') ? 'checked="checked"' : ''; ?> data-present="<?php echo $tsheet['present'] ?? ''; ?>" disabled>
@@ -432,7 +387,7 @@ elseif ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                     <a style='color:white;' class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
          </td>
 
-                <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
     
 
                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
@@ -461,7 +416,8 @@ elseif ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
 
                   <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                         <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours :</td>
-                      <td style="text-align: center;"> <input  type="text"   readonly id="total_net" value="<?php echo $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td>
+                      <td style="text-align: center;"> <input  type="text"   readonly value="<?php echo $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" /> </td>
+                      <!-- id="total_net" -->
 
  <?php 
 
@@ -530,7 +486,7 @@ $total_cost_ytd =round($total_cost_ytd,2);
         <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $total_cost_ytd; ?>" />
       
       <?php } ?>
-                    <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                    <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td>
                       <td style="text-align: center;"> <input  type="text"   readonly id="total_net" value="<?php echo $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td>
                   <?php  if($time_sheet_data[0]['total_hours'] > $extratime_info[0]['work_hour']) { ?>
@@ -762,7 +718,14 @@ $total_c = round($total_c, 2);
   <div class="col-sm-12" style="padding-top:20px;">
     <div class="col-sm-10">
 
-                        <input type="submit" style="float:right;color:white;background-color: #38469f;" value="Generate pay slip"   class="btn btn-info m-b-5 m-r-2"/> 
+       <?php 
+        $isDisabled = $time_sheet_data[0]['uneditable'] == 1 ? 'disabled' : ''; 
+        $buttonStyle = 'float:right; color:white; background-color: #38469f;'; 
+        $mouseEvents = $time_sheet_data[0]['uneditable'] == 1 ? 'onmouseover="showToast()" onmouseleave="hideToast()"' : ''; 
+    ?>
+    <input type="submit" style="<?= $buttonStyle ?>" value="Generate pay slip" class="btn btn-info m-b-5 m-r-2" <?= $isDisabled ?> <?= $mouseEvents ?> />
+
+
    </div>    </div> 
                     </div>               
                     <!-- <?php //echo form_close() ?> -->
@@ -779,7 +742,6 @@ $total_c = round($total_c, 2);
 
 
 </div>
-
 
 
 <script>
@@ -1291,4 +1253,16 @@ $(function() {
         maxDate: 0
     });
 });
+
+
+function showToast() {
+    toastr.warning("This payslip has been approved, and another cannot be generated", { 
+        closeButton: false,
+        timeOut: 1000
+    });
+}
+
+function hideToast() {
+    toastr.clear(); 
+}
 </script>

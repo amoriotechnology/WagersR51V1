@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
 <div class="content-wrapper">
     <section class="content-header">
         <div class="header-icon"> <i class="pe-7s-note2"></i> </div>
@@ -64,7 +66,9 @@
                              <div class="col-sm-6">
                                 <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Type <i class="text-danger"></i></label>
                                 <div class="col-sm-6">
-                                    <input type="text" readonly name="payroll_type" value="" class="form-control" id="payroll_type"  placeholder="Payroll Type">
+                                    <input type="text" readonly name="payroll_freq" class="form-control" id="payroll_freq"  placeholder="Payroll Type">
+
+                                    <input type="hidden" name="payroll_type" class="form-control" id="payroll_type">
                                 </div>
                              </div>
                         </div>
@@ -90,6 +94,11 @@
 
 </div>
 <br><br>
+
+<?php 
+   $modaldata['bootstrap_modals'] = array('daily_break');
+   $this->load->view('include/bootstrap_modal', $modaldata);
+?>
 
 <script>
 $('.decimal').keydown(function (e) {
@@ -188,6 +197,7 @@ $(document).on('select change'  ,'#templ_name', function () {
             if (result[0]['designation'] !== '') {
                 $('#job_title').val(result[0]['designation']);
                 $('#payroll_type').val(result[0]['payroll_type']);
+                $('#payroll_freq').val(result[0]['payroll_freq']);
             } else {
                 $('#job_title').val("Sales Partner");
                 $('#payroll_type').val("Sales Partner");
@@ -253,16 +263,13 @@ $('#insert_daily_break').submit(function(e){
                 var option = $('<option/>').attr('value', data1[i].dailybreak_name).text(data1[i].dailybreak_name);
                 $select.append(option); 
             }
-            $('#dailybreak_name').val('');
-            $("#bodyModal1").html("Daily Break Added Successfully");
-            $('#dailybreak_add').modal('hide');
-            $('#dailybreak').show();
-            $('#myModal1').modal('show');
-            window.setTimeout(function(){
-                $('#payment_type_new').modal('hide');
-                $('#myModal1').modal('hide');
-                $('.modal-backdrop').remove();
-            }, 2500);
+            toastr.success("Daily Break Added Successfully", { 
+               closeButton: false,
+               timeOut: 1000
+            });
+            setTimeout(function() {
+                $('#dailybreak_add').modal('hide'); 
+            }, 1000);
         }
     });
 });
@@ -289,6 +296,7 @@ $(document).on('select change'  ,'#templ_name', function () {
             if (result[0]['designation'] !== '') {
                 $('#job_title').val(result[0]['designation']);
                 $('#payroll_type').val(result[0]['payroll_type']);
+                $('#payroll_freq').val(result[0]['payroll_freq']);
             } else {
                 $('#job_title').val("Sales Partner");
                 $('#payroll_type').val("Sales Partner");
@@ -444,19 +452,26 @@ $('body').on('input select change','#reportrange',function() {
             });
         }
 
-        if (response.includes('salary') || response.includes('Salaried-weekly') || response.includes('Salaried-BiWeekly') || response.includes('Salaried-Monthly')  || response.includes('Salaried-BiMonthly'  )) {
-            $('#tHead').append(`
-                <tr style="text-align:center;">
-                    <th class="col-md-2">Date</th>
-                    <th class="col-md-2">Day</th>
-                    <th class="col-md-2">Present / Absence</th>
-                </tr>`);
-            $('#tFoot').append(`
-                <tr style="text-align:end">
-                    <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td> 
-                    <td><input type="text" id="total_net" class="sumOfDays" name="total_net" /></td>
-                </tr>`);
-        } else if (response.includes('Hourly')) {
+            if (
+                response.includes('salary') || 
+                response.includes('Weekly') || 
+                response.includes('Bi-Weekly') || 
+                response.includes('Monthly') || 
+                response.includes('Fixed')
+            ) {
+                $('#tHead').append(`
+                    <tr style="text-align:center;">
+                        <th class="col-md-2">Date</th>
+                        <th class="col-md-2">Day</th>
+                        <th class="col-md-2">Present / Absence</th>
+                    </tr>`);
+                $('#tFoot').append(`
+                    <tr style="text-align:end">
+                        <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td> 
+                        <td><input type="text" id="total_net" class="sumOfDays" name="total_net" readonly /></td>
+                    </tr>`);
+            }
+            else if (response.includes('Hourly')) {
             $('#tHead').append(`
                 <tr style="text-align:center;">
                     <th class="col-md-2">Date</th>
@@ -474,7 +489,7 @@ $('body').on('input select change','#reportrange',function() {
             $('#tFoot').append(`
                 <tr style="text-align:end">
                     <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours:</td> 
-                    <td><input type="text" id="total_net" class="sumOfDays" name="total_net" /></td>
+                    <td><input type="text" id="total_net" class="sumOfDays" name="total_net" readonly /></td>
                 </tr>`);
         } else if (response.includes('SalesCommission')) {
             $('#tFoot').append(`
@@ -495,7 +510,13 @@ $('body').on('input select change','#reportrange',function() {
             let month = ("0" + (newDate.getMonth() + 1)).slice(-2); 
             let dateString = `${month}/${day}/${newDate.getFullYear()}`;
             
-            if (response.includes('salary') || response.includes('Salaried-weekly') || response.includes('Salaried-BiWeekly') || response.includes('Salaried-Monthly')  || response.includes('Salaried-BiMonthly'  )) {
+            if (
+                response.includes('salary') || 
+                response.includes('Weekly') || 
+                response.includes('Bi-Weekly') || 
+                response.includes('Monthly') || 
+                response.includes('Fixed')
+            ){
                 var presentCount = $('input[type="checkbox"].present:checked').length + 1;
                 $('#total_net').val(presentCount);
                 if(presentCount > 0) {
@@ -880,5 +901,6 @@ $(document).ready(function() {
         }
     });
 })
+
 
 </script>
