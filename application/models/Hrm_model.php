@@ -3064,7 +3064,7 @@ public function get_employee_sal_overtime($id, $tax, $timeid) {
 }
 public function getPaginatedpayslip($limit, $offset, $orderField, $orderDirection, $search, $date = null, $emp_name = 'All')
 {
-    $this->db->select('a.*,b.*,c.*');
+    $this->db->select('a.*,b.*,c.*, a.amount as total_period');
     if ($date) {
         $dates = explode(' to ', $date);
         $start_date = $dates[0];

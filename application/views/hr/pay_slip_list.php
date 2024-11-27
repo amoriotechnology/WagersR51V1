@@ -2,7 +2,7 @@
    <section class="content-header" style="height: 60px;">
       <div class="header-icon">
          <figure class="one">
-            <img src="<?php echo base_url() ?>assets/images/payslip.png" class="headshotphoto" style="height:50px;" />
+            <img src="<?= base_url('assets/images/payslip.png') ?>" class="headshotphoto" style="height:50px;" />
          </figure>
       </div>
       <div class="header-title">
@@ -10,17 +10,17 @@
          <h1>Generated Pay Slips List</h1>
          </div>
             <ol class="breadcrumb" style=" border: 3px solid #d7d4d6;" >
-               <li><a href="<?php echo base_url()?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
-               <li><a href="#"><?php echo 'Hr'; ?></a></li>
-               <li class="active" style="color:orange"><?php echo 'Payslip List';?></li>
+               <li><a href="<?= base_url()?>"><i class="pe-7s-home"></i> <?= display('home') ?></a></li>
+               <li><a href="#"><?= 'Hr'; ?></a></li>
+               <li class="active" style="color:orange"><?= 'Payslip List';?></li>
          </ol>
       </div>
    </section>
    <section class="content">
       <div class="panel panel-bd lobidrag">
-         <div class="panel-heading" style="height: 60px;border: 3px solid #D7D4D6;">
+         <div class="panel-heading" style="height: 60px; border: 3px solid #D7D4D6;">
             <div class="col-sm-12">
-                <div class="col-md-6 col-sm-6" style="display: flex; justify-content: center; align-items: center;">
+                <div class="col-md-4 col-sm-4" style="display: flex; justify-content: center; align-items: center;">
                     <label>Employee</label>&nbsp;&nbsp;&nbsp;
                     <select id="customer-name-filter" name="employee_name" class="form-control employee_name">
                         <option value="All">All</option> 
@@ -29,7 +29,7 @@
                             $emp['first_name']=trim($emp['first_name']);
                             $emp['last_name']=trim($emp['last_name']);
                           ?>
-                        <option value="<?php echo $emp['first_name']." ".$emp['middle_name']." ".$emp['last_name']; ?>"><?php echo $emp['first_name']." ".$emp['middle_name']." ".$emp['last_name']; ?></option>
+                        <option value="<?= $emp['first_name']." ".$emp['middle_name']." ".$emp['last_name']; ?>"><?= $emp['first_name']." ".$emp['middle_name']." ".$emp['last_name']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -50,15 +50,15 @@
                      <table class="table table-bordered" cellspacing="0" width="100%" id="payslip_list">
                         <thead>
                            <tr class="btnclr">
-                              <th class="text-center"><?php echo ('S.No') ?></th>
-                              <th class="text-center"><?php echo ('Employee Name') ?></th>
-                              <th class="text-center"><?php echo ('Job Title') ?></th>
-                              <th class="text-center"><?php echo ('Month') ?></th>
-                              <th class="text-center"><?php echo ('Total hours/Days') ?></th>
-                              <th class="text-center"><?php echo ('Total Amount') ?></th>
-                              <th class="text-center"><?php echo ('Over Time') ?></th>
-                              <th class="text-center"><?php echo ('Sales Commision') ?></th>
-                              <th class="text-center"><?php echo ('Action') ?></th>
+                              <th class="text-center" width="5%"> S.No </th>
+                              <th class="text-center">Employee Name </th>
+                              <th class="text-center">Job Title </th>
+                              <th class="text-center">Month </th>
+                              <th class="text-center">Total hours/Days </th>
+                              <th class="text-center">Over Time </th>
+                              <th class="text-center">Sales Commision </th>
+                              <th class="text-center">Total Amount </th>
+                              <th class="text-center" width="8%">Action </th>
                            </tr>
                         </thead>
                         <tfoot>
@@ -78,14 +78,17 @@
       </div>
    </section>
 </div>
+
 <script type="text/javascript">
+
 var payslipDataTable;
+
 $(document).ready(function() {
     if ($.fn.DataTable.isDataTable('#payslip_list')) {
         $('#payslip_list').DataTable().clear().destroy();
     }
-    var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
-    var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+    var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';
+    var csrfHash = '<?= $this->security->get_csrf_hash(); ?>';
     payslipDataTable = $('#payslip_list').DataTable({
         "processing": true,
         "serverSide": true,
@@ -94,19 +97,19 @@ $(document).ready(function() {
             [10, 25, 50, 100]
         ],
         "ajax": {
-            "url": "<?php echo base_url('Chrm/payslipIndexData?id='); ?>" + 
-                encodeURIComponent('<?php echo $_GET['id']; ?>') + 
-                '&admin_id=' + encodeURIComponent('<?php echo $_GET['admin_id']; ?>'),
+            "url": "<?= base_url('Chrm/payslipIndexData?id='); ?>" + 
+                encodeURIComponent('<?= $_GET['id']; ?>') + 
+                '&admin_id=' + encodeURIComponent('<?= $_GET['admin_id']; ?>'),
             "type": "POST",
             "data": function(d) {
-                d['<?php echo $this->security->get_csrf_token_name(); ?>'] =
-                    '<?php echo $this->security->get_csrf_hash(); ?>';
+                d['<?= $this->security->get_csrf_token_name(); ?>'] =
+                    '<?= $this->security->get_csrf_hash(); ?>';
                 d.employee_name = $('.employee_name').val(); 
                 d['payslip_date_search'] = $('#daterangepicker-field').val();
             },
             "dataSrc": function(json) {
                csrfHash = json[
-                    '<?php echo $this->security->get_csrf_token_name(); ?>'];
+                    '<?= $this->security->get_csrf_token_name(); ?>'];
                 return json.data;
             }
         },
@@ -116,9 +119,9 @@ $(document).ready(function() {
          { "data": "job_title" },
          { "data": "month" },
          { "data": "total_hours" },
-         { "data": "tot_amt" },
          { "data": "overtime" },
          { "data": "sales_comm" },
+         { "data": "tot_amt" },
          { "data": "action" },
          ],
         "columnDefs": [{
@@ -152,35 +155,35 @@ $(document).ready(function() {
         "pageLength": 10,
         "colReorder": true,
         "stateSave": true,
-footerCallback: function(row, data, start, end, display) {
-    var api = this.api();
- var totalHours = 0;
-    var totalAmount = 0;
-    var totalOvertimeHours = 0;
-    var totalSalesCommission = 0;
-    function convertToHours(overtime) {
-    if (!overtime) return 0; 
-    var timeParts = overtime.split(':');
-    var hours = parseInt(timeParts[0], 10) || 0; 
-    var minutes = parseInt(timeParts[1], 10) || 0; 
-    return hours + minutes / 60;
-}
-function convertToHHMM(totalHours) {
-    var hours = Math.floor(totalHours);
-    var minutes = Math.round((totalHours - hours) * 60); 
-    return hours + ':' + (minutes < 10 ? '0' : '') + minutes; 
-}
-    api.rows({ page: 'current' }).every(function() {
-        var rowData = this.data();
- totalAmount += parseFloat(rowData.tot_amt) || 0;
-        totalOvertimeHours += convertToHours(rowData.overtime); 
-        totalSalesCommission += parseFloat(rowData.sales_comm) || 0;
-    });
-    var totalOvertimeFormatted = convertToHHMM(totalOvertimeHours);
-    $(api.column(5).footer()).html(totalAmount.toFixed(2)); 
-    $(api.column(6).footer()).html(totalOvertimeFormatted); 
-    $(api.column(7).footer()).html(totalSalesCommission.toFixed(2)); 
-},
+        footerCallback: function(row, data, start, end, display) {
+            var api = this.api();
+        var totalHours = 0;
+            var totalAmount = 0;
+            var totalOvertimeHours = 0;
+            var totalSalesCommission = 0;
+            function convertToHours(overtime) {
+            if (!overtime) return 0; 
+            var timeParts = overtime.split(':');
+            var hours = parseInt(timeParts[0], 10) || 0; 
+            var minutes = parseInt(timeParts[1], 10) || 0; 
+            return hours + minutes / 60;
+        }
+        function convertToHHMM(totalHours) {
+            var hours = Math.floor(totalHours);
+            var minutes = Math.round((totalHours - hours) * 60); 
+            return hours + ':' + (minutes < 10 ? '0' : '') + minutes; 
+        }
+            api.rows({ page: 'current' }).every(function() {
+                var rowData = this.data();
+                totalAmount += parseFloat(rowData.tot_amt) || 0;
+                totalOvertimeHours += convertToHours(rowData.overtime); 
+                totalSalesCommission += parseFloat(rowData.sales_comm) || 0;
+            });
+            var totalOvertimeFormatted = convertToHHMM(totalOvertimeHours);
+            $(api.column(5).footer()).html(totalOvertimeFormatted); 
+            $(api.column(6).footer()).html(totalSalesCommission.toFixed(2)); 
+            $(api.column(7).footer()).html(totalAmount.toFixed(2)); 
+        },
         "stateSaveCallback": function(settings, data) {
             localStorage.setItem('quotation', JSON.stringify(data));
         },
@@ -255,9 +258,11 @@ function convertToHHMM(totalHours) {
             }
         ]
     });
+
     $('.employee_name').on('change', function() {
         payslipDataTable.ajax.reload();
     });
+    
     $('#searchtrans').on('click', function() {
         var dateValue = $('.dateSearch').val();
         if (dateValue === '') {
