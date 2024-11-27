@@ -469,3 +469,8 @@ $(document).ready(function () {
 <script type="text/javascript" charset="utf8" src="<?php echo base_url(); ?>assets/js/jspdf.debug.js"></script>
 <script type="text/javascript" charset="utf8" src="<?php echo base_url(); ?>assets/js/html2pdf.bundle.min.js"></script>
 
+<!--For Calender in Reports - Hr  -->
+<!-- <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/calanderstyle.css">
+<script src='<?php echo base_url();?>assets/js/moment.min.js'></script>
+<script src='<?php echo base_url();?>assets/js/knockout-debug.js'></script>
+<script  src="<?php echo base_url() ?>assets/js/scripts.js"></script>  -->
