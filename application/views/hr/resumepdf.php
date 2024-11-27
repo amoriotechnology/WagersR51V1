@@ -7,11 +7,6 @@
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
 
 <style>
-.btnclr{
-   background-color:<?php echo $setting_detail[0]['button_color']; ?>;
-   color: white;
-}
-
 label {
    color: #000;
 }
@@ -72,25 +67,29 @@ label {
    <section class="content">
       <!-- Sales report -->
       <div class="row">
-         <div class="col-md-12">
-            <a style="float:right;color:white;" href="<?= base_url('Chrm/manage_employee?id='.$_GET['id'].'&admin_id='.$_GET['admin_id']) ?>" class="btnclr btn">
-               <i class="ti-align-justify"> </i>Manage Employee
-            </a>
-         </div>
 
          <div class="panel panel-bd lobidrag">
-            <div class='col-sm-12'>
+
+            <div class='col-sm-12'>            
                <div class="row">
+                  
                   <div class="panel panel-bd lobidrag">
                      <div class="panel-body">
+
+                     <h3 class="text-center" style="margin-top: 0px;"> 
+                        <?= ($row[0]['e_type'] == 1) ? 'Employee' : 'Sales Partner'; ?> Information
+                        <a style="float:right;" href="<?= base_url('Chrm/manage_employee?id='.$_GET['id'].'&admin_id='.$_GET['admin_id']) ?>" class="btnclr btn">
+                           <i class="ti-align-justify"> </i>Manage Employee
+                        </a>
+                     </h3>
                      
                         <?php if(!empty($row[0]['profile_image'])) { ?>                     
-                        <div class="col-md-12">
-                           <img src="<?= base_url('assets/images/'.$row[0]['profile_image']); ?>" class="pro_pic" alt="Profile Picture" width="100px" height="100px">
-                           <br><br>
-                        </div>
+                           <div class="col-md-12">
+                              <img src="<?= base_url('assets/images/'.$row[0]['profile_image']); ?>" class="pro_pic" alt="Profile Picture" width="100px" height="100px">
+                              <br><br>
+                           </div>
                         <?php } ?>
-
+                        
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
@@ -197,11 +196,30 @@ label {
 
                            <div class="col-md-6">
                               <div class="form-group">
+                                 <label for="" class="col-md-4">Houre Rate/Salary</label>
+                                 <span class="form-group"> : <?= $row[0]['hrate']; ?></span>
+                              </div>
+                           </div>
+                        </div>
+
+                        <?php if($row[0]['e_type'] == 1) { ?>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <div class="form-group">
                                  <label for="" class="col-md-4">Payroll Type</label>
                                  <span class="form-group"> : <?= $row[0]['payroll_type']; ?></span>
                               </div>
                            </div>
+                        
+
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                 <label for="" class="col-md-4">Payroll Frequency</label>
+                                 <span class="form-group"> : <?= $row[0]['payroll_freq']; ?></span>
+                              </div>
+                           </div>
                         </div>
+                        <?php } ?>
 
                         <div class="row">
                            <div class="col-md-6">
@@ -210,7 +228,7 @@ label {
                                  <span class="form-group"> : <?= $row[0]['bank_name']; ?></span>
                               </div>
                            </div>
-
+                        
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">Account Number</label>
@@ -218,7 +236,7 @@ label {
                               </div>
                            </div>
                         </div>
-
+                        
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
@@ -226,6 +244,7 @@ label {
                                  <span class="form-group"> : <?= $row[0]['employee_tax']; ?></span>
                               </div>
                            </div>
+                        
 
                            <div class="col-md-6">
                               <div class="form-group">
@@ -234,7 +253,7 @@ label {
                               </div>
                            </div>
                         </div>
-
+                        
                         <div class="row">
                            <div class="col-md-12">
                               <p class="bg-warning text-center m-3">Working Location Taxes</p>
@@ -245,14 +264,14 @@ label {
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">State Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['state_tx']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['working_state_tax']; ?></span>
                               </div>
                            </div>
 
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">City Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['local_tax']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['working_city_tax']; ?></span>
                               </div>
                            </div>
                         </div>
@@ -261,14 +280,14 @@ label {
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">Country Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['cty_tax']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['working_county_tax']; ?></span>
                               </div>
                            </div>
 
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">Other Working Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['state_tax_1']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['working_other_tax']; ?></span>
                               </div>
                            </div>
                         </div>
@@ -290,7 +309,7 @@ label {
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">City Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['living_local_tax']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['living_city_tax']; ?></span>
                               </div>
                            </div>
                         </div>
@@ -306,7 +325,7 @@ label {
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="col-md-4">Other Living Tax</label>
-                                 <span class="form-group"> : <?= $row[0]['edit_living_other']; ?></span>
+                                 <span class="form-group"> : <?= $row[0]['living_other_tax']; ?></span>
                               </div>
                            </div>
                         </div>

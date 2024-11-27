@@ -74,6 +74,13 @@
         }
     }
 
+    .toast.toast-warning {
+        background-color: #ffc107 !important; 
+        color: black !important;
+        opacity: 0;
+        animation: fadeIn 1s forwards; 
+    }
+
 
 .daterangepicker td.in-range {
   background: #0044cc;

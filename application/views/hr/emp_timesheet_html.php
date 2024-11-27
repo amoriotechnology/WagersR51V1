@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Timesheet Invoice</title>
+    <link rel="stylesheet" href="<?= base_url('assets/css/bootstrap.min.css') ?>">
+
     <style>
     @page { 
         margin: 0px 10px; /* Adjust margins to accommodate header and footer */
@@ -78,19 +80,20 @@
         color: #fff;
         background-color: gray;
     }
+    .text-center {
+        text-align: center !important;
+    }
     </style>
 </head>
 
 <body>
 <?php 
     $logoPath =  $logo;
-
     if (file_exists($logoPath)) {
         $logo = base64_encode(file_get_contents($logoPath));
     } else {
         $logo = '';
     }
-
 ?>
 
 <header>
@@ -103,7 +106,7 @@
             <h3 style="text-align: center;font-weight:bold;" >Employee <?= ($type == "emp_data") ? 'Detail' : 'Timesheet'; ?></h3>
         </div>
         <div class="col-sm-6" style="text-align:left;margin-left:550px; margin-top:-85px; font-size:15px;" >
-            <b> <?php if($type == 'timesheet') { echo "Date : </b> &nbsp;". $sheet_date; } ?>
+            <b> <?php if($type == 'timesheet') { echo "Date : </b> &nbsp;". $time_data['sheet_date']; } ?>
         </div>
     </div>
     </div>
@@ -126,9 +129,9 @@
                 </div>
                 <?php if($type != 'emp_data') { ?>
                     <div class="col-sm-5" style="margin-left:550px;margin-top:-95px; font-size:12px;">
-                        <b><span style="font-weight:bold;"> Name : <?= $first_name.' '.$last_name; ?></span><br> 
-                        <span style="font-weight:1;"> Job Title :  <?= $designation; ?><br>
-                        <span style="font-weight:1;"> Payroll Type : <?= $payroll_type; ?><br>
+                        <b><span style="font-weight:bold;"> Name : <?= $time_data['first_name'].' '.$time_data['last_name']; ?></span><br> 
+                        <span style="font-weight:1;"> Job Title :  <?= $time_data['designation']; ?><br>
+                        <span style="font-weight:1;"> Payroll Type : <?= $time_data['payroll_type']; ?><br>
                     </div>
                 <?php } ?>
             </div>
@@ -144,41 +147,119 @@
     <table class="mainTable">
         <tbody class="emp_tbl">
             <tr>
+                <th colspan="4" class="text-center"> <?= ($emp_datas[0]['e_type'] == 1) ? 'Employee' : 'Sales Partner'; ?> Information </th>
+            </tr>
+
+            <tr>
                 <th>Name</th>
                 <td> <?= !empty($emp_datas[0]['first_name']) ? $emp_datas[0]['first_name'] : ''; ?> </td>
-            </tr>
-            <tr>
+            
                 <th>Phone</th>
                 <td> <?= !empty($emp_datas[0]['phone']) ? $emp_datas[0]['phone'] : ''; ?> </td>
             </tr>
+
             <tr>
                 <th>Email</th>
                 <td> <?= !empty($emp_datas[0]['email']) ? $emp_datas[0]['email'] : ''; ?> </td>
-            </tr>
-            <tr>
-                <th>Country</th>
-                <td> <?= !empty($emp_datas[0]['country']) ? $emp_datas[0]['country'] : ''; ?> </td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td> <?= !empty($emp_datas[0]['city']) ? $emp_datas[0]['city'] : ''; ?> </td>
-            </tr>
-            <tr>
-                <th>Zipcode</th>
-                <td> <?= !empty($emp_datas[0]['zipcode']) ? $emp_datas[0]['zipcode'] : ''; ?> </td>
-            </tr>
-            <tr>
+            
                 <th>Designation</th>
                 <td> <?= !empty($emp_datas[0]['designation']) ? $emp_datas[0]['designation'] : ''; ?> </td>
             </tr>
+
             <tr>
-                <th>Rate Type</th>
-                <td> <?= !empty($emp_datas[0]['rate_type']) ? $emp_datas[0]['rate_type'] : ''; ?> </td>
+                <th>State</th>
+                <td> <?= !empty($emp_datas[0]['state']) ? $emp_datas[0]['state'] : ''; ?> </td>
+           
+                <th>City</th>
+                <td> <?= !empty($emp_datas[0]['city']) ? $emp_datas[0]['city'] : ''; ?> </td>
             </tr>
+
+            <tr>
+                <th>Country</th>
+                <td> <?= !empty($emp_datas[0]['country']) ? $emp_datas[0]['country'] : ''; ?> </td>
+           
+                <th>Zipcode</th>
+                <td> <?= !empty($emp_datas[0]['zip']) ? $emp_datas[0]['zip'] : ''; ?> </td>
+            </tr>
+
             <tr>
                 <th>Houre Rate/Salary</th>
                 <td> <?= !empty($emp_datas[0]['hrate']) ? $emp_datas[0]['hrate'] : ''; ?> </td>
+
+                <th>Employee Type</th>
+                <td> <?= !empty($emp_datas[0]['employee_type']) ? $emp_datas[0]['employee_type'] : ''; ?> </td>
             </tr>
+
+            <?php if($emp_datas[0]['e_type'] == 1) { ?>
+                <tr>
+                    <th>Payroll Type</th>
+                    <td> <?= !empty($emp_datas[0]['payroll_type']) ? $emp_datas[0]['payroll_type'] : ''; ?> </td>
+
+                    <th>Payroll Frequency</th>
+                    <td> <?= !empty($emp_datas[0]['payroll_freq']) ? $emp_datas[0]['payroll_freq'] : ''; ?> </td>
+                </tr>
+            <?php } ?>
+
+            <tr>
+                <th>Bank Name</th>
+                <td> <?= !empty($emp_datas[0]['bank_name']) ? $emp_datas[0]['bank_name'] : ''; ?> </td>
+
+                <th>Account Number</th>
+                <td> <?= !empty($emp_datas[0]['account_number']) ? $emp_datas[0]['account_number'] : ''; ?> </td>
+            </tr>
+
+            <tr>
+                <th>Employee Tax</th>
+                <td> <?= !empty($emp_datas[0]['employee_tax']) ? $emp_datas[0]['employee_tax'] : ''; ?> </td>
+
+                <th>Routing Number</th>
+                <td> <?= !empty($emp_datas[0]['routing_number']) ? $emp_datas[0]['routing_number'] : ''; ?> </td>
+            </tr>
+            
+            <tr><td colspan="4"></td></tr>
+            <tr>
+                <th colspan="4" class="text-center">Working Location Tax</th>
+            </tr>
+            <tr><td colspan="4"></td></tr>
+
+            <tr>
+                <th>State Tax</th>
+                <td> <?= !empty($emp_datas[0]['working_state_tax']) ? $emp_datas[0]['working_state_tax'] : ''; ?> </td>
+
+                <th>City Tax</th>
+                <td> <?= !empty($emp_datas[0]['working_city_tax']) ? $emp_datas[0]['working_city_tax'] : ''; ?> </td>
+            </tr>
+
+            <tr>
+                <th>Country Tax</th>
+                <td> <?= !empty($emp_datas[0]['working_county_tax']) ? $emp_datas[0]['working_county_tax'] : ''; ?> </td>
+
+                <th>Other Tax</th>
+                <td> <?= !empty($emp_datas[0]['working_other_tax']) ? $emp_datas[0]['working_other_tax'] : ''; ?> </td>
+            </tr>
+
+            <tr><td colspan="4"></td></tr>
+            <tr>
+                <th colspan="4" class="text-center">Living Location Tax</th>
+            </tr>
+            <tr><td colspan="4"></td></tr>
+
+            <tr>
+                <th>State Tax</th>
+                <td> <?= !empty($emp_datas[0]['living_state_tax']) ? $emp_datas[0]['living_state_tax'] : ''; ?> </td>
+
+                <th>City Tax</th>
+                <td> <?= !empty($emp_datas[0]['living_city_tax']) ? $emp_datas[0]['living_city_tax'] : ''; ?> </td>
+            </tr>
+
+            <tr>
+                <th>Country Tax</th>
+                <td> <?= !empty($emp_datas[0]['living_county_tax']) ? $emp_datas[0]['living_county_tax'] : ''; ?> </td>
+
+                <th>Other Tax</th>
+                <td> <?= !empty($emp_datas[0]['living_other_tax']) ? $emp_datas[0]['living_other_tax'] : ''; ?> </td>
+            </tr>
+
         </tbody>
     </table>
 
@@ -188,33 +269,41 @@
             <tr style="color:white;text-align:center;">
                 <th style="text-align:center; color:white;">Date</th>
                 <th style="text-align:center; color:white;" >Day</th>
-                <th style="text-align:center; color:white;">Daily Break in mins</th>
-                <th style="text-align:center; color:white;">Start Time (HH:MM)</th>
-                <th style="text-align:center; color:white;">End Time (HH:MM)</th>
-                <th style="text-align:center; color:white;">Hours</th>
+                <?php if($time_data['payroll_type'] == 'Hourly') { ?>
+                    <th style="text-align:center; color:white;">Daily Break in mins</th>
+                    <th style="text-align:center; color:white;">Start Time (HH:MM)</th>
+                    <th style="text-align:center; color:white;">End Time (HH:MM)</th>
+                    <th style="text-align:center; color:white;">Hours</th>
+                <?php } else { ?>
+                    <th style="text-align:center; color:white;">Present / Absence</th>
+                <?php } ?>
             </tr>
         </thead>
         <tbody>
             <?php 
-            if(!empty($timesheet_data[0]['Date'])) {
-            foreach ($timesheet_data as $row) { 
-                $date = str_replace(['/'], '-', $row['Date']);
-                echo '<tr style="color: black;">
-                <td style="text-align:center;">' . date('m/d/Y', strtotime($date)) . '</td>
-                <td style="text-align:center;">' . $row['Day'] . '</td>
-                <td style="text-align:center;">' . $row['daily_break'] . '</td>
-                <td style="text-align:center;">' . $row['time_start'] . '</td>
-                <td style="text-align:center;">' . $row['time_end'] . '</td>
-                <td style="text-align:center;">' . $row['hours_per_day'] . '</td>
-                </tr>';    
+            if(!empty($time_data['timesheet_data'])) {
+            foreach ($time_data['timesheet_data'] as $row) { 
+
+                    echo '<tr style="color: black;">
+                    <td style="text-align:center;">' . $row['Date'] . '</td>
+                    <td style="text-align:center;">' . $row['Day'] . '</td>';
+                    if($time_data['payroll_type'] == 'Hourly') { 
+                    echo '<td style="text-align:center;">' . $row['daily_break'] . '</td>
+                        <td style="text-align:center;">' . $row['time_start'] . '</td>
+                        <td style="text-align:center;">' . $row['time_end'] . '</td>
+                        <td style="text-align:center;">' . $row['hours_per_day'] . '</td>';
+                    } else {
+                        echo '<td style="text-align:center;">' . $row['present'] . '</td>';
+                    }
+                    echo '</tr>';    
             } }
             ?>
         </tbody>
         <tfoot>
             <tr style="color: black;">
-                <td colspan="5" style="text-align: right;"><b><?= display('TOTAL'); ?> :</b></td>
+                <td colspan="<?= ($time_data['payroll_type'] == 'Hourly') ? 5 : 2; ?>" style="text-align: right;"><b><?= display('TOTAL'); ?> :</b></td>
                 <td style="text-align: center;">
-                    <input type="text" name="total[]" value="<?= $currency . "" .  $total_hours; ?>" style="border: none;" readonly />
+                    <input type="text" name="total[]" value="<?= $time_data['currency'] . "" .  $time_data['total_hours']; ?>" style="border: none;" readonly />
                 </td>
             </tr>
         </tfoot>
@@ -232,10 +321,10 @@
         </thead>
         <tbody>
             <tr>
-                <td style="text-align:center;"><?= $admin_name; ?></td>
-                <td style="text-align:center;"><?= $payment_method; ?></td>
-                <td style="text-align:center;"><?= $cheque_no; ?></td>
-                <td style="text-align:center;"><?= $cheque_date; ?></td>
+                <td style="text-align:center;"><?= $time_data['admin_name']; ?></td>
+                <td style="text-align:center;"><?= $time_data['payment_method']; ?></td>
+                <td style="text-align:center;"><?= $time_data['cheque_no']; ?></td>
+                <td style="text-align:center;"><?= $time_data['cheque_date']; ?></td>
             </tr>
         </tbody>
     </table>
