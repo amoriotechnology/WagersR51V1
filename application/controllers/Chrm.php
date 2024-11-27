@@ -1161,8 +1161,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
         $this_period_unemp    = $u['tax_value'];
         $overall_unemp        = $u['tax_data']['t_u_tax'];
         // Country Tax Ends //
-        $working_state_tax = $this->state_tax( $end_date, $employeedata[0]['id'], $employeedata[0]['employee_tax'], $working_state_tax, $user_id, $thisPeriodAmount, 'state_tax', $timesheetdata[0]['timesheet_id'], $employeedata[0]['payroll_type'], $employeedata[0]['payroll_freq'] );
-        
+        $working_state_tax = $this->state_tax($end_date, $employeedata[0]['id'], $employeedata[0]['employee_tax'], $working_state_tax, $user_id, $thisPeriodAmount, 'state_tax', $timesheetdata[0]['timesheet_id'],$employeedata[0]['payroll_type'], $employeedata[0]['payroll_freq']);
         if (trim($employeedata[0]['working_state_tax']) != trim($employeedata[0]['living_state_tax'])) {
             $living_state_tax = $this->state_tax($end_date, $employeedata[0]['id'], $employeedata[0]['employee_tax'], $living_state_tax, $user_id, $thisPeriodAmount, 'living_state_tax', $timesheetdata[0]['timesheet_id'],$employeedata[0]['payroll_type'], $employeedata[0]['payroll_freq']);
         }
