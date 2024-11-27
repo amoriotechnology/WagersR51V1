@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
 <div class="content-wrapper">
     <section class="content-header">
         <div class="header-icon"> <i class="pe-7s-note2"></i> </div>
@@ -92,6 +94,11 @@
 
 </div>
 <br><br>
+
+<?php 
+   $modaldata['bootstrap_modals'] = array('daily_break');
+   $this->load->view('include/bootstrap_modal', $modaldata);
+?>
 
 <script>
 $('.decimal').keydown(function (e) {
@@ -256,16 +263,13 @@ $('#insert_daily_break').submit(function(e){
                 var option = $('<option/>').attr('value', data1[i].dailybreak_name).text(data1[i].dailybreak_name);
                 $select.append(option); 
             }
-            $('#dailybreak_name').val('');
-            $("#bodyModal1").html("Daily Break Added Successfully");
-            $('#dailybreak_add').modal('hide');
-            $('#dailybreak').show();
-            $('#myModal1').modal('show');
-            window.setTimeout(function(){
-                $('#payment_type_new').modal('hide');
-                $('#myModal1').modal('hide');
-                $('.modal-backdrop').remove();
-            }, 2500);
+            toastr.success("Daily Break Added Successfully", { 
+               closeButton: false,
+               timeOut: 1000
+            });
+            setTimeout(function() {
+                $('#dailybreak_add').modal('hide'); 
+            }, 1000);
         }
     });
 });
@@ -897,5 +901,6 @@ $(document).ready(function() {
         }
     });
 })
+
 
 </script>

@@ -3567,7 +3567,7 @@ public function get_cumulative_tax_amount($tax, $end, $employee, $tax_type) {
         ->where('timesheet_info.templ_name', $employee)
         ->where('tax_history.tax', $tax)
         ->where('tax_history.tax_type', $tax_type)
-        ->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%m/%d/%Y') <= STR_TO_DATE('$end', '%m/%d/%Y')", NULL, FALSE);
+        ->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%d/%m/%Y') <= STR_TO_DATE('$end', '%d/%m/%Y')", NULL, FALSE);
     $query = $this->db->get();
    if ($query->num_rows() > 0) {
         $result = $query->row_array();
@@ -3591,7 +3591,7 @@ $this->db->join('info_payslip', 'timesheet_info.timesheet_id = info_payslip.time
 $this->db->where('info_payslip.templ_name',$empid);
 $this->db->where('info_payslip.create_by', $user_id);
 if($end_date){
-$this->db->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%m/%d/%Y') <= STR_TO_DATE(' $end_date', '%m/%d/%Y')", NULL, FALSE);
+    $this->db->where("STR_TO_DATE(SUBSTRING_INDEX(timesheet_info.month, ' - ', -1), '%d/%m/%Y') <= STR_TO_DATE('$end_date', '%d/%m/%Y')", NULL, FALSE);
 }
 $query = $this->db->get();
     if ($query->num_rows() > 0) {

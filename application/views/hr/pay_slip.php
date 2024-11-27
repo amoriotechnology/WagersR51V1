@@ -233,23 +233,27 @@ echo "00:00";
                 <th>YTD(<?php echo $setting[0]["currency" ]; ?>)</th>
               </tr>
               <?php if (
-                $employee_info[0]["payroll_type"] == "Hourly" ||
+                $employee_info[0]["payroll_type"] == "Hourly" || 
                 $employee_info[0]["payroll_type"] == "Fixed" ||
-                $employee_info[0]["payroll_freq"] ==
-                    "Weekly" ||
-                $employee_info[0]["payroll_freq"] ==
-                    "Bi-Weekly" ||
-                $employee_info[0]["payroll_freq"] ==
-                    "Monthly" ||
-                $employee_info[0]["payroll_freq"] ==
-                    "SalesCommission"
-                ) { ?> <?php if ($this_social["tax_data"]["t_s_tax"]) { ?> 
+                $employee_info[0]["payroll_freq"] == "Weekly" || 
+                $employee_info[0]["payroll_freq"] == "Bi-Weekly" || 
+                $employee_info[0]["payroll_freq"] == "Monthly" || 
+                $employee_info[0]["payroll_freq"] == "SalesCommission"
+              ) { ?>
+                <?php if ($this_social["tax_data"]["t_s_tax"]) { ?> 
               <tr>
                 <td style="text-align:left;"> Social Security</td>
                 <td>S O</td>
-                <td class="current"><?php if ($this_social["tax_value"] ) { echo "-" . round($this_social["tax_value"], 3); } ?></td>
-                <td class="ytd"><?php if ($this_social["tax_data"]["t_s_tax"] ) { echo round( $this_social["tax_data"]["t_s_tax"],3);
-                  } ?></td>
+                <td class="current">
+                  <?php if ($this_social["tax_value"]) { 
+                    echo "-" . round($this_social["tax_value"], 3); 
+                  } ?>
+                </td>
+                <td class="ytd">
+                  <?php if ($this_social["tax_data"]["t_s_tax"]) { 
+                    echo round($this_social["tax_data"]["t_s_tax"], 3); 
+                  } ?>
+                </td>
               </tr>
               <?php } ?> <?php if ($this_medicare["tax_data"]["t_m_tax"]) { ?> 
               <tr>

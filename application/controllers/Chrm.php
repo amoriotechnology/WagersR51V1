@@ -957,7 +957,7 @@ class Chrm extends CI_Controller {
                     if ($this_period >= $split[0] && $this_period <= $split[1]) {
                         $range               = $split[0] . "-" . $split[1];
 
-                        $data['working_tax'] = $this->Hrm_model->working_state_tax($tax_data[0]['tax'],$employee_tax, $this_period, $range, $state_tax[0]['state'], $user_id,$payroll,$payroll_frequency);
+                        $data['working_tax'] = $this->Hrm_model->working_state_tax($tax_data[0]['tax'], $employee_tax, $this_period, $range, $state_tax[0]['state'], $user_id, $payroll, $payroll_frequency);
 
                        if (!empty($data['working_tax'])) {
                             foreach ($data['working_tax'] as $contribution) {
@@ -1824,6 +1824,7 @@ class Chrm extends CI_Controller {
     }
 // Admin Approve this Function
     public function adminApprove() {
+        // echo '<pre>'; print_r($_POST); echo '</pre>'; die;
         list($user_id, $company_id)     = array_map('decodeBase64UrlParameter', [$this->input->post('admin_company_id'), $this->input->post('adminId')]);
         $company_info                   = $this->Hrm_model->retrieve_companyinformation($user_id);
         $datacontent                    = $this->Hrm_model->retrieve_companydata($user_id);
@@ -1899,6 +1900,7 @@ class Chrm extends CI_Controller {
             $purchase_id_1               = $this->db->where('templ_name', $this->input->post('templ_name'))->where('timesheet_id', $data_timesheet['timesheet_id']);
             $q                           = $this->db->get('timesheet_info');
             $row                         = $q->row_array();
+
             $old_id                      = trim($row['timesheet_id']);
             if (!empty($old_id)) {
                 $this->session->set_userdata("timesheet_id_old", $row['timesheet_id']);
@@ -1912,7 +1914,6 @@ class Chrm extends CI_Controller {
                 logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
                 $this->db->insert('timesheet_info', $data_timesheet);
             }
-
             $data['timesheet_data'] = $this->Hrm_model->timesheet_info_data($data_timesheet['timesheet_id'], $user_id);
             $purchase_id_2          = $this->db->select('timesheet_id')->from('timesheet_info')->where('templ_name', $this->input->post('templ_name'))->where('month', $this->input->post('date_range'))->get()->row()->timesheet_id;
             $this->session->set_userdata("timesheet_id_new", $purchase_id_2);
@@ -1939,6 +1940,7 @@ class Chrm extends CI_Controller {
                     $this->db->insert('timesheet_info_details', $data1);
                 }
             }
+
             $payroll_type      = $data['timesheet_data'][0]['payroll_type'];
             $payroll_freq      = $data['timesheet_data'][0]['payroll_freq'];
             $hrate             = $hrate;

@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="table-responsive work_table col-md-12">
-		                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
                                 <thead>
                                     <tr> 
                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
@@ -89,7 +89,7 @@
                                         
                                         <?php } ?>
                                     </tr>
-								</thead>
+                                </thead>
 
                                 <?php 
                                 
@@ -112,7 +112,7 @@
                                 
                                 if($employee_name[0]['payroll_type'] == 'Hourly') { ?>
 
-								<tbody id="tBody">
+                                <tbody id="tBody">
                                 <?php
                                    
                                     usort($time_sheet_data, 'compareDates');

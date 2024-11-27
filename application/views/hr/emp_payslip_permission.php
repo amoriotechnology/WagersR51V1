@@ -38,7 +38,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height:50px;">
                         <div class="panel-title">
-                            <a style="float:right;background-color:#38469f;color:white;" href="<?php echo base_url('Chrm/manage_timesheet') ?>" class="btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
                     <!-- <?php// echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?> -->
@@ -116,6 +116,7 @@
                                             <th style='height:25px;' class="col-md-1">Day</th>
                                             <th class="col-md-1">Daily Break in mins</th>
                                             <th style='height:25px;' class="col-md-2">Start Time (HH:MM)</th>
+                                            <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
                                             <th style='height:25px; ' class="col-md-5">Hours</th>
                                             <th style='height:25px;' class="col-md-5">Action</th>
                                         <?php }
@@ -717,7 +718,14 @@ $total_c = round($total_c, 2);
   <div class="col-sm-12" style="padding-top:20px;">
     <div class="col-sm-10">
 
-                        <input type="submit" style="float:right;color:white;background-color: #38469f;" value="Generate pay slip"   class="btn btn-info m-b-5 m-r-2"/> 
+       <?php 
+        $isDisabled = $time_sheet_data[0]['uneditable'] == 1 ? 'disabled' : ''; 
+        $buttonStyle = 'float:right; color:white; background-color: #38469f;'; 
+        $mouseEvents = $time_sheet_data[0]['uneditable'] == 1 ? 'onmouseover="showToast()" onmouseleave="hideToast()"' : ''; 
+    ?>
+    <input type="submit" style="<?= $buttonStyle ?>" value="Generate pay slip" class="btn btn-info m-b-5 m-r-2" <?= $isDisabled ?> <?= $mouseEvents ?> />
+
+
    </div>    </div> 
                     </div>               
                     <!-- <?php //echo form_close() ?> -->
@@ -734,7 +742,6 @@ $total_c = round($total_c, 2);
 
 
 </div>
-
 
 
 <script>
@@ -1246,4 +1253,16 @@ $(function() {
         maxDate: 0
     });
 });
+
+
+function showToast() {
+    toastr.warning("This payslip has been approved, and another cannot be generated", { 
+        closeButton: false,
+        timeOut: 1000
+    });
+}
+
+function hideToast() {
+    toastr.clear(); 
+}
 </script>
