@@ -3485,42 +3485,66 @@ public function get_state_details($find, $table, $where, $state, $user_id)
 {
     $this->db->select($find)->from($table)->where($where, $state)->where('created_by', $user_id);
     $query = $this->db->get();
+    
+    if ($query === false) {
+        return [];
+    }
+    
     if ($query->num_rows() > 0) {
-        $result = $query->result_array();
-        return $result;
+        return $query->result_array();
     }
     return [];
 }
 
+
 // To get the state tax details - Used in state_tax function
-public function working_state_tax($taxname,$employee_status,$final,$local_tax_range, $stateTax="",$user_id,$payroll)
+public function working_state_tax($taxname, $employee_status, $final, $local_tax_range, $stateTax = "", $user_id, $payroll, $payroll_frequency)
 {
-    $this->db->select('employee,employer,tax,details,single,tax_filling,married,head_household');
+    $this->db->select('employee, employer, tax, details, single, tax_filling, married, head_household');
+    
     if (strpos($taxname, 'Income') !== false) {
-    if($payroll =='Hourly'){
-    $this->db->from('state_localtax');
-    }else if($payroll == 'Salaried-weekly'){
-    $this->db->from('weekly_tax_info');
-    }else if($payroll == 'Salaried-BiWeekly'){
-        $this->db->from('biweekly_tax_info');
-    }else if ($payroll == 'Salaried-Monthly') {
-        $this->db->from('monthly_tax_info');
-} 
-}else{
-    $this->db->from('state_localtax');
-}
-    $this->db->where($employee_status,$local_tax_range);
-    if($stateTax !=""){
+        if ($payroll == 'Hourly' || $payroll == 'Fixed') {
+            switch ($payroll_frequency) {
+                case 'Weekly':
+                    $this->db->from('weekly_tax_info');
+                    break;
+                case 'Bi-Weekly':
+                    $this->db->from('biweekly_tax_info');
+                    break;
+                case 'Monthly':
+                    $this->db->from('monthly_tax_info');
+                    break;
+                default:
+                    $this->db->from('state_localtax');
+                    break;
+            }
+        }
+    } else {
+        $this->db->from('state_localtax');  
+    }
+
+    
+    $this->db->where($employee_status, $local_tax_range);
+    
+    if ($stateTax != "") {
         $this->db->like('tax', $stateTax);
     }
+    
     $this->db->where('created_by', $user_id);
+
     $query = $this->db->get();
-  
-   if ($query->num_rows() > 0) {
-       return $query->result_array();
+    
+    if ($query === false) {
+        return false;
     }
-     return true;
- }
+
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    
+    return true; 
+}
+
 //To get the tax amount of current timesheet_id
 public function get_tax_history($tax_type,$tax,$timesheet){
     $this->db->select('amount')->from('tax_history')

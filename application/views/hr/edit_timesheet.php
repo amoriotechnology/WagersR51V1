@@ -81,7 +81,7 @@
                                             <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
                                             <th style='height:25px;' class="col-md-5">Hours</th>
                                             <th style='height:25px;' class="col-md-5">Action</th>
-                                        <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                                        <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                                             <th style='height:25px;' class="col-md-2">Date</th>
                                             <th style='height:25px;' class="col-md-1">Day</th>
                                             <th style='height:25px; ' class="col-md-5">Present / Absence</th>
@@ -169,7 +169,7 @@
                                 <?php } ?>
                             </tbody>
 
-                        <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                        <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
 
                             <tbody id="tBody">
                             <?php
@@ -199,7 +199,7 @@
                                 <td class="day">
                                     <input type="text" name="day[]" readonly value="<?= $timesheetdata[$date]['day']; ?>">
                                 </td>
-                                <?php if($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                                <?php if($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                                 <td class="hours-worked">
                                     <label class="switch" style="width:100px;">
                                         <input type="checkbox" class="timeSum present checkbox switch-input" id="blockcheck_<?= $i; ?>" name="present[]"
@@ -225,7 +225,7 @@
                     <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours :</td> 
                     <td style="text-align: center;"> <input  type="text" readonly id="total_net" value="<?= $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td> 
 
-                    <?php } elseif ($employee_name[0]['payroll_type'] == 'Salaried-weekly' || $employee_name[0]['payroll_type'] == 'Salaried-BiWeekly' || $employee_name[0]['payroll_type'] == 'Salaried-Monthly' || $employee_name[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+                    <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td> 
                     <td style="text-align: center;"> <input  type="text" readonly id="total_net" value="<?= $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td> 
 
@@ -329,7 +329,7 @@ for(let i = 0; i <= Days; i++) {
             <td class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
             <td class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
             <td class="hours-worked_<?= $i; ?>"><input id="hoursWorked<?= $monStartWeekDays[$i]; ?>" name="sum[]" class="timeSum" readonly type="text" /></td>
-        <?php } elseif ($time_sheet_data[0]['payroll_type'] == 'Salaried-weekly' || $time_sheet_data[0]['payroll_type'] == 'Salaried-BiWeekly' || $time_sheet_data[0]['payroll_type'] == 'Salaried-Monthly' || $time_sheet_data[0]['payroll_type'] == 'Salaried-BiMonthly') { ?>
+        <?php } elseif ($time_sheet_data[0]['payroll_type'] == 'Fixed') { ?>
             <td style="display:none;" class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
             <td style="display:none;" class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
             <td class="hours-worked_<?= $i; ?>">
