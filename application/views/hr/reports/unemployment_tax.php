@@ -1,9 +1,8 @@
-<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/calanderstyle.css">
 <div class="content-wrapper">
    <section class="content-header" style="height: 60px;">
       <div class="header-icon">
          <figure class="one">
-            <img src="<?php echo base_url() ?>asset/images/salesreport.png" class="headshotphoto" style="height:50px;" />
+            <img src="<?php echo base_url() ?>assets/images/salesreport.png" class="headshotphoto" style="height:50px;" />
          </figure>
       </div>
       <div class="header-title">
@@ -23,27 +22,11 @@
       </div>
    </section>
    <section class="content">
-      <?php
-         $message = $this->session->userdata('message');
-         if (isset($message)) { 
-      ?>
-      <div class="alert alert-info alert-dismissable" style="background-color:#38469f;color:white;font-weight:bold;">
-         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-         <?php echo $message ?>                    
-      </div>
-      <?php $this->session->unset_userdata('message'); }
-         $error_message = $this->session->userdata('error_message');
-         if (isset($error_message)) {
-      ?>
-      <div class="alert alert-danger alert-dismissable">
-         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-         <?php echo $error_message ?>                    
-      </div>
-      <?php $this->session->unset_userdata('error_message');}?>
       <div class="panel panel-bd lobidrag">
          <div class="panel-heading" style="height: 60px;border: 3px solid #D7D4D6;">
             <div class="col-sm-12">
-                <div class="col-md-6 col-sm-6" style="display: flex; justify-content: center; align-items: center;">
+              <div class="col-md-2 col-sm-2"></div>
+                <div class="col-md-4 col-sm-4" style="display: flex; justify-content: center; align-items: center;">
                     <label>Employee</label>&nbsp;&nbsp;&nbsp;
                     <select id="customer-name-filter" name="employee_name" class="form-control employee_name">
                         <option value="All">All</option>
@@ -73,13 +56,13 @@
                      <table class="table table-bordered" cellspacing="0" width="100%" id="socialsecuritytax_list">
                         <thead>
                             <tr  class="btnclr">
-                                <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; width: 300px;"><?php echo 'S.NO'?></th>
-                                <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 300px;"><?php echo 'Employee Name'?></th>
-                                 <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 300px;"><?php echo 'Employee Tax'?></th>
-                                <th rowspan="2" class="3 value" data-col="3" style="text-align:center; width: 300px;"><?php echo 'TimeSheet ID'?></th>
-                                <th rowspan="2" class="4 value" data-col="4" style="text-align:center; width: 300px;"><?php echo 'Pay Period'?></th>
-                                <th rowspan="2" class="4 value" data-col="4" style="text-align:center; width: 300px;"><?php echo 'Cheque Date'?></th>
-                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 200px;"><?php echo ('Unemployment Tax')?></th>
+                                <th rowspan="2" class="1 value" data-col="1" style="height: 45.0114px; text-align:center; width: 100px;"><?php echo 'S.NO'?></th>
+                                <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 100px;"><?php echo 'Employee Name'?></th>
+                                 <th rowspan="2" class="2 value" data-col="2" style="text-align:center; width: 100px;"><?php echo 'Employee Tax'?></th>
+                                <th rowspan="2" class="3 value" data-col="3" style="text-align:center; width: 100px;"><?php echo 'TimeSheet ID'?></th>
+                                <th rowspan="2" class="4 value" data-col="4" style="text-align:center; width: 100px;"><?php echo 'Pay Period'?></th>
+                                <th rowspan="2" class="4 value" data-col="4" style="text-align:center; width: 100px;"><?php echo 'Cheque Date'?></th>
+                                <th colspan="2" class="4 value" data-col="4" style="text-align:center;width: 300px;"><?php echo ('Unemployment Tax')?></th>
                             </tr>
                             <tr class="btnclr">
                                <th class="4 value" data-col="4" style="text-align:center;width: 200px;"><?php echo ('Employee Contribution')?></th>
@@ -101,14 +84,6 @@
       </div>
    </section>
 </div>
-
-
-<script src='<?php echo base_url();?>assets/js/moment.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-debug.js'></script>
-<script  src="<?php echo base_url() ?>assets/js/scripts.js"></script> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 <script type="text/javascript">
 var federalincomeDataTable;
 $(document).ready(function() {
@@ -181,7 +156,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
             },
         }],
         "pageLength": 10,
-        "colReorder": true,
+        "colReorder": false,
         "stateSave": true,
         "footerCallback": function(row, data, start, end, display) {
             var api = this.api();
@@ -300,60 +275,7 @@ $(".sidebar-mini").addClass('sidebar-collapse') ;
 
 </script>
 
-<style type="text/css">
-.search {
-position: relative;
-color: #aaa;
-font-size: 16px;
-}
-
-.search {display: inline-block;}
-
-.search input {
-  width: 260px;
-  height: 34px;
-  background: #fff;
-  border: 1px solid #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 3px #ccc, 0 10px 15px #fff inset;
-  color: #000;
-}
-
-.search input { text-indent: 32px;}
-
-.search .fa-search { 
-  position: absolute;
-  top: 8px;
-  left: 10px;
-}
-
-.search .fa-search {left: auto; right: 10px;}
-
-.btnclr{
-    background-color: #424f5c;
-    color: #fff;
-}
-
-.select2-container{
-    display: none !important;
-}
-.form-control{
-    width: 40% !important;
-}
-
-.table.dataTable thead th{
-    border-bottom: 1px solid #e1e6ef  !important;
-}
-
-.table.dataTable tfoot th{
-    border-top: 1px solid #e1e6ef  !important;
-}
-
-tbody{
-    text-align: center !important;
-}
-
-.error-border {
-    border: 2px solid red;
-}
-</style>
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/css/calanderstyle.css">
+<script src='<?php echo base_url();?>assets/js/moment.min.js'></script>
+<script src='<?php echo base_url();?>assets/js/knockout-debug.js'></script>
+<script  src="<?php echo base_url() ?>assets/js/scripts.js"></script>
