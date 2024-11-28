@@ -1048,12 +1048,81 @@ if(in_array(BOOTSTRAP_MODALS['add_states'],$bootstrap_modals)){ ?>
       </div>
    </div>
 </div>
+<?php } if(in_array(BOOTSTRAP_MODALS['add_administrator'],$bootstrap_modals)) { ?>
+   
+<!----- // add Administrator data - Yokesh -->  
+<div class="modal fade" id="add_admst" role="dialog">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header" style="color:white;background-color:#38469f;" >
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h4 class="modal-title"> Add New Administrator</h4>
+        </div>
+        
+        <div class="modal-body">
+
+        <div id="customeMessage" class="alert hide"></div>
+        <form id="insert_adm" method="post">
+            <div class="panel-body">
+                <input type ="hidden" name="csrf_test_name" id="" value="<?= $this->security->get_csrf_hash();?>">
+                <div class="form-group row">
+                    <label for="adms_name" class="col-sm-4 col-form-label" ><?= ('Administrator Name') ?> <i class="text-danger">*</i></label>
+                    <div class="col-sm-6">
+                        <input class="form-control" name ="adms_name" id="adms_name" type="text" placeholder="Administrator Name"   required="" tabindex="1">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="address" class="col-sm-4 col-form-label" ><?= ('Administrator Address') ?> </label>
+                    <div class="col-sm-6">
+                        <input class="form-control" name ="address" id="address" type="text" placeholder="Administrator Adress" required="" tabindex="1">
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" class="btn" style="color:white;background-color:#38469f;" data-dismiss="modal"><?= display('Close') ?> </a>
+                <input type="submit" class="btn" style="color:white;background-color: #38469f;" value=<?= display('Submit') ?>>
+            </div>
+        </form>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <?php } ?>
 
 
 <script>
 
-var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
+   var csrfName = '<?= $this->security->get_csrf_token_name();?>';
+   var csrfHash = '<?= $this->security->get_csrf_hash();?>';
+   // add Administrator data - Yokesh
+   $('#insert_adm').submit(function (event) {
+      event.preventDefault();
+
+      var dataString = {
+         dataString : $("#insert_adm").serialize()
+      };
+      dataString[csrfName] = csrfHash;
+      $.ajax({
+         type:"POST",
+         dataType:"json",
+         url:"<?= base_url(); ?>Chrm/insert_data_adsr",
+         data:$("#insert_adm").serialize(),
+         success:function (data1) {
+               var $select = $('select#administrator_person');
+               $select.empty();
+               $('#add_admst').modal('hide');
+               for(var i = 0; i < data1.length; i++) {
+                  var option = $('<option/>').attr('value', data1[i].adm_name).text(data1[i].adm_name);
+                  $select.append(option); // append new options
+               }
+         }
+      });
+   });
+
+   var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
    var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
 
    $(document).ready(function () {

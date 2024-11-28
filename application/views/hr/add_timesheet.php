@@ -1,13 +1,14 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
+
+<link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/toastr.min.css')?>" />
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="header-icon"> <i class="pe-7s-note2"></i> </div>
         <div class="header-title">
             <h1>Timesheet</h1>
-            <small><?php echo $title ?></small>
+            <small><?= $title ?></small>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
+                <li><a href="#"><i class="pe-7s-home"></i> <?= display('home') ?></a></li>
                 <li><a href="#">HRM</a></li>
                 <li class="active" style="color:orange">Timesheet</li>
             </ol>
@@ -20,26 +21,26 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading" style="height: 50px;">
                         <div class="panel-title">
-                            <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
+                            <a style="float:right;color:white;" href="<?= base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?= "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
-                <?php echo form_open_multipart('Chrm/pay_slip?id=' . $_GET['id'], 'id="validate"'); ?>
-                  <?php  $id=random_int(100000, 999999); ?>
-                  <input type="hidden" name="<?php echo $this->security->get_csrf_token_name();?>" value="<?php echo $this->security->get_csrf_hash();?>">
+                <?= form_open_multipart('Chrm/pay_slip?id=' . $_GET['id'], 'id="validate"'); ?>
+                  <?php  $id = random_int(100000, 999999); ?>
+                  <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
                     <div class="panel-body">
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="customer" class="col-sm-4 col-form-label">Employee Name<i class="text-danger">*</i></label>
                                 <div class="col-sm-6">
-                                    <input type="hidden" id="tsheet_id" value="<?php echo $id ; ?>" name="tsheet_id" />
-                                    <input  type="hidden" readonly id="unique_id" value="<?php echo $this->session->userdata('unique_id') ?>" name="unique_id" />
+                                    <input type="hidden" id="tsheet_id" value="<?= $id ; ?>" name="tsheet_id" />
+                                    <input  type="hidden" readonly id="unique_id" value="<?= $this->session->userdata('unique_id') ?>" name="unique_id" />
 
-                                    <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
-                                    <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
+                                    <input type ="hidden"  id="admin_company_id" value="<?= $_GET['id'];  ?>" name="admin_company_id" />
+                                    <input type ="hidden" id="adminId" value="<?= $_GET['admin_id'];  ?>" name="adminId" />
                                     <select name="templ_name" id="templ_name" class="form-control"  required  tabindex="3" style="width:100;">
-                                        <option value=""> <?php echo ('Select Employee Name') ?></option>
+                                        <option value=""> <?= ('Select Employee Name') ?></option>
                                     <?php foreach($employee_name as $emp_name) { ?>
-                                        <option value="<?php  echo $emp_name['id'] ;?>"> <?php echo isset($emp_name['first_name']) ? $emp_name['first_name'] . " " : ""; echo isset($emp_name['middle_name']) ? $emp_name['middle_name'] . " " : ""; echo isset($emp_name['last_name']) ? $emp_name['last_name'] : ""; ?></option>
+                                        <option value="<?php  echo $emp_name['id'] ;?>"> <?= isset($emp_name['first_name']) ? $emp_name['first_name'] . " " : ""; echo isset($emp_name['middle_name']) ? $emp_name['middle_name'] . " " : ""; echo isset($emp_name['last_name']) ? $emp_name['last_name'] : ""; ?></option>
                                     <?php } ?>
                                     </select>
                                 </div>
@@ -87,7 +88,7 @@
                         <input type="hidden" id="csrf" data-name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
                         <input type="hidden" id="week_setting" data-start="<?= (!empty($setting_detail[0]['start_week'])) ? $setting_detail[0]['start_week'] : 'Monday'; ?>" data-end="<?= (!empty($setting_detail[0]['end_week']) ? $setting_detail[0]['end_week'] : 'Friday'); ?>" >
                     </div>               
-                    <?php echo form_close() ?>
+                    <?= form_close() ?>
                 </div>
             </div>
         </div>
@@ -102,6 +103,7 @@
 ?>
 
 <script>
+
 $('.decimal').keydown(function (e) {
   var match = $(this).val().match(/\./g);
   if(match!=null){
@@ -146,7 +148,7 @@ $('#add_pay_terms').submit(function(e){
         type:'POST',
         data: data,
         dataType:"json",
-        url:'<?php echo base_url();?>Cpurchase/add_payment_terms',
+        url:'<?= base_url();?>Cpurchase/add_payment_terms',
         success: function(data1, statut) {
             var $select = $('select#terms');
             $select.empty();
@@ -180,10 +182,10 @@ $('body').on('keyup','.end',function(){
 });
 
 
-var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
-var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
+var csrfName = '<?= $this->security->get_csrf_token_name();?>';
+var csrfHash = '<?= $this->security->get_csrf_hash();?>';
 
-$(document).on('select change'  ,'#templ_name', function () {
+$(document).on('select change', '#templ_name', function () {
     var data = {
         value:$('#templ_name').val()
     };
@@ -192,7 +194,7 @@ $(document).on('select change'  ,'#templ_name', function () {
         type:'POST',
         data: data, 
         dataType:"json",
-        url:'<?php echo base_url();?>Chrm/getemployee_data',
+        url:'<?= base_url();?>Chrm/getemployee_data',
         success: function(result, statut) {
             if (result.length > 0) { 
             if (result[0]['designation'] !== '') {
@@ -222,11 +224,11 @@ $('#add_duration').submit(function(e){
         type:'POST',
         data: data,
         dataType:"json",
-        url:'<?php echo base_url();?>Chrm/add_durat_info',
+        url:'<?= base_url();?>Chrm/add_durat_info',
         success: function(data1, statut) {
             var $select = $('select#duration');
             $select.empty();
-            // console.log(data);
+
             for(var i = 0; i < data1.length; i++) {
                 var option = $('<option/>').attr('value', data1[i].duration_name).text(data1[i].duration_name);
                 $select.append(option); 
@@ -256,7 +258,7 @@ $('#insert_daily_break').submit(function(e){
         type:'POST',
         data: data,
         dataType:"json",
-        url:'<?php echo base_url();?>Chrm/add_dailybreak_info',
+        url:'<?= base_url();?>Chrm/add_dailybreak_info',
         success: function(data1, statut) {
             var $select = $('select#dailybreak');
             $select.empty();
@@ -276,10 +278,10 @@ $('#insert_daily_break').submit(function(e){
 });
 
 
-var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
-var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
+var csrfName = '<?= $this->security->get_csrf_token_name();?>';
+var csrfHash = '<?= $this->security->get_csrf_hash();?>';
 
-$(document).on('select change'  ,'#templ_name', function () {
+$(document).on('select change', '#templ_name', function () {
     $('#check_date').text('');
     $('.btnclr').show();
     var data = {
@@ -291,17 +293,24 @@ $(document).on('select change'  ,'#templ_name', function () {
         type:'POST',
         data: data, 
         dataType:"json",
-        url:'<?php echo base_url();?>Chrm/getemployee_data',
+        url:'<?= base_url();?>Chrm/getemployee_data',
         success: function(result, statut) {
             if (result.length > 0) { 
-            if (result[0]['designation'] !== '') {
-                $('#job_title').val(result[0]['designation']);
-                $('#payroll_type').val(result[0]['payroll_type']);
-                $('#payroll_freq').val(result[0]['payroll_freq']);
-            } else {
-                $('#job_title').val("Sales Partner");
-                $('#payroll_type').val("Sales Partner");
-            }
+                if (result[0]['designation'] !== '') {
+                    $('#job_title').val(result[0]['designation']);
+                    $('#payroll_type').val(result[0]['payroll_type']);
+                    $('#payroll_freq').val(result[0]['payroll_freq']);
+
+                    if(result[0]['payroll_freq'] != "") {
+                        getDatePicker(result[0]['payroll_freq']);
+                    } else {
+                        $('#tHead, #tBody, #tFoot').empty();
+                    }
+
+                } else {
+                    $('#job_title').val("Sales Partner");
+                    $('#payroll_type').val("Sales Partner");
+                }
             }
         }
     });
@@ -311,72 +320,175 @@ $(document).on('select change'  ,'#templ_name', function () {
 if(isset($_POST['btnSearch'])){
     $s = $_REQUEST["daterangepicker-field"];
 }
-$prev_month = date('Y-m-d', strtotime('first day of january this year'));
-$current=date('Y-m-d');
-$dat2= $prev_month."to". $current;
-$searchdate =(!empty($s)?$s:$dat2);
-$dat = str_replace(' ', '', $searchdate);
-$split=explode("to",$dat);
+    $prev_month = date('Y-m-d', strtotime('first day of january this year'));
+    $current=date('Y-m-d');
+    $dat2= $prev_month."to". $current;
+    $searchdate =(!empty($s)?$s:$dat2);
+    $dat = str_replace(' ', '', $searchdate);
+    $split=explode("to",$dat);
 ?>
 
-var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
-var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
-$(function() {
+function formatDate(date) {
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+
+    return month + '/' + day + '/' + year;
+}
+
+var csrfName = '<?= $this->security->get_csrf_token_name();?>';
+var csrfHash = '<?= $this->security->get_csrf_hash();?>';
+
+function diffDays(startday, endday, type) {
+    if(type == "Bi-Weekly") {
+        var res = 14;
+    } else {
+        var res = 7;
+    }
+    
+    if(startday > endday) {
+        if(endday == 0) {
+            if(type == "Bi-Weekly") {
+                res = (14 - startday);
+            } else {
+                res = (7 - startday);
+            }
+        } else {
+            res = (endday + parseInt(startday - endday));
+        }
+    } else if(endday > startday) {
+        res = parseInt(endday - startday);
+    }
+    return res;
+}
+
+var weeks = {'Sunday' : 0, 'Monday' : 1, 'Tuesday': 2, 'Wednesday' : 3, 'Thusday' : 4, 'Friday' : 5, 'Saturday' : 6};
+
+function getDatePicker(payroll_freq) {
+
     var start = moment().startOf('isoWeek'); 
     var end = moment().endOf('isoWeek'); 
     var startOfLastWeek = moment().subtract(1, 'week').startOf('week');
     var endOfLastWeek = moment().subtract(1, 'week').endOf('week').add(1, 'day'); 
-    function cb(start, end) {
-        $('#reportrange').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-    }
 
-    var start_week = "<?php echo (!empty($setting_detail[0]['start_week'])) ? $setting_detail[0]['start_week'] : 'Monday'; ?>";
-    var end_week = "<?php echo (!empty($setting_detail[0]['end_week']) ? $setting_detail[0]['end_week'] : 'Friday'); ?>";
-    var weeks = {'Sunday' : 0, 'Monday' : 1, 'Tuesday': 2, 'Wednesday' : 3, 'Thusday' : 4, 'Friday' : 5, 'Saturday' : 6};
+    var start_week = $('#week_setting').data('start');
+    var end_week = $('#week_setting').data('end');
+
+    var btwDays = diffDays(weeks[start_week], weeks[end_week], payroll_freq);
+    var sDate = moment().weekday(weeks[start_week]).startOf();
+    
+    if(payroll_freq == "Weekly") {
+        var eDate = moment(sDate).add(btwDays, 'days');
+
+    } else if(payroll_freq == "Bi-Weekly") {
+        var eDate = moment(sDate).add(btwDays, 'days');
+
+    } else {
+        var sDate = moment().startOf('month');
+        var eDate = moment().endOf('month');
+    }
+    
+    $('#reportrange').val(sDate.format('DD/MM/YYYY') + ' - ' + eDate.format('DD/MM/YYYY'));
+    
     var ThisWeekStart = moment().weekday(weeks[start_week]).startOf()._d;
     var LastWeekStart = moment().subtract(1,  'week').startOf().weekday(weeks[start_week])._d;
     var BeforeLastWeekStart = moment().subtract(2,  'week').startOf().weekday(weeks[start_week])._d;
-    
-    function diffDays(startday, endday) {
-        var res = 7;
-        if(startday > endday) {
-            if(endday == 0) {
-                res = (7 - startday);
-            } else {
-                res = (endday + parseInt(startday - endday));
+
+    var date_range = {};
+    if(payroll_freq == "Weekly") {
+        date_range = {
+            maxDate: 0,
+            startDate: sDate,
+            endDate: eDate,
+            ThisWeek: ThisWeekStart,
+            LastWeek: LastWeekStart,
+            beforeWeek:BeforeLastWeekStart,
+            ranges: {
+                'Last Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+                'Last Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+                'This Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+            },
+            locale: {
+                firstDay: 1
+            },
+            isInvalidDate: function(date) {
+                return date.day() !== weeks[start_week];
             }
-        } else if(endday > startday) {
-            res = parseInt(endday - startday);
         }
-        return res;
+    }
+
+    if(payroll_freq == "Bi-Weekly") {
+        date_range = {
+            startDate: sDate,
+            endDate: eDate,
+            ThisWeek: ThisWeekStart,
+            LastWeek: LastWeekStart,
+            beforeWeek:BeforeLastWeekStart,
+            ranges: {
+                'Last Bi Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+                'Last Bi Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+                'This Bi Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], payroll_freq), 'days')],
+            },
+            locale: {
+                firstDay: 1
+            },
+            isInvalidDate: function(date) {
+                return date.day() !== weeks[start_week];
+            }
+        }
+    }
+
+    if(payroll_freq == "Monthly") {
+        date_range = {
+            startDate: sDate,
+            endDate: eDate,
+            ranges: {
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }
     }
     
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ThisWeek: ThisWeekStart,
-        LastWeek: LastWeekStart,
-        beforeWeek:BeforeLastWeekStart,
-        ranges: {
-           
-            'Last Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'Last Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'This Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    $('#reportrange').daterangepicker(date_range);
+    Timesheetcheck();
+
+    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+
+        var startDate = $('#week_setting').data('start');
+        var endDate = $('#week_setting').data('end');
+        var payroll_freq = $('#payroll_freq').val();
+        var btwDays = diffDays(weeks[startDate], weeks[endDate], payroll_freq);
+        var sDate = moment(picker.startDate._d);
+
+        if(payroll_freq == "Weekly") {
+            var eDate = moment(sDate).add(btwDays, 'days');
+
+        } else if(payroll_freq == "Bi-Weekly") {
+            var eDate = moment(sDate).add(btwDays, 'days');
+        
+        } else {
+            var sDate = moment(picker.startDate._d).startOf('month');
+            var eDate = moment(sDate).endOf('month');
         }
-    }, cb);
+
+        $('#reportrange').val(sDate.format('MM/DD/YYYY') + ' - ' + eDate.format('MM/DD/YYYY'));
+        Timesheetcheck();
+    });
+
+}
 
 
-  $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-      
+function Timesheetcheck() {
     var data= {
         selectedDate: $('#reportrange').val(),
         employeeId: $('#templ_name').val() 
     };
     data[csrfName] = csrfHash;
     $.ajax({
-        url:'<?php echo base_url();?>Chrm/checkTimesheet',
+        url:'<?= base_url();?>Chrm/checkTimesheet',
         method: 'POST',
         data:data,
         success: function(response) {
@@ -389,20 +501,39 @@ $(function() {
         },
         error: function(xhr, status, error) {}
     });
-});
-
-cb(start, end);
-});
+}
 
 
-$('body').on('input select change','#reportrange',function() {
-    var date = $(this).val();
-    $('#tBody').empty();
-    $('#tHead').empty();  
-    $('#tFoot').empty();
+// while active select & change daterangepicker and creating hourly / Fixed table
+$('body').on('input select change', '#reportrange',function() {
+
+    var selectdate = $(this).val();
+    var start = selectdate.split(" - ");
+    var startDate = $('#week_setting').data('start');
+    var endDate = $('#week_setting').data('end');
+    var pay_freq = $('#payroll_freq').val();
+    var btwDays = diffDays(weeks[startDate], weeks[endDate], pay_freq);
+    var start_date = new Date(start[0]);
+    var sDate = formatDate(start_date);
+
+    if(pay_freq == "Weekly") {
+        var eDate = new Date(start_date.setDate(start_date.getDate() + btwDays));
+        var date = (sDate + ' - ' + formatDate(eDate));
+
+    } else if(pay_freq == "Bi-Weekly") {
+        var eDate = new Date(start_date.setDate(start_date.getDate() + btwDays));
+        var date = (sDate + ' - ' + formatDate(eDate));
+    
+    } else {
+        var date = selectdate;
+    }
+    
+    $('#reportrange').val(date);
+    $('#tHead, #tBody, #tFoot').empty();
     $('.btnclr').show();
     $('#check_date').html('');
-    const myArray = date.split("-");
+
+    const myArray = date.split(" - ");
     var start = myArray[0];
     var s_split=start.split("/");
     var end = myArray[1];
@@ -412,7 +543,6 @@ $('body').on('input select change','#reportrange',function() {
     var Date1 = new Date (s_split[2]+'/'+s_split[0]+'/'+s_split[1]);
     var Date2 = new Date (e_split[2]+'/'+e_split[0]+'/'+e_split[1]);
     var Days = Math.round((Date2.getTime() - Date1.getTime())/(1000*60*60*24));
-    
     const validDate = new Date(chosenDate);
     let newDate;
     const monStartWeekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -422,7 +552,7 @@ $('body').on('input select change','#reportrange',function() {
     };
     data[csrfName] = csrfHash;
     $.ajax({
-        url:'<?php echo base_url();?>Chrm/check_employee_pay_type',
+        url:'<?= base_url();?>Chrm/check_employee_pay_type',
         method: 'POST',
         data:data,
         success: function(response) {
@@ -433,7 +563,7 @@ $('body').on('input select change','#reportrange',function() {
             };
             data[csrfName] = csrfHash;
             $.ajax({
-                url:'<?php echo base_url();?>Chrm/sc_cnt',
+                url:'<?= base_url();?>Chrm/sc_cnt',
                 method: 'POST',
                 data:data,
                 success: function(response) {
@@ -452,14 +582,13 @@ $('body').on('input select change','#reportrange',function() {
                 error: function(xhr, status, error) {}
             });
         }
-
-            if (
-                response.includes('salary') || 
-                response.includes('Weekly') || 
-                response.includes('Bi-Weekly') || 
-                response.includes('Monthly') || 
-                response.includes('Fixed')
-            ) {
+        if (
+            response.includes('salary') || 
+            response.includes('Weekly') || 
+            response.includes('Bi-Weekly') || 
+            response.includes('Monthly') || 
+            response.includes('Fixed')
+        ) {
                 $('#tHead').append(`
                     <tr style="text-align:center;">
                         <th class="col-md-2">Date</th>
@@ -500,7 +629,7 @@ $('body').on('input select change','#reportrange',function() {
                 </tr>`);
         }
 
-        var end_week = "<?php echo (!empty($setting_detail[0]['end_week'])) ? $setting_detail[0]['end_week'] : 'Sunday'; ?>";
+        var end_week = "<?= (!empty($setting_detail[0]['end_week'])) ? $setting_detail[0]['end_week'] : 'Sunday'; ?>";
         var total_pres = 0;
         var data_id = 0;
         for (let i = 0; i <= Days; i++) { 
@@ -563,7 +692,7 @@ $('body').on('input select change','#reportrange',function() {
                         <td style="text-align:center;" class="daily-break_${i}">
                             <select name="dailybreak[]" id="dailybreak" class="form-control datepicker dailybreak" style="width: 100px;margin: auto; display: block;">
                                 <?php foreach ($dailybreak as $dbd) { ?>
-                                <option value="<?php echo $dbd['dailybreak_name']; ?>"><?php echo $dbd['dailybreak_name']; ?></option>
+                                <option value="<?= $dbd['dailybreak_name']; ?>"><?= $dbd['dailybreak_name']; ?></option>
                                 <?php } ?>  
                             </select>  
                         </td>
@@ -584,7 +713,7 @@ $('body').on('input select change','#reportrange',function() {
                         $('#tBody').append(`<tr> 
                             <td colspan="5" class="text-right" style="font-weight:bold;"> Weekly Total Hours:</td> 
                             <td class="hour_week_total">
-                                <input type="text" name="hour_weekly_total" id="hourly_`+data_id+`" value="" readonly />
+                                <input type="text" name="hour_weekly_total[]" id="hourly_`+data_id+`" value="" readonly />
                             </td>
                         </tr>`);
                         data_id++;
@@ -611,7 +740,6 @@ $('body').on('input select change','#reportrange',function() {
                         <a style="color:white;" class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
                     </td> 
                 </tr>`);
-                
             }
         }
     },
@@ -625,22 +753,18 @@ $(document).ready(function() {
     function updateCounter() {
         var sumOfDays = 0;
         var sumofWeek = 0;
-
         var data_id = $('input[type="checkbox"]').data('id');
         $(".weekly_"+data_id+":checkbox:checked").each(function() {
 
         });
-
         sumOfDays = $('input[type="checkbox"].present:checked').length;
         $('#total_net').val(sumOfDays);
     }
-
    
     $(document).on('change', 'input[type="checkbox"].present', function() {
         updateCounter();
     });
 
-    
     updateCounter();
 });
 
@@ -653,7 +777,6 @@ function converToMinutes(s) {
 function parseTime(s) {
     return Math.floor(parseInt(s) / 60) + "." + parseInt(s) % 60
 }
-
 
 $(document).on('select change', '.end','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
@@ -684,7 +807,6 @@ $(document).on('select change', '.end','.dailybreak', function () {
         var tableTotal = 0;
         var tableHours = 0;
         var tableMinutes = 0;
-
         var weekTotal = 0;
         var weekHours = 0;
         var weekMinutes = 0;
@@ -705,7 +827,6 @@ $(document).on('select change', '.end','.dailybreak', function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
                 var [hours, minutes] = precio.split('.').map(parseFloat);
-                
                 tableHours += hours;
                 tableMinutes += minutes;
             }
@@ -716,7 +837,6 @@ $(document).on('select change', '.end','.dailybreak', function () {
 
     var timeConvertion = convertToTime(week_netH, week_netM);
     $('#hourly_'+data_id).val(timeConvertion).trigger('change');
-
     var timeConvertion = convertToTime(total_netH, total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
 });
@@ -749,7 +869,6 @@ $(document).on('select change', '.start','.dailybreak', function () {
         var tableTotal = 0;
         var tableHours = 0;
         var tableMinutes = 0;
-
         var weekTotal = 0;
         var weekHours = 0;
         var weekMinutes = 0;
@@ -764,7 +883,6 @@ $(document).on('select change', '.start','.dailybreak', function () {
         });
         week_netH += weekHours;
         week_netM += weekMinutes;
-
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
@@ -778,7 +896,6 @@ $(document).on('select change', '.start','.dailybreak', function () {
     });
     var timeConvertion = convertToTime(week_netH, week_netM);
     $('#hourly_'+data_id).val(timeConvertion).trigger('change');
-
     var timeConvertion = convertToTime(total_netH,total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
 });
