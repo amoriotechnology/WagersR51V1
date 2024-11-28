@@ -112,30 +112,35 @@ function add_time($time1, $time2) {
           <table class="table" style='margin-bottom:0px;'>
             <tr class='btnclr'>
               <th style='font-size:12px;'>EARNINGS</th>
-              <th> <?php
+              <th>
+                <?php
                 if (
-                    ($employee_info[0]["payroll_type"] == "Hourly") ||
-                    ($employee_info[0]["payroll_type"] == "Fixed" && 
-                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"]))
+                    $employee_info[0]["payroll_type"] == "Hourly" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"])
+                ) {
+                    echo "HRS/ UNIT";
+                } elseif (
+                    $employee_info[0]["payroll_type"] == "Fixed" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"])
                 ) {
                     echo "DAYS";
-                } else {
-                    echo "HRS/ UNITS";
-                }
+                } 
                 ?>
               </th>
               <th>RATE</th>
               <th>THIS PERIOD(<?php echo $setting[0]["currency"]; ?>)</th>
               <th> <?php
                 if (
-                    $employee_info[0]["payroll_type"] == "Hourly" || 
-                    ($employee_info[0]["payroll_type"] == "Fixed" && 
-                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"]))
+                    $employee_info[0]["payroll_type"] == "Hourly" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"])
+                ) {
+                    echo "HRS/HOURS";
+                } elseif (
+                    $employee_info[0]["payroll_type"] == "Fixed" && 
+                    in_array($employee_info[0]["payroll_freq"], ["Weekly", "Bi-Weekly", "Monthly"])
                 ) {
                     echo "YTD DAYS";
-                } else {
-                    echo "HRS/HOURS";
-                }
+                } 
                 ?>
               </th>
               <th>YTD(<?php echo $setting[0]["currency"]; ?>)</th>
@@ -240,7 +245,7 @@ echo "00:00";
                 $employee_info[0]["payroll_freq"] == "Monthly" || 
                 $employee_info[0]["payroll_freq"] == "SalesCommission"
               ) { ?>
-                <?php if ($this_social["tax_data"]["t_s_tax"]) { ?> 
+                <?php  if ($this_social['tax_data']) { ?> 
               <tr>
                 <td style="text-align:left;"> Social Security</td>
                 <td>S O</td>
@@ -255,7 +260,7 @@ echo "00:00";
                   } ?>
                 </td>
               </tr>
-              <?php } ?> <?php if ($this_medicare["tax_data"]["t_m_tax"]) { ?> 
+              <?php } ?> <?php if ($this_medicare["tax_data"]) { ?> 
               <tr>
                 <td style="text-align:left;">Medicare</td>
                 <td>SMCU O</td>
@@ -265,7 +270,7 @@ echo "00:00";
                   echo round( $this_medicare["tax_data"]["t_m_tax"], 3);
                   } ?></td>
               </tr>
-              <?php } ?> <?php } ?> <?php if ( $this_federal["tax_data"]["t_f_tax"]) { ?> 
+              <?php } ?> <?php } ?> <?php if ( $this_federal["tax_data"]) { ?> 
               <tr>
                 <td style="text-align:left;">Fed Income Tax</td>
                 <td></td>
@@ -671,7 +676,7 @@ echo "00:00";
     right: -48px;
 }
 .footer_number {
-    background-image: url('<?php echo base_url("/assets/images/logo/footer.png"  );
+    background-image: url('<?php echo base_url("/assets/images/logo/footer.png");
     ?>');  
 }
 .separator .sep-line {

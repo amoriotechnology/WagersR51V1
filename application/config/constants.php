@@ -84,5 +84,20 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 define('COMPANY_ENCRYPT_KEY','amorio@2024');
-define('BOOTSTRAP_MODALS', [ 'daily_break' => 'daily_break','add_states' => 'add_states', 'add_state_tax' => 'add_state_tax', 'add_city_info' => 'add_city_info', 'add_city_tax' => 'add_city_tax', 'add_county_info' => 'add_county_info', 'add_county_tax' => 'add_county_tax', 'new_emp_form' => 'new_emp_form', 'bank_info_modal' => 'bank_info_modal', 'designation_modal' => 'designation_modal', 'city_tax_modal' => 'city_tax_modal', 'payroll_type_modal' => 'payroll_type_modal', 'emp_type_modal' => 'emp_type_modal', 'pay_type_modal' => 'pay_type_modal']);
+define('BOOTSTRAP_MODALS', [ 'daily_break' => 'daily_break',
+                                                    'add_states' => 'add_states', 
+                                                    'add_state_tax' => 'add_state_tax', 
+                                                    'add_city_info' => 'add_city_info', 
+                                                    'add_city_tax' => 'add_city_tax', 
+                                                    'add_county_info' => 'add_county_info', 
+                                                    'add_county_tax' => 'add_county_tax', 
+                                                    'new_emp_form' => 'new_emp_form', 
+                                                    'bank_info_modal' => 'bank_info_modal', 
+                                                    'designation_modal' => 'designation_modal', 
+                                                    'city_tax_modal' => 'city_tax_modal', 
+                                                    'payroll_type_modal' => 'payroll_type_modal', 
+                                                    'emp_type_modal' => 'emp_type_modal', 
+                                                    'pay_type_modal' => 'pay_type_modal',
+                                                    'add_administrator' => 'add_administrator',
+                                                ]);
 
