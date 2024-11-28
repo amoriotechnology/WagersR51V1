@@ -1,13 +1,12 @@
-
 <style>
 .switch-input[disabled] + .switch-label {
     pointer-events: none;
-    background-color: #f2f2f2; /* Change background color to indicate disabled */
-    color: #999; /* Change text color to indicate disabled */
+    background-color: #f2f2f2;
+    color: #999;
 }
 
 .switch-input[disabled] + .switch-label::after {
-    border-color: #999; /* Change border color to indicate disabled */
+    border-color: #999;
 }
 .switch {
   margin-top: 5px;
@@ -129,26 +128,21 @@
    color: white;
    }
 .table {
-    width: 100%; /* Set the table width */
-    table-layout: fixed; /* Use a fixed layout */
+    width: 100%;
+    table-layout: fixed;
 }
 
 .table th,
 .table td {
-    width: auto; /* Or set the width as per your requirement */
-    /* Additional styling properties */
+    width: auto;
     border: 1px solid #ccc;
     padding: 8px;
-    /* Other styling properties */
 }
 .table input[type="text"],input[type="time"] {
     text-align:center;
-    background-color: inherit; /* Set your desired background color */
-    /* Additional styling properties */
-    /*border: 1px solid #ccc;*/
+    background-color: inherit;
     border-radius: 4px;
     padding: 8px;
-    /* Other styling properties */
 }
 input {border:0;outline:0;}
 .work_table td {
@@ -198,10 +192,8 @@ th,td{
                         <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id'] . '&admin_id=' . $_GET['admin_id']); ?>" class="btnclr btn m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                     </div>
                 </div>
-                <?php // echo form_open('Cquotation/insert_quotation', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
-                <!-- <form id="insert_timesheet"  method="post">   -->                  
+                 
                 <?= form_open_multipart('Chrm/adminApprove','id="validate"' ) ?>
-
                 <div class="panel-body">
                     <div class="form-group row">
                         <div class="col-sm-6">
@@ -271,7 +263,7 @@ th,td{
                                     $dateA = DateTime::createFromFormat('d/m/Y', $a['Date']);
                                     $dateB = DateTime::createFromFormat('d/m/Y', $b['Date']);
                                     if ($dateA === false || $dateB === false) {
-                                        return 0; // Handle invalid dates here if needed
+                                        return 0; 
                                     }
                                     return $dateA <=> $dateB;
                                 }
@@ -288,12 +280,9 @@ th,td{
                             <tbody id="tBody">
                             <?php                                    
                                 if(!empty($time_sheet_data)) {
-
-                                // Sorting the $time_sheet_data array based on the 'Date' field
                                 usort($time_sheet_data, 'compareDates');
                                 $printedDates = array();
 
-                                // Rendering the sorted table rows
                                 foreach($time_sheet_data as $tsheet) {
                                     $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit'=> $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break']];
                                     if(!empty($tsheet['hours_per_day']) && !in_array($tsheet['Date'], $printedDates) ) {
@@ -369,12 +358,9 @@ th,td{
                         <tbody id="tBody">
                             <?php
                             if(!empty($time_sheet_data)) {
-
-                                // Sorting the $time_sheet_data array based on the 'Date' field
                                 usort($time_sheet_data, 'compareDates');
                                 $printedDates = array();
 
-                                // Rendering the sorted table rows
                                 foreach($time_sheet_data as $tsheet) {
                                     $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit'=> $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break']];
                                     if(empty($tsheet['hours_per_day']) && !in_array($tsheet['Date'], $printedDates) ) {
@@ -446,7 +432,6 @@ th,td{
                                 <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
                                 <!-- Your code for 'SalesCommission' payroll type here, if any -->
                                 <?php } ?>
-
                             </tr>
                             <?php } } ?>
                         </tbody>
@@ -468,16 +453,11 @@ th,td{
                                 $mins  =  $time_sheet_data[0]['total_hours'] - $extratime_info[0]['work_hour'];
                                 $get_value  =  $time_sheet_data[0]['total_hours'] - $mins;
                                 $get_value = sprintf('%d:00', $get_value); 
-                                //For This Period
                                 $hrate = $employee_name[0]['hrate']; 
                                 list($hours, $minutes) = explode(':', $get_value);
-                                // Convert to decimal hours
-                                $total_hours = (int)$hours + ((int)$minutes / 60); // This should yield 25.5
-                                // Calculate total cost
-                                $total_cost = $total_hours * $hrate; // This should yield 2550
-                                // Round the total cost
+                                $total_hours = (int)$hours + ((int)$minutes / 60);
+                                $total_cost = $total_hours * $hrate;
                                 $total_cost = round($total_cost, 2);
-                                //For YTD
                                 $total=$time_sheet_data[0]['total_hours'];
                                 list($hours, $minutes) = explode(':', $total);
                                 $total_hours_ytd = $hours + ($minutes / 60);
@@ -757,11 +737,9 @@ $(document).ready(function(){
    $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
 
-
 <script src="<?= base_url('assets/js/moment.min.js'); ?>"></script>
 
 <script>
-
 var data = {
     value:$('#customer_name').val()
 };

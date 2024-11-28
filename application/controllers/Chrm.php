@@ -1149,6 +1149,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
         $this_period_federal  = $f['tax_value'];
         $overall_federal      = $f['tax_data']['t_f_tax'];
         $s                    = $this->countryTax('Social Security', $employeedata[0]['employee_tax'], $thisPeriodAmount, $employee_id, 's_tax', $user_id, $end_date, $timesheetdata[0]['timesheet_id']);
+
         $this_period_social   = $s['tax_value'];
         $overall_social       = $s['tax_data']['t_s_tax'];
         $m                    = $this->countryTax('Medicare', $employeedata[0]['employee_tax'], $thisPeriodAmount, $employee_id, 'm_tax', $user_id, $end_date, $timesheetdata[0]['timesheet_id']);
@@ -1183,6 +1184,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
             'admin'            => $admin_name,
             'ytd'              => $f['ytd'],
         );
+
         $content = $this->parser->parse('hr/pay_slip', $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -1882,7 +1884,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
     }
 // Admin Approve this Function
     public function adminApprove() {
-        // echo '<pre>'; print_r($_POST); echo '</pre>'; die;
+     //    echo '<pre>'; print_r($_POST); echo '</pre>'; die;
         list($user_id, $company_id)     = array_map('decodeBase64UrlParameter', [$this->input->post('admin_company_id'), $this->input->post('adminId')]);
         $company_info                   = $this->Hrm_model->retrieve_companyinformation($user_id);
         $datacontent                    = $this->Hrm_model->retrieve_companydata($user_id);
@@ -1895,6 +1897,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
         $work_hour = $this->input->post('hour_weekly_total');
         $data_timesheet['weekly_hours']   = (!empty($work_hour)) ? json_encode($work_hour) : '';
         $extra_hour                     = $this->input->post('extra_hour');
+        // echo '$extra_hour' . $extra_hour . '<br/>';die;
         $data_timesheet['ytd']          = $this->input->post('above_extra_ytd');
         $data_timesheet['month']        = $this->input->post('date_range');
         $date_split                     = explode(' - ', $this->input->post('date_range'));
@@ -1913,12 +1916,15 @@ $data['merged_reports_employer'] = $merged_array_employer;
         $data['timesheet_data']         = $this->Hrm_model->timesheet_info_data($data_timesheet['timesheet_id'], $user_id);
         $timesheetdata                  = $data['timesheet_data'];
         $employeedata                   = $data['employee_data'];
-        if (!empty($extra_hour) && $employeedata[0]['payroll_type'] == 'Hourly') {
+      
+        if ($employeedata[0]['payroll_type'] == 'Hourly') {
+            
             $data_timesheet['extra_rate']   = $this->input->post('extra_rate');
             $data_timesheet['extra_amount'] = $this->input->post('extra_thisrate');
             $data_timesheet['extra_hour']   = $this->input->post('extra_this_hour');
             $data_timesheet['extra_ytd']    = $this->input->post('extra_ytd');
         } else {
+          
             $data_timesheet['extra_rate']   = 0;
             $data_timesheet['extra_amount'] = 0;
             $data_timesheet['extra_hour']   = 0;
@@ -1970,9 +1976,11 @@ $data['merged_reports_employer'] = $merged_array_employer;
                 $this->db->delete('timesheet_info_details');
                 logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
                 $this->db->insert('timesheet_info', $data_timesheet);
+                 //echo $this->db->last_query(); die;
             } else {
                 logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
                 $this->db->insert('timesheet_info', $data_timesheet);
+                //echo $this->db->last_query(); die;
             }
             $data['timesheet_data'] = $this->Hrm_model->timesheet_info_data($data_timesheet['timesheet_id'], $user_id);
             $purchase_id_2          = $this->db->select('timesheet_id')->from('timesheet_info')->where('templ_name', $this->input->post('templ_name'))->where('month', $this->input->post('date_range'))->get()->row()->timesheet_id;
