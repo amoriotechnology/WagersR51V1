@@ -1,10 +1,8 @@
 <div class="content-wrapper">
-
     <section class="content-header" style="height:70px;">
         <div class="header-icon">
             <i class="pe-7s-note2"></i>
         </div>
-
         <div class="header-title">
             <h1>Edit TimeSheet</h1>
             <small></small>
@@ -15,9 +13,7 @@
             </ol>
         </div>
     </section>
-
     <section class="content">
-     
         <div class="row">
             <div class="col-sm-12">                
                 <div class="panel panel-bd lobidrag">
@@ -26,12 +22,9 @@
                             <a style="float:right;color:white;" href="<?php echo base_url('Chrm/manage_timesheet?id=' . $_GET['id']); ?>" class="btnclr btn  m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo "Manage TimeSheet" ?> </a>
                         </div>
                     </div>
-                  
                     <?php echo form_open_multipart('Chrm/pay_slip?id=' . $_GET['id'], 'id="validate"'); ?>
-                  
                     <div class="panel-body">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
-
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="customer" class="col-sm-4 col-form-label">Employee Name<i class="text-danger">*</i></label>
@@ -44,7 +37,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-sm-6">
                                 <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                                 <div class="col-sm-6">
@@ -52,7 +44,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="dailybreak" class="col-sm-4 col-form-label">Date Range<i class="text-danger">*</i></label>
@@ -60,7 +51,6 @@
                                     <input id="reportrange" type="text" readonly name="date_range" <?php if($time_sheet_data[0]['uneditable']==1){ echo 'readonly';}  ?> value="<?= $time_sheet_data[0]['month']; ?>" class="form-control"/>
                                 </div>
                             </div>
-
                             <div class="col-sm-6">
                                 <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Type <i class="text-danger"></i></label>
                                 <div class="col-sm-6">
@@ -68,7 +58,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="table-responsive work_table col-md-12">
                             <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
                                 <thead>
@@ -86,13 +75,10 @@
                                             <th style='height:25px;' class="col-md-1">Day</th>
                                             <th style='height:25px; ' class="col-md-5">Present / Absence</th>
                                         <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
-                                        
                                         <?php } ?>
                                     </tr>
                                 </thead>
-
                                 <?php 
-                                
                                 function compareDates($a, $b) {
                                     $dateA = DateTime::createFromFormat('d/m/Y', $a['Date']);
                                     $dateB = DateTime::createFromFormat('d/m/Y', $b['Date']);
@@ -101,7 +87,6 @@
                                     }
                                     return $dateA <=> $dateB;
                                 }
-
                                 $timesheetdata = [];
                                 $split_date = explode(' - ', $time_sheet_data[0]['month']);
                                 $start_date = date('Y-m-d', strtotime($split_date[0]));
@@ -109,26 +94,17 @@
                                 $btw_days = date_diff(date_create($start_date),date_create($end_date));
                                 $get_days = (int)($btw_days->format('%a') + 1);
                                 $end_week = $setting_detail[0]['end_week'];
-                                
                                 if($employee_name[0]['payroll_type'] == 'Hourly') { ?>
-
                                 <tbody id="tBody">
                                 <?php
-                                   
                                     usort($time_sheet_data, 'compareDates');
-
-                                   
                                     $printedDates = array();
-
-                                 
                                     foreach($time_sheet_data as $tsheet) {
                                         $timesheetdata[$tsheet['Date']] = ['date' => $tsheet['Date'], 'day' => $tsheet['Day'], 'edit'=> $tsheet['uneditable'], 'start' => $tsheet['time_start'], 'end' => $tsheet['time_end'], 'per_hour' => $tsheet['hours_per_day'], 'check' => $tsheet['present'], 'break' => $tsheet['daily_break']];
                                         if( !empty($tsheet['hours_per_day']) && !in_array($tsheet['Date'], $printedDates)) {
-                                         
                                             $printedDates[] = $tsheet['Date'];
                                         }
                                     }
-
                                     $time_tot = 0;
                                     for($i = 0; $i < $get_days; $i++) {
                                         $date = date('m/d/Y', strtotime($start_date .' +'.$i.' day'));
@@ -137,10 +113,8 @@
                                         $time_tot  += ((float)$split_time[0] * 3600);
                                         $time_tot += ((float)$split_time[1] * 60);
                                 ?>
-                                
                                 <tr>
                                     <td class="date"> <input type="text" readonly value="<?= $date; ?>" name="date[]"> </td>
-                                    
                                     <td class="day">
                                         <input type="text" readonly value="<?= $timesheetdata[$date]['day']; ?>" name="day[]">
                                     </td>
@@ -158,7 +132,6 @@
                                     <td class="finish-time">
                                         <input <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'readonly'; } ?> name="end[]" class="hasTimepicker end" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['end']; ?>" type="time">
                                     </td>
-                                  
                                     <td class="hours-worked">
                                         <input readonly name="sum[]" class="timeSum" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['per_hour']; ?>" type="text">
                                     </td>
@@ -168,9 +141,7 @@
                                 </tr>                                
                                 <?php } ?>
                             </tbody>
-
                         <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
-
                             <tbody id="tBody">
                             <?php
                                 $i = 0;
@@ -182,7 +153,6 @@
                                         $printedDates[] = $tsheet['Date'];
                                     }
                                 }
-
                                 $time_tot = 0;
                                 for($j = 0; $j < $get_days; $j++) {
                                     $date = date('m/d/Y', strtotime($start_date .' +'.$j.' day'));
@@ -190,7 +160,6 @@
                                     $split_time = explode(':', $stru_time);
                                     $time_tot  += ((float)$split_time[0] * 3600);
                                     $time_tot += ((float)$split_time[1] * 60);
-
                             ?>
                             <tr>
                                 <td class="date">
@@ -213,30 +182,24 @@
                                 <?php } ?>
                             </tr>
                             <?php
-                            
                             $i++;
                         } ?>
                 </tbody>
                 <?php } ?>
-
                 <tfoot>
                 <tr style="text-align:end"> 
                     <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                     <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours :</td> 
                     <td style="text-align: center;"> <input  type="text" readonly id="total_net" value="<?= $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td> 
-
                     <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td> 
                     <td style="text-align: center;"> <input  type="text" readonly id="total_net" value="<?= $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td> 
-
                     <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
                     <?php } ?>
                 </tr> 
-
             </tfoot>
         </table>
     </div>
-    
     <div class="form-group row">
         <div class="col-sm-4"><br/>
             <?php if($time_sheet_data[0]['uneditable']==1){ 
@@ -245,23 +208,17 @@
             <input type="submit" style="<?php if($time_sheet_data[0]['uneditable']==1){ echo 'display:none;';}  ?>color:white;" value="Submit" class="btnclr btn btn-info"/> 
         </div>               
     <?= form_close() ?>
-
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-
 </div>
-
 <script>
 var csrfName = '<?= $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?= $this->security->get_csrf_hash();?>';
-  
 $('#insert_adm').submit(function (event) {
     event.preventDefault();
-
     var dataString = {
         dataString : $("#insert_adm").serialize()
     };
@@ -274,7 +231,6 @@ $('#insert_adm').submit(function (event) {
         success:function (data1) {  
             var $select = $('select#insert_adm');
                 $select.empty();
-
             for(var i = 0; i < data1.length; i++) {
                 var option = $('<option/>').attr('value', data1[i].adms_name).text(data1[i].adms_name);
                 $select.append(option); 
@@ -282,15 +238,11 @@ $('#insert_adm').submit(function (event) {
         }
     });
 });
-
 var data = {
     value:$('#customer_name').val()
 };
-
-
 var csrfName = '<?= $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?= $this->security->get_csrf_hash();?>';
-
 $('body').on('input select change','#reportrange',function(){
 var date = $(this).val();
 $('#tBody').empty();
@@ -308,7 +260,6 @@ console.log(s_split[2]+"/"+ s_split[1]+"/"+ s_split[0]+"/"+Days);
 const validDate = new Date(chosenDate);
 let newDate;
 const monStartWeekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-
 for(let i = 0; i <= Days; i++) {
     newDate = new Date(validDate); 
     newDate.setDate(validDate.getDate() + i); 
@@ -342,18 +293,14 @@ for(let i = 0; i <= Days; i++) {
         </tr>`);
     }
 });
-
 function converToMinutes(s) {
     var c = s.split('.');
     return parseInt(c[0]) * 60 + parseInt(c[1]);
 }
-
 function parseTime(s) {
     return Math.floor(parseInt(s) / 60) + "." + parseInt(s) % 60
 }
-
 $(document).on('select change', '.end','.dailybreak', function () {
-
     var $begin = $(this).closest('tr').find('.start').val();
     var $end = $(this).closest('tr').find('.end').val();
     let valuestart = moment($begin, "HH:mm");
@@ -364,17 +311,14 @@ $(document).on('select change', '.end','.dailybreak', function () {
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
     var formattedTime = hours.toString().padStart(2, '0') + '.' + minutes.toString().padStart(2, '0');
-
     if (isNaN(parseFloat(formattedTime))) {
         $(this).closest('tr').find('.timeSum').val('00:00');
     } else {
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-
     var total_net = 0;
     $('.table').each(function () {
         var tableTotal = 0;
-
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
@@ -384,19 +328,14 @@ $(document).on('select change', '.end','.dailybreak', function () {
         });
         total_net += tableTotal;
     });
-
     var hours = Math.floor(total_net);
     var minutes = Math.round((total_net % 1) * 100); 
-
     if (minutes === 100) {
         hours += 1;
         minutes = 0;
     }
-
     $('#total_net').val(hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0')).trigger('change');
 });
-
-
 $(document).on('select change', '.start','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
     var $end = $(this).closest('tr').find('.end').val();
@@ -408,18 +347,14 @@ $(document).on('select change', '.start','.dailybreak', function () {
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
     var formattedTime = hours.toString().padStart(2, '0') + '.' + minutes.toString().padStart(2, '0');
-
     if (isNaN(parseFloat(formattedTime))) {
         $(this).closest('tr').find('.timeSum').val('00:00');
     }else{
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-
     var total_net = 0;
-
     $('.table').each(function () {
         var tableTotal = 0;
-
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
@@ -427,36 +362,26 @@ $(document).on('select change', '.start','.dailybreak', function () {
                 tableTotal += hours + minutes / 100; 
             }
         });
-
         total_net += tableTotal;
     });
-
     var hours = Math.floor(total_net);
     var minutes = Math.round((total_net % 1) * 100); 
-
     if (minutes === 100) {
         hours += 1;
         minutes = 0;
     }
-
     $('#total_net').val(hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0')).trigger('change');
 });
-
-
 $(document).on('input','.timeSum', function () {
     var $addtotal = $(this).closest('tr').find('.timeSum').val();
 });
-
 $('body').on('keyup','.end',function(){
-
     var start=$(this).closest('tr').find('.strt').val();
     var end=$(this).closest('td').find('.end').val();
     var breakv=$('#dailybreak').val();
     var calculate=parseInt(start)+parseInt(end);
     var final =calculate-parseInt(breakv);
 });
-
-
 $(document).on('select change'  ,'#templ_name', function () {
     var data = {      
         value:$('#templ_name').val()
@@ -473,14 +398,10 @@ $(document).on('select change'  ,'#templ_name', function () {
         }
     });
 });
-
-
 function sumHours () 
 {
-
     var time1 = $begin.timepicker().getTime();
     var time2 = $end.timepicker().getTime();
-
     if ( time1 && time2 ) {
     if ( time1 > time2 ) {
         v = new Date(time2);
@@ -490,12 +411,10 @@ function sumHours ()
     }
     var diff = ( Math.abs( v - time1) / 36e5 ).toFixed(2);
     $input.val(diff); 
-    
     } else {
         $input.val(''); 
     }
 }
-
 $(document).on('click','.delete_day',function(){
     $(this).closest('tr').remove();
     var total_net=0;
@@ -506,23 +425,18 @@ $(document).on('click','.delete_day',function(){
             total_net += parseFloat(precio);
             }
         });
-
     });
     $('#total_net').val(total_net.toFixed(2)).trigger('change');
     var firstDate = $('.date input').first().val(); 
         var lastDate = $('.date input').last().val(); 
-
         function convertDateFormat(dateStr) {
             const [day, month, year] = dateStr.split('/');
             return `${month}/${day}/${year}`;
         }
-
         var firstDateMDY = convertDateFormat(firstDate);
         var lastDateMDY = convertDateFormat(lastDate);
     $('#reportrange').val(firstDateMDY + ' - ' + lastDateMDY);
-
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     var checkboxes = document.querySelectorAll('.checkbox.switch-input'); 
     checkboxes.forEach(function(checkbox) {
@@ -533,9 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-    
-
 $(document).ready(function() {
     function updateCounter() {
         var sumOfDays = 0;
@@ -551,5 +462,4 @@ $(document).ready(function() {
         updateCounter();
     }
 });
-
 </script>

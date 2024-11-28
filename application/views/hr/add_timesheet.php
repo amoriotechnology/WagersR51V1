@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/toastr.min.css" />
 <div class="content-wrapper">
     <section class="content-header">
@@ -13,7 +12,6 @@
             </ol>
         </div>
     </section>
-
     <section class="content">
         <div class="row">
             <div class="col-sm-12">                
@@ -33,7 +31,6 @@
                                 <div class="col-sm-6">
                                     <input type="hidden" id="tsheet_id" value="<?php echo $id ; ?>" name="tsheet_id" />
                                     <input  type="hidden" readonly id="unique_id" value="<?php echo $this->session->userdata('unique_id') ?>" name="unique_id" />
-
                                     <input type ="hidden"  id="admin_company_id" value="<?php echo $_GET['id'];  ?>" name="admin_company_id" />
                                     <input type ="hidden" id="adminId" value="<?php echo $_GET['admin_id'];  ?>" name="adminId" />
                                     <select name="templ_name" id="templ_name" class="form-control"  required  tabindex="3" style="width:100;">
@@ -44,7 +41,6 @@
                                     </select>
                                 </div>
                             </div>
-                            
                             <div class="col-sm-6">
                                 <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                                 <div class="col-sm-6">
@@ -52,7 +48,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label for="dailybreak" class="col-sm-4 col-form-label">Date Range<i class="text-danger">*</i></label>
@@ -61,17 +56,14 @@
                                     <div id='check_date' style='font-weight:bold;color:red;'></div>
                                 </div>
                             </div>
-                            
                              <div class="col-sm-6">
                                 <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Frequency <i class="text-danger"></i></label>
                                 <div class="col-sm-6">
                                     <input type="text" readonly name="payroll_freq" class="form-control" id="payroll_freq"  placeholder="Payroll Type">
-
                                     <input type="hidden" name="payroll_type" class="form-control" id="payroll_type">
                                 </div>
                              </div>
                         </div>
-
                         <div class="table-responsive work_table col-md-12">
                             <table class=" table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
                                 <thead class="btnclr" id='tHead'>
@@ -82,7 +74,6 @@
                                 </tfoot>
                             </table>
                         </div>
-
                         <input type="submit" value="Submit" class="sub_btn btnclr btn text-center"/> 
                         <input type="hidden" id="csrf" data-name="<?= $this->security->get_csrf_token_name();?>" value="<?= $this->security->get_csrf_hash();?>">
                         <input type="hidden" id="week_setting" data-start="<?= (!empty($setting_detail[0]['start_week'])) ? $setting_detail[0]['start_week'] : 'Monday'; ?>" data-end="<?= (!empty($setting_detail[0]['end_week']) ? $setting_detail[0]['end_week'] : 'Friday'); ?>" >
@@ -92,15 +83,12 @@
             </div>
         </div>
     </section>
-
 </div>
 <br><br>
-
 <?php 
    $modaldata['bootstrap_modals'] = array('daily_break');
    $this->load->view('include/bootstrap_modal', $modaldata);
 ?>
-
 <script>
 $('.decimal').keydown(function (e) {
   var match = $(this).val().match(/\./g);
@@ -124,8 +112,6 @@ $('.decimal').keydown(function (e) {
     }
   }
 });
-
-
 $('.decimal').keyup(function () {
   if ($(this).val().indexOf('.') != -1) {
     if ($(this).val().split(".")[1].length > 2) {
@@ -134,8 +120,6 @@ $('.decimal').keyup(function () {
     }
   }
 });
-
-
 $('#add_pay_terms').submit(function(e){
     e.preventDefault();
     var data = {
@@ -150,7 +134,6 @@ $('#add_pay_terms').submit(function(e){
         success: function(data1, statut) {
             var $select = $('select#terms');
             $select.empty();
-            
             for(var i = 0; i < data1.length; i++) {
                 var option = $('<option/>').attr('value', data1[i].payment_terms).text(data1[i].payment_terms);
                 $select.append(option); 
@@ -168,8 +151,6 @@ $('#add_pay_terms').submit(function(e){
         }
     });
   });
-
-
 $('body').on('keyup','.end',function(){
     var start = $(this).closest('tr').find('.strt').val();
     var end = $(this).closest('td').find('.end').val();
@@ -178,11 +159,8 @@ $('body').on('keyup','.end',function(){
     var final = calculate-parseInt(breakv);
     $(this).closest('tr').find('.hours-worked').html(final);
 });
-
-
 var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
-
 $(document).on('select change'  ,'#templ_name', function () {
     var data = {
         value:$('#templ_name').val()
@@ -210,8 +188,6 @@ $(document).on('select change'  ,'#templ_name', function () {
         }
     });
 });
-
-
 $('#add_duration').submit(function(e){
     e.preventDefault();
     var data = {
@@ -226,7 +202,6 @@ $('#add_duration').submit(function(e){
         success: function(data1, statut) {
             var $select = $('select#duration');
             $select.empty();
-            // console.log(data);
             for(var i = 0; i < data1.length; i++) {
                 var option = $('<option/>').attr('value', data1[i].duration_name).text(data1[i].duration_name);
                 $select.append(option); 
@@ -244,8 +219,6 @@ $('#add_duration').submit(function(e){
         }
     });
 });
-
-
 $('#insert_daily_break').submit(function(e){
     e.preventDefault();
     var data = {
@@ -274,17 +247,13 @@ $('#insert_daily_break').submit(function(e){
         }
     });
 });
-
-
 var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
-
 $(document).on('select change'  ,'#templ_name', function () {
     $('#check_date').text('');
     $('.btnclr').show();
     var data = {
         value:$('#templ_name').val()
-
     };
     data[csrfName] = csrfHash;
     $.ajax({
@@ -306,7 +275,6 @@ $(document).on('select change'  ,'#templ_name', function () {
         }
     });
 });
-    
 <?php
 if(isset($_POST['btnSearch'])){
     $s = $_REQUEST["daterangepicker-field"];
@@ -318,7 +286,6 @@ $searchdate =(!empty($s)?$s:$dat2);
 $dat = str_replace(' ', '', $searchdate);
 $split=explode("to",$dat);
 ?>
-
 var csrfName = '<?php echo $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?php echo $this->security->get_csrf_hash();?>';
 $(function() {
@@ -329,14 +296,12 @@ $(function() {
     function cb(start, end) {
         $('#reportrange').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
     }
-
     var start_week = "<?php echo (!empty($setting_detail[0]['start_week'])) ? $setting_detail[0]['start_week'] : 'Monday'; ?>";
     var end_week = "<?php echo (!empty($setting_detail[0]['end_week']) ? $setting_detail[0]['end_week'] : 'Friday'); ?>";
     var weeks = {'Sunday' : 0, 'Monday' : 1, 'Tuesday': 2, 'Wednesday' : 3, 'Thusday' : 4, 'Friday' : 5, 'Saturday' : 6};
     var ThisWeekStart = moment().weekday(weeks[start_week]).startOf()._d;
     var LastWeekStart = moment().subtract(1,  'week').startOf().weekday(weeks[start_week])._d;
     var BeforeLastWeekStart = moment().subtract(2,  'week').startOf().weekday(weeks[start_week])._d;
-    
     function diffDays(startday, endday) {
         var res = 7;
         if(startday > endday) {
@@ -350,7 +315,6 @@ $(function() {
         }
         return res;
     }
-    
     $('#reportrange').daterangepicker({
         startDate: start,
         endDate: end,
@@ -358,7 +322,6 @@ $(function() {
         LastWeek: LastWeekStart,
         beforeWeek:BeforeLastWeekStart,
         ranges: {
-           
             'Last Week Before': [BeforeLastWeekStart , moment(BeforeLastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
             'Last Week': [LastWeekStart , moment(LastWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
             'This Week': [ThisWeekStart, moment(ThisWeekStart).add(diffDays(weeks[start_week], weeks[end_week], weeks[end_week]), 'days')],
@@ -366,10 +329,7 @@ $(function() {
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, cb);
-
-
   $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-      
     var data= {
         selectedDate: $('#reportrange').val(),
         employeeId: $('#templ_name').val() 
@@ -390,11 +350,8 @@ $(function() {
         error: function(xhr, status, error) {}
     });
 });
-
 cb(start, end);
 });
-
-
 $('body').on('input select change','#reportrange',function() {
     var date = $(this).val();
     $('#tBody').empty();
@@ -412,7 +369,6 @@ $('body').on('input select change','#reportrange',function() {
     var Date1 = new Date (s_split[2]+'/'+s_split[0]+'/'+s_split[1]);
     var Date2 = new Date (e_split[2]+'/'+e_split[0]+'/'+e_split[1]);
     var Days = Math.round((Date2.getTime() - Date1.getTime())/(1000*60*60*24));
-    
     const validDate = new Date(chosenDate);
     let newDate;
     const monStartWeekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -452,7 +408,6 @@ $('body').on('input select change','#reportrange',function() {
                 error: function(xhr, status, error) {}
             });
         }
-
             if (
                 response.includes('salary') || 
                 response.includes('Weekly') || 
@@ -499,7 +454,6 @@ $('body').on('input select change','#reportrange',function() {
                     <td><input type="text" id="total_net"  value="0.00" name="total_net"  readonly /></td>
                 </tr>`);
         }
-
         var end_week = "<?php echo (!empty($setting_detail[0]['end_week'])) ? $setting_detail[0]['end_week'] : 'Sunday'; ?>";
         var total_pres = 0;
         var data_id = 0;
@@ -510,7 +464,6 @@ $('body').on('input select change','#reportrange',function() {
             let day = ("0" + newDate.getDate()).slice(-2); 
             let month = ("0" + (newDate.getMonth() + 1)).slice(-2); 
             let dateString = `${month}/${day}/${newDate.getFullYear()}`;
-            
             if (
                 response.includes('salary') || 
                 response.includes('Weekly') || 
@@ -525,7 +478,6 @@ $('body').on('input select change','#reportrange',function() {
                 } else {
                     $('.sub_btn').attr('disabled', 'disabled');
                 }
-                
                 total_pres++;
                 $('#tBody').append(`
                     <tr>
@@ -550,7 +502,6 @@ $('body').on('input select change','#reportrange',function() {
                             <input type="hidden" name="block[]" id="block_`+i+`" />              
                         </td>
                     </tr>`);
-                    
             } else if (response.includes('Hourly')) {
                 $('#tBody').append(`
                     <tr> 
@@ -611,50 +562,34 @@ $('body').on('input select change','#reportrange',function() {
                         <a style="color:white;" class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
                     </td> 
                 </tr>`);
-                
             }
         }
     },
     error: function(xhr, status, error) {}
 });
 });
-
-
 $(document).ready(function() {
-
     function updateCounter() {
         var sumOfDays = 0;
         var sumofWeek = 0;
-
         var data_id = $('input[type="checkbox"]').data('id');
         $(".weekly_"+data_id+":checkbox:checked").each(function() {
-
         });
-
         sumOfDays = $('input[type="checkbox"].present:checked').length;
         $('#total_net').val(sumOfDays);
     }
-
-   
     $(document).on('change', 'input[type="checkbox"].present', function() {
         updateCounter();
     });
-
-    
     updateCounter();
 });
-
-
 function converToMinutes(s) {
     var c = s.split('.');
     return parseInt(c[0]) * 60 + parseInt(c[1]);
 }
-
 function parseTime(s) {
     return Math.floor(parseInt(s) / 60) + "." + parseInt(s) % 60
 }
-
-
 $(document).on('select change', '.end','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
     var $end = $(this).closest('tr').find('.end').val();
@@ -666,46 +601,37 @@ $(document).on('select change', '.end','.dailybreak', function () {
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
     var formattedTime = hours.toString().padStart(2, '0') + '.' + minutes.toString().padStart(2, '0');
-    
     if (isNaN(parseFloat(formattedTime))) {
         $(this).closest('tr').find('.timeSum').val('00.00');
     } else {
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-
     var data_id = $(this).data('id');
-    
     var total_netH = 0;
     var total_netM = 0;
     var week_netH = 0;
     var week_netM = 0;
-
     $('.table').each(function () {
         var tableTotal = 0;
         var tableHours = 0;
         var tableMinutes = 0;
-
         var weekTotal = 0;
         var weekHours = 0;
         var weekMinutes = 0;
-
         $(this).find('.hourly_tot_'+data_id).each(function() {
             var total_week = $(this).val();
             if (!isNaN(total_week) && total_week.length !== 0) {
                 var [weekhour, weekmin] = total_week.split('.').map(parseFloat);
-               
                 weekHours += weekhour;
                 weekMinutes += weekmin;
             }
         });
         week_netH += weekHours;
         week_netM += weekMinutes;
-
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
                 var [hours, minutes] = precio.split('.').map(parseFloat);
-                
                 tableHours += hours;
                 tableMinutes += minutes;
             }
@@ -713,15 +639,11 @@ $(document).on('select change', '.end','.dailybreak', function () {
         total_netH += tableHours;
         total_netM += tableMinutes;
     });
-
     var timeConvertion = convertToTime(week_netH, week_netM);
     $('#hourly_'+data_id).val(timeConvertion).trigger('change');
-
     var timeConvertion = convertToTime(total_netH, total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
 });
-
-
 $(document).on('select change', '.start','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
     var $end = $(this).closest('tr').find('.end').val();
@@ -738,22 +660,18 @@ $(document).on('select change', '.start','.dailybreak', function () {
     }else{
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-
     var data_id = $(this).data('id');
     var total_netH = 0;
     var total_netM = 0;
     var week_netH = 0;
     var week_netM = 0;
-
     $('.table').each(function () {
         var tableTotal = 0;
         var tableHours = 0;
         var tableMinutes = 0;
-
         var weekTotal = 0;
         var weekHours = 0;
         var weekMinutes = 0;
-
         $(this).find('.hourly_tot_'+data_id).each(function() {
             var total_week = $(this).val();
             if (!isNaN(total_week) && total_week.length !== 0) {
@@ -764,7 +682,6 @@ $(document).on('select change', '.start','.dailybreak', function () {
         });
         week_netH += weekHours;
         week_netM += weekMinutes;
-
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
@@ -778,16 +695,12 @@ $(document).on('select change', '.start','.dailybreak', function () {
     });
     var timeConvertion = convertToTime(week_netH, week_netM);
     $('#hourly_'+data_id).val(timeConvertion).trigger('change');
-
     var timeConvertion = convertToTime(total_netH,total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
 });
-
-
 $(document).on('input','.timeSum', function () {
     var $addtotal = $(this).closest('tr').find('.timeSum').val();
 });
-
 function sumHours () {
     var time1 = $begin.timepicker().getTime();
     var time2 = $end.timepicker().getTime();
@@ -804,7 +717,6 @@ function sumHours () {
         $input.val(''); 
     }
 }
-
 $('#total_net').on('keyup',function(){
     var value=$(this).val();
     if($(this).val() == ''){
@@ -814,13 +726,10 @@ $('#total_net').on('keyup',function(){
         $(".hasTimepicker").prop("readonly", true); 
     }
 });
-
-
 $(document).on('click', '.delete_day', function() {
     $(this).closest('tr').remove();
     var total_netH = 0;
     var total_netM = 0;
-
     $('.table').each(function() {
         $(this).find('.timeSum').each(function() {
             var precio = $(this).val();
@@ -831,10 +740,8 @@ $(document).on('click', '.delete_day', function() {
             }
         });
     });
-
     var timeConversion = convertToTime(total_netH, total_netM);
     $('#total_net').val(timeConversion).trigger('change');
-
     var firstDate = $('.date input').first().val(); 
     var lastDate = $('.date input').last().val(); 
     function convertDateFormat(dateStr) {
@@ -845,8 +752,6 @@ $(document).on('click', '.delete_day', function() {
     var lastDateMDY = convertDateFormat(lastDate);
     $('#reportrange').val(firstDateMDY + ' - ' + lastDateMDY);
 });
-
-
 $(function() {
     $('.applyBtn').datepicker({
         onSelect: function(date) {
@@ -865,8 +770,6 @@ $(function() {
         }
     });
 });
-
-
 document.getElementById('validate').addEventListener('submit', function(event) {
     var checkboxes = document.querySelectorAll('.checkbox.switch-input');
     checkboxes.forEach(function(checkbox) {
@@ -879,8 +782,6 @@ document.getElementById('validate').addEventListener('submit', function(event) {
         }
     });
 });
-
-
 function convertToTime(hr,min) 
 {
     let hours = Math.floor(min / 60);
@@ -888,13 +789,10 @@ function convertToTime(hr,min)
     minutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours+hr}:${minutes}`;
 }
-
 $(document).ready(function() {
     $('.sub_btn').attr('disabled', 'disabled');
-
     $(document).on('change keyup', '#total_net, #reportrange, input[type="checkbox"].present:checked', function() {
         var total_net = $('#total_net').val();
-        
         if(total_net != "" && total_net != undefined) {
             $('.sub_btn').removeAttr('disabled');
         } else {
@@ -902,6 +800,4 @@ $(document).ready(function() {
         }
     });
 })
-
-
 </script>
