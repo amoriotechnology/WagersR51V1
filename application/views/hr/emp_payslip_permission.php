@@ -1,187 +1,18 @@
-<style>
-.switch-input[disabled] + .switch-label {
-    pointer-events: none;
-    background-color: #f2f2f2;
-    color: #999;
-}
-
-.switch-input[disabled] + .switch-label::after {
-    border-color: #999;
-}
-.switch {
-  margin-top: 5px;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  width: 56px;
-  height: 20px;
-  padding: 3px;
-  background-color: white;
-  border-radius: 18px;
-  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  background-image: -webkit-linear-gradient(top, #EEEEEE, white 25px);
-  background-image: -moz-linear-gradient(top, #EEEEEE, white 25px);
-  background-image: -o-linear-gradient(top, #EEEEEE, white 25px);
-  background-image: linear-gradient(to bottom, #EEEEEE, white 25px);
-}
-.switch-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-.switch-label {
-  position: relative;
-  display: block;
-  height: inherit;
-  font-size: 10px;
-  text-transform: uppercase;
-  background: #ECEEEF;
-  border-radius: inherit;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
-  -webkit-transition: 0.15s ease-out;
-  -moz-transition: 0.15s ease-out;
-  -o-transition: 0.15s ease-out;
-  transition: 0.15s ease-out;
-  -webkit-transition-property: opacity background;
-  -moz-transition-property: opacity background;
-  -o-transition-property: opacity background;
-  transition-property: opacity background;
-}
-.switch-label:before, .switch-label:after {
-  position: absolute;
-  top: 50%;
-  margin-top: -.5em;
-  line-height: 1;
-  -webkit-transition: inherit;
-  -moz-transition: inherit;
-  -o-transition: inherit;
-  transition: inherit;
-}
-.switch-label:before {
-  content: attr(data-off);
-  right: 11px;
-  color: #aaa;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
-}
-.switch-label:after {
-  content: attr(data-on);
-  left: 11px;
-  color: white;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-}
-.switch-input:checked ~ .switch-label {
-  background: #38469F;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
-}
-.switch-input:checked ~ .switch-label:before {
-  opacity: 0;
-}
-.switch-input:checked ~ .switch-label:after {
-  opacity: 1;
-}
-.switch-handle {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  background-image: -webkit-linear-gradient(top, white 40%, #F0F0F0);
-  background-image: -moz-linear-gradient(top, white 40%, #F0F0F0);
-  background-image: -o-linear-gradient(top, white 40%, #F0F0F0);
-  background-image: linear-gradient(to bottom, white 40%, #F0F0F0);
-  -webkit-transition: left 0.15s ease-out;
-  -moz-transition: left 0.15s ease-out;
-  -o-transition: left 0.15s ease-out;
-  transition: left 0.15s ease-out;
-}
-.switch-handle:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -6px 0 0 -6px;
-  width: 12px;
-  height: 12px;
-  background: #F9F9F9;
-  border-radius: 6px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
-  background-image: -webkit-linear-gradient(top, #EEEEEE, white);
-  background-image: -moz-linear-gradient(top, #EEEEEE, white);
-  background-image: -o-linear-gradient(top, #EEEEEE, white);
-  background-image: linear-gradient(to bottom, #EEEEEE, white);
-}
-.switch-input:checked ~ .switch-handle {
-  left: 85px;
-  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
-}
-.switch-green > .switch-input:checked ~ .switch-label {
-  background: #4FB845;
-}
- .btnclr ,th{
-   background-color:<?= $setting_detail[0]['button_color']; ?>;
-   color: white;
-   }
-.table {
-    width: 100%;
-    table-layout: fixed;
-}
-
-.table th,
-.table td {
-    width: auto;
-    border: 1px solid #ccc;
-    padding: 8px;
-}
-.table input[type="text"],input[type="time"] {
-    text-align:center;
-    background-color: inherit;
-    border-radius: 4px;
-    padding: 8px;
-}
-input {border:0;outline:0;}
-.work_table td {
-    height: 36px;
-}
-.btnclr{
-    background-color:<?= $setting_detail[0]['button_color']; ?>;
-    color: <?= $setting_detail[0]['button_color']; ?>;
-
-}
-th,td{
-    text-align:center;
-}
-.select2-selection{
-    display :none;
-}
-.mt-4 {
-    margin-top: 3rem;
-}
-.m-3 {
-    margin: 2rem;
-}
-</style>
-
 <div class="content-wrapper">
     <section class="content-header" style="height:70px;">
-        <div class="header-icon"><i class="pe-7s-note2"></i></div>
-
+        <div class="header-icon">
+            <i class="pe-7s-note2"></i>
+        </div>
         <div class="header-title">
             <h1>Payment Administration</h1>
             <small></small>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="pe-7s-home"></i> <?= display('home') ?></a></li>
+                <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#">HRM</a></li>
                 <li class="active" style="color:orange">Payment Administration</li>
             </ol>
         </div>
     </section>
-
 <section class="content">
     <!-- New category -->
     <div class="row">
@@ -209,7 +40,7 @@ th,td{
                             </div>
                         </div>
 
-                         <div class="col-sm-6">
+                       <div class="col-sm-6">
                             <label for="qdate" class="col-sm-4 col-form-label">Job title</label>
                             <div class="col-sm-6">
                                 <input type="text" name="job_title" id="job_title" readonly placeholder="Job title" value="<?= empty($employee_name[0]['designation']) ? 'Sales Partner' : $employee_name[0]['designation']; ?>" class="form-control">
@@ -223,6 +54,7 @@ th,td{
                             <div class="col-sm-6">
                                 <input id="reportrange" type="text" readonly name="date_range" <?php if($time_sheet_data[0]['uneditable']==1){ echo 'readonly';}  ?> value="<?= $time_sheet_data[0]['month'] ; ?>" class="form-control"/>
                             </div>
+
                         </div>
 
                         <div class="col-sm-6">
@@ -686,7 +518,6 @@ th,td{
         </div>
     </section>
 </div>
-
 <script>
 function yesnoCheck(that) {
   if (that.value == "Cheque") {
@@ -705,13 +536,14 @@ function yesnoCheck(that) {
         document.getElementById("adc").style.display = "none";
         document.getElementById("pc").style.display = "none";
         document.getElementById("Cashmethod").style.display = "none";
+
     }
 }
-
 $(document).ready(function(){
     var that=$('#selector').val();
     if (that == "Cheque") {
         $('#adc').show();
+
         $('#pc').hide();
         $('#Cashmethod').hide();
     } else if (that == "Bank") {
@@ -745,7 +577,6 @@ var data = {
 };
 var csrfName = '<?= $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?= $this->security->get_csrf_hash();?>';
-
 $('body').on('input select change','#reportrange',function(){
     var date = $(this).val();
     const myArray = date.split("-");
@@ -757,6 +588,7 @@ $('body').on('input select change','#reportrange',function(){
 function getTimesheet(start, end) {
 
     const weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
     let chosenDate = start;
     var s_split = start.split("/");
     var e_split = end.split("/");
@@ -805,6 +637,7 @@ function getTimesheet(start, end) {
                 </td> 
                 <td>
                     <a style="color:white;" class="delete_day btnclr btn  m-b-5 m-r-2"><i class="fa fa-trash" aria-hidden="true"></i> </a>
+
                 </td>
             </tr>`);
 
@@ -821,15 +654,14 @@ function getTimesheet(start, end) {
     return tbody;
 }
 
+
 function converToMinutes(s) {
     var c = s.split('.');
     return parseInt(c[0]) * 60 + parseInt(c[1]);
 }
-
 function parseTime(s) {
     return Math.floor(parseInt(s) / 60) + "." + parseInt(s) % 60
 }
-
 $('body').on('keyup','.end',function(){
 
     var start = $(this).closest('tr').find('.strt').val();
@@ -864,10 +696,12 @@ $(document).ready(function() {
     }
 
     $(document).on('change', 'input[type="checkbox"].present', updateCounter);
+
     var payroll_type = $('#payroll_type').val();
 
     if(payroll_type !== 'Hourly') {
         updateCounter();
+
     }
 });
 
@@ -893,6 +727,7 @@ $(document).on('select change', '.end','.dailybreak', function () {
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
     var formattedTime = hours.toString().padStart(2, '0') + '.' + minutes.toString().padStart(2, '0');
+
     if (isNaN(parseFloat(formattedTime))) {
         $(this).closest('tr').find('.timeSum').val('00.00');
     }else{
@@ -915,6 +750,7 @@ $(document).on('select change', '.end','.dailybreak', function () {
         });
         total_netH += tableHours;
         total_netM += tableMinutes;
+
     });
     var timeConvertion = convertToTime(total_netH ,total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
@@ -932,6 +768,7 @@ $(document).on('select change'  ,'.start','.dailybreak', function () {
     var hours = Math.floor(totalMinutes / 60);
     var minutes = totalMinutes % 60;
     var formattedTime = hours.toString().padStart(2, '0') + '.' + minutes.toString().padStart(2, '0');
+
     if (isNaN(parseFloat(formattedTime))) {
         $(this).closest('tr').find('.timeSum').val('00.00');
     }else{
@@ -958,11 +795,13 @@ $(document).on('select change'  ,'.start','.dailybreak', function () {
 
     var timeConvertion = convertToTime(total_netH,total_netM);
     $('#total_net').val(timeConvertion).trigger('change');
+
 });
 
 
 $(document).on('input','.timeSum', function () {
     var $addtotal = $(this).closest('tr').find('.timeSum').val();
+
 });
 
 function sumHours () {
@@ -997,7 +836,6 @@ $(document).on('click', '.delete_day', function() {
 
     var total_netH = 0;
     var total_netM = 0;
-
     $('.table').each(function() {
         $(this).find('.timeSum').each(function() {
             var precio = $(this).val();
@@ -1008,8 +846,6 @@ $(document).on('click', '.delete_day', function() {
             }
         });
     });
-
-    // Convert total hours and minutes to the correct format
     var timeConversion = convertToTime(total_netH, total_netM);
     $('#total_net').val(timeConversion).trigger('change');
 
@@ -1048,7 +884,6 @@ function showToast() {
         timeOut: 1000
     });
 }
-
 function hideToast() {
     toastr.clear(); 
 }

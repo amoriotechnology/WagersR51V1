@@ -15,11 +15,13 @@
 .table{
    display: block;
    overflow-x: auto;
+
 }
 </style>
 
 
 <div class="content-wrapper">
+
    <section class="content-header">
       <div class="header-icon">
         <figure class="one">
@@ -93,6 +95,7 @@
         </div>
     </div>
     
+
 
     <div class="row">
         <div class="col-sm-16 col-md-14">
@@ -383,6 +386,7 @@ $(document).ready(function() {
         ],
     });
 
+
 });
 
    
@@ -498,8 +502,34 @@ function processAjaxResponse(data) {
         });
     }
 
-</script>
 
+// Datatable
+$(document).ready(function () {
+    $('#statereport_list').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'excel', 'print', 'colvis'
+        ],
+        responsive: true,
+        paging: true,
+        searching: true,
+        ordering: true
+    });
+});
+
+$(document).ready(function () {
+    $('#statereport_list').DataTable({
+        dom: 'Bfrtip',
+        buttons: [ 'copy', 'excel', 'print', 'colvis'],
+        responsive: true,
+        paging: true,
+        searching: true,
+        ordering: true
+    });
+});
+
+
+</script>
 
 
 

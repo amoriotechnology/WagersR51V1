@@ -676,7 +676,7 @@ echo "00:00";
     right: -48px;
 }
 .footer_number {
-    background-image: url('<?php echo base_url("/assets/images/logo/footer.png"  );
+    background-image: url('<?php echo base_url("/assets/images/logo/footer.png");
     ?>');  
 }
 .separator .sep-line {
