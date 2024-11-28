@@ -1,4 +1,3 @@
-
 <div class="content-wrapper">
    <section class="content-header" style="height: 60px;">
       <div class="header-icon">

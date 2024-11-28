@@ -172,22 +172,22 @@ foreach ($employer_contributions as $tax_type => &$contributions) {
           if ($row['first_name'] . ' ' . $row['middle_name'] . ' ' . $row['last_name'] === $employee_name && $row['tax_type'] === $tax_type && $row['tax'] === $tax) {
                             $final_amount = '';
                           
-if (trim($row['tax'])=='Income tax'   &&  $row['weekly'] > 0) {
-    $final_amount = $row['weekly'];
-} elseif (trim($row['tax'])=='Income tax'   && $row['biweekly'] > 0) {
-    $final_amount = $row['biweekly'];
-} elseif (trim($row['tax'])=='Income tax'   && $row['monthly'] > 0) {
-    $final_amount = $row['monthly'];
-} else {
-    $final_amount = $row['total_amount'];
-}
-            
-            $sum +=   $final_amount;
+        if (trim($row['tax'])=='Income tax'   &&  $row['weekly'] > 0) {
+            $final_amount = $row['weekly'];
+        } elseif (trim($row['tax'])=='Income tax'   && $row['biweekly'] > 0) {
+            $final_amount = $row['biweekly'];
+        } elseif (trim($row['tax'])=='Income tax'   && $row['monthly'] > 0) {
+            $final_amount = $row['monthly'];
+        } else {
+            $final_amount = $row['total_amount'];
+        }
+                    
+                    $sum +=   $final_amount;
+                    }
+                }
+                $contribution['total_amount'] = $sum;
             }
         }
-        $contribution['total_amount'] = $sum;
-    }
-}
 
 
 foreach ($employee_contributions as $tax_type => &$contributions) {
@@ -975,13 +975,14 @@ $data['merged_reports_employer'] = $merged_array_employer;
         $this->template->full_admin_html_view($content);
     }
     public function state_tax($endDate, $employee_id, $employee_tax, $working_state_tax, $user_id, $this_period, $tax_type, $timesheet_id,$payroll, $payroll_frequency) {
-       $state_tax            = $this->Hrm_model->get_state_details('state', 'state_and_tax', 'state', $working_state_tax, $user_id);
+
+        $state_tax            = $this->Hrm_model->get_state_details('state', 'state_and_tax', 'state', $working_state_tax, $user_id);
         $state                = $this->Hrm_model->get_state_details('tax', 'state_and_tax', 'state', $state_tax[0]['state'], $user_id);
         $tax_split            = explode(',', $state[0]['tax']);
         $overall_state_tax    = [];
         $this_period_statetax = [];
         $table = '';
-    
+        $total_federal_taxes = 0;
             foreach ($tax_split as $tax) {
                 if (strpos($tax, 'Income') !== false) {
                     if ($payroll == 'Hourly' || $payroll == 'Fixed') {
@@ -1004,7 +1005,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
                 }
 
             $tax_data = $this->Hrm_model->get_state_details('*', $table, 'tax', $state_tax[0]['state'] . "-" . $tax, $user_id);
-         
+           
             foreach ($tax_data as $tx) {
                 $split = explode('-', $tx[$employee_tax]);
                 if (count($split) > 1 && $split[0] != '' && $split[1] != '') {
@@ -1024,7 +1025,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
                                 $checkFinalAmount      = floatval($this_period - $employeeTaxExplode[0]);
 
                                 $employee_contribution = floatval(($employee / 100) * $checkFinalAmount + $contribution['details']);
-                                 
+                               
                                 $employer_contribution = floatval(($employer / 100) * $this_period);
 
                                 $row                   = $this->db->select('*')->from($table)->where('employee', $employee)->where('tax', $tax_data[0]['tax'])->where($employee_tax, $range)->where('created_by', $user_id)->count_all_results();
@@ -1044,6 +1045,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
 
                                         $u = $this->countryTax('Federal unemployment', $employee_tax, $this_period, $employee_id, 'u_tax', $user_id, $endDate, $timesheet_id);
 
+                                        
                                         $tax_name = trim(substr($contribution['tax'], strpos($contribution['tax'], '-') + 1, strrpos($contribution['tax'], '-') - strpos($contribution['tax'], '-') - 1));
 
                                         $code = trim(substr($contribution['tax'], strrpos($contribution['tax'], '-') + 1));
@@ -1062,8 +1064,10 @@ $data['merged_reports_employer'] = $merged_array_employer;
                                                 'amount'        => round($employee_contribution, 3),
                                                 'created_by'    => $user_id,
                                             );
+                                            
+                                     
                                             $this->db->insert('tax_history', $tax_history_employee);
-
+                                         
                                         }
                                         if ($employer_contribution) {
                                             $tax_history_employer = array(
@@ -1087,6 +1091,10 @@ $data['merged_reports_employer'] = $merged_array_employer;
                                         if ($this->db->count_all_results('info_payslip') > 0) {
                                             $this->db->delete('info_payslip', ['timesheet_id' => $timesheet_id]);
                                         }
+                                          $total_federal_taxes= $f['tax_value']+$s['tax_value']+$m['tax_value']+$u['tax_value'];
+                                            
+                                             
+
                                         $info_payslip = array(
                                             's_tax'        => $s['tax_value'],
                                             'm_tax'        => $m['tax_value'],
@@ -1099,9 +1107,11 @@ $data['merged_reports_employer'] = $merged_array_employer;
                                             'templ_name'   => $timesheetdata[0]['templ_name'],
                                             'employee_tax' => $employeedata[0]['employee_tax'],
                                             'hrate'        => $employeedata[0]['hrate'],
+                                            'net_amount'   => round($net_amount, 2),
                                             'create_by'    => $user_id,
                                         );
                                         $this->db->insert('info_payslip', $info_payslip);
+                                      
                                     } else {
                                         $amount           = $result ? $result : 0;
                                         $sum_of_state_tax = $this->Hrm_model->get_cumulative_tax_amount($search_tax[1], $endDate, $employee_id, $tax_type);
@@ -1125,7 +1135,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
             'this_perid_state_tax' => $this_period_statetax,
             'overall_state_tax'    => $overall_state_tax,
         );
-       
+
         return $data;
     }
     public function time_list() {
@@ -1885,7 +1895,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
     }
 // Admin Approve this Function
     public function adminApprove() {
-     //    echo '<pre>'; print_r($_POST); echo '</pre>'; die;
+        // echo '<pre>'; print_r($_POST); echo '</pre>'; die;
         list($user_id, $company_id)     = array_map('decodeBase64UrlParameter', [$this->input->post('admin_company_id'), $this->input->post('adminId')]);
         $company_info                   = $this->Hrm_model->retrieve_companyinformation($user_id);
         $datacontent                    = $this->Hrm_model->retrieve_companydata($user_id);
@@ -1922,6 +1932,7 @@ $data['merged_reports_employer'] = $merged_array_employer;
             $data_timesheet['extra_amount'] = $this->input->post('extra_thisrate');
             $data_timesheet['extra_hour']   = $this->input->post('extra_this_hour');
             $data_timesheet['extra_ytd']    = $this->input->post('extra_ytd');
+
         } else {
           
             $data_timesheet['extra_rate']   = 0;
@@ -1975,11 +1986,9 @@ $data['merged_reports_employer'] = $merged_array_employer;
                 $this->db->delete('timesheet_info_details');
                 logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
                 $this->db->insert('timesheet_info', $data_timesheet);
-                 //echo $this->db->last_query(); die;
             } else {
                 logEntry($this->session->userdata('user_id'), $this->session->userdata('unique_id'), $data_timesheet['timesheet_id'], $data_timesheet['month'], $this->session->userdata('userName'), 'Add TimeSheet', 'Human Resource', 'TimeSheet has been added successfully', 'Add', date('m-d-Y'));
                 $this->db->insert('timesheet_info', $data_timesheet);
-                //echo $this->db->last_query(); die;
             }
             $data['timesheet_data'] = $this->Hrm_model->timesheet_info_data($data_timesheet['timesheet_id'], $user_id);
             $purchase_id_2          = $this->db->select('timesheet_id')->from('timesheet_info')->where('templ_name', $this->input->post('templ_name'))->where('month', $this->input->post('date_range'))->get()->row()->timesheet_id;
@@ -2025,17 +2034,30 @@ $data['merged_reports_employer'] = $merged_array_employer;
             $u                 = $this->countryTax('Federal unemployment', $employeedata[0]['employee_tax'], $final, $timesheetdata[0]['templ_name'], 'u_tax', $user_id, $data_timesheet['end'], $employeedata[0]['id'], $timesheetdata[0]['timesheet_id']);
 
            
-            $working_state_tax = $this->state_tax($data_timesheet['end'], $employeedata[0]['id'], $employeedata[0]['employee_tax'], $working_state_tax, $user_id, $final, 'state_tax', $timesheetdata[0]['timesheet_id'],$employeedata[0]['payroll_type'], $payroll_freq);
+               $working_state_tax = $this->state_tax($data_timesheet['end'], $employeedata[0]['id'], $employeedata[0]['employee_tax'], $working_state_tax, $user_id, $final, 'state_tax', $timesheetdata[0]['timesheet_id'],$employeedata[0]['payroll_type'], $payroll_freq);
+               $working_deduction=0; $living_deduction=0;
+          foreach($working_state_tax['this_perid_state_tax'] as $k=>$v){
+          $working_deduction +=  $v;
+          }
+          $federal_deduction = ($f['tax_value']+$s['tax_value']+$m['tax_value']);
+        
          
             if (trim($employeedata[0]['working_state_tax']) != trim($employeedata[0]['living_state_tax'])) {
                
                 $living_state_tax = $this->state_tax($data_timesheet['end'], $employeedata[0]['id'], $employeedata[0]['employee_tax'], $employeedata[0]['living_state_tax'], $user_id, $final, 'living_state_tax', $timesheetdata[0]['timesheet_id'],$employeedata[0]['payroll_type'], $payroll_freq);
+                 foreach($living_state_tax['this_perid_state_tax'] as $k=>$v){
+                $living_deduction +=  $v;
+                }
             }
-            
+            $net_amount=$final-$federal_deduction-$working_deduction-$living_deduction;
+
+         $this->db->set('net_amount', $net_amount)->where('timesheet_id', $timesheetdata[0]['timesheet_id'])->update('info_payslip');
+         
         }
     
         redirect(base_url('Chrm/manage_timesheet?id=' . $this->input->post('admin_company_id') . '&admin_id=' . $this->input->post('adminId')));
     }
+
 // Country Tax - Madhu
     public function countryTax($tax_type, $employee_tax_column, $final, $templ_name, $tax_history_column, $user_id, $endDate, $timesheet_id) {
 
@@ -3284,14 +3306,16 @@ SET tax = TRIM(BOTH ',' FROM tax)";
     }
     // This Period Final Amount - Madhu
     public function thisPeriodAmount($payroll_type, $payroll_frequency, $total_hours, $hrate, $scAmount, $extra_thisrate, $above_extra_sum, $user_id, $company_id) 
-    {
+    { 
         $workingHour = $this->db->select('work_hour, created_by')->from('working_time')->where('created_by', $user_id)->get()->row();
-        $limit_hours = $workingHour->work_hour;
-        $final       = 0;
+        $limit_hours = $workingHour->work_hour; 
+        $final = 0;  
+
         if (in_array($payroll_type, ['Hourly', 'Fixed'])) {
             list($hours, $minutes) = explode(':', $total_hours);
-            $decimal_hours = $hours + ($minutes / 60);
+            $decimal_hours = $hours + ($minutes / 60);  
             $total_cost = $hrate * $decimal_hours;
+
             $frequency_limits = [
                 'Bi-Weekly' => 14,
                 'Weekly' => 7,
@@ -3299,19 +3323,20 @@ SET tax = TRIM(BOTH ',' FROM tax)";
             ];
 
             if (!isset($frequency_limits[$payroll_frequency])) {
-                $limit = ($payroll_type === 'Hourly') ? $limit_hours : 0;
+                $limit = ($payroll_type === 'Hourly') ? $limit_hours : 0;  
             } else {
-                $limit = $frequency_limits[$payroll_frequency];
+                $limit = $frequency_limits[$payroll_frequency];  
             }
-
             if ($decimal_hours <= $limit) {
                 $final = $total_cost + $scAmount;
             } else {
+                // if()
                 $final = $extra_thisrate + $above_extra_sum;
             }
         }
         return $final;
     }
+
 
     // Sales Commision Amount - Madhu
     public function saleCommission($employee_id, $payperiod, $user_id, $company_id) {
@@ -3429,4 +3454,49 @@ SET tax = TRIM(BOTH ',' FROM tax)";
         $this->db->insert('acc_coa', $bank_coa);
         echo json_encode($bankinfo);
     }
+
+    public function state_tax_search() {
+        $CI = &get_instance();
+        $CI->load->model('Web_settings');
+        $this->load->model('Hrm_model');
+        $tax_name = trim(urldecode($this->input->post('url')));
+        $date = $this->input->post('daterangepicker-field');
+        $employee_name = $this->input->post('employee_name');
+        $employee_contributions = $this->fetch_contributions(decodeBase64UrlParameter($this->input->post('id')),$employee_name,$tax_name, $date,false);
+        $employer_contributions = $this->fetch_contributions(decodeBase64UrlParameter($this->input->post('id')),$employee_name,$tax_name, $date,true);
+        $merged_array = $this->merge_contributions($employee_contributions, $employer_contributions);
+        header('Content-Type: application/json');
+        echo json_encode($merged_array);
+    }
+//For Individual State Tax Report
+public function fetch_contributions($id,$employee_name,$tax_name, $date,$is_employer) {
+    $state_tax_report = $is_employer ?
+        $this->Hrm_model->employer_state_tax_report($id,$employee_name,$tax_name, $date) :
+        $this->Hrm_model->state_tax_report($id,$employee_name,$tax_name, $date);
+    $living_state_tax_report = $is_employer ?
+        $this->Hrm_model->employer_living_state_tax_report($id,$employee_name,$tax_name, $date) :
+        $this->Hrm_model->living_state_tax_report($id,$employee_name,$tax_name, $date);
+    $merged_array = [];
+    foreach ($state_tax_report as $state_tax) {
+        $time_sheet_id = $state_tax['time_sheet_id'];
+        $merged_array[$time_sheet_id]['state_tax'][] = $state_tax;
+    }
+    foreach ($living_state_tax_report as $living_state_tax) {
+        $time_sheet_id = $living_state_tax['time_sheet_id'];
+        $merged_array[$time_sheet_id]['living_state_tax'][] = $living_state_tax;
+    }
+    return $merged_array;
+}
+//For Individual State Tax Report
+public function merge_contributions($employee_contributions, $employer_contributions) {
+    $merged_array = [];
+    foreach ($employee_contributions as $time_sheet_id => $employee_data) {
+        $merged_array[$time_sheet_id] = ['employee' => $employee_data];
+ if (isset($employer_contributions[$time_sheet_id])) {
+            $merged_array[$time_sheet_id]['employer'] = $employer_contributions[$time_sheet_id];
+        }
+    }
+    return $merged_array;
+}
+
 }
