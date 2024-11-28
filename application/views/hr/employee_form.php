@@ -1108,181 +1108,178 @@
        $('#payroll_type').change(function(){
            var selectedOption = $(this).val();
            if(selectedOption === 'Hourly') {
-               $('#cost').text('Pay rate (Hourly)').show(); // Show the label
-               $('#hrate').show(); // Show the input field
+               $('#cost').text('Pay rate (Hourly)').show();
+               $('#hrate').show();
            } else if (selectedOption === 'SalesCommission') {
-               $('#cost').hide(); // Hide the label
-               $('#hrate').hide(); // Hide the input field
+               $('#cost').hide(); 
+               $('#hrate').hide(); 
            } else {
-               $('#cost').text('Pay rate (Daily)').show(); // Show the label
-               $('#hrate').show(); // Show the input field
+               $('#cost').text('Pay rate (Daily)').show();
+               $('#hrate').show(); 
            }
        });
    });
    
-   
-      const dt = new DataTransfer();
-      $("#attachment").on('change', function(e){
-          for(var i = 0; i < this.files.length; i++){
-              let fileBloc = $('<span/>', {class: 'file-block'}),
-                   fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
-              fileBloc.append('<span class="file-delete"><span><i class="fa fa-trash-o"></i></span></span>')
-                  .append(fileName);
-              $("#filesList > #files-names").append(fileBloc);
-          };
-          for (let file of this.files) {
-              dt.items.add(file);
-          }
-          this.files = dt.files;
-      
-          $('span.file-delete').click(function(){
-              let name = $(this).next('span.name').text();
-              $(this).parent().remove();
-              for(let i = 0; i < dt.items.length; i++){
-                  if(name === dt.items[i].getAsFile().name){
-                      dt.items.remove(i);
-                      continue;
-                  }
-              }
-              document.getElementById('attachment').files = dt.files;
-          });
-      });
-      
-         // JavaScript to show the popup
-      document.getElementById("showPopup").addEventListener("click", function() {
-         document.getElementById("popup").style.display = "block";
-      });
-   
-      function closeModal() {
-         document.getElementById("showPopup").style.display = "none";
+   const dt = new DataTransfer();
+   $("#attachment").on('change', function(e){
+      for(var i = 0; i < this.files.length; i++){
+         let fileBloc = $('<span/>', {class: 'file-block'}),
+               fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+         fileBloc.append('<span class="file-delete"><span><i class="fa fa-trash-o"></i></span></span>')
+            .append(fileName);
+         $("#filesList > #files-names").append(fileBloc);
+      };
+      for (let file of this.files) {
+         dt.items.add(file);
       }
-   
-      document.getElementById("addPopupData").addEventListener("click", function() {
-         document.getElementById("popup").style.display = "none";
-       });
-      
-      function closeModal() {
-         document.getElementById("popup").style.display = "none";
-      }
+      this.files = dt.files;
 
-      // Sales Partner
-      document.getElementById("showPopupsalespartner").addEventListener("click", function() {
-       document.getElementById("popupsalespartner").style.display = "block";
-       });
-   
-       function closeModalsalepartner() {
-       document.getElementById("showPopupsalespartner").style.display = "none";
-       }
-   
-       document.getElementById("addPopupsalespartnerData").addEventListener("click", function() {
-           document.getElementById("popupsalespartner").style.display = "none";
-       });
+      $('span.file-delete').click(function(){
+         let name = $(this).next('span.name').text();
+         $(this).parent().remove();
+         for(let i = 0; i < dt.items.length; i++){
+            if(name === dt.items[i].getAsFile().name){
+                  dt.items.remove(i);
+                  continue;
+            }
+         }
+         document.getElementById('attachment').files = dt.files;
+      });
+   });
       
-      function closeModalsalepartner() {
+   // JavaScript to show the popup
+   document.getElementById("showPopup").addEventListener("click", function() {
+      document.getElementById("popup").style.display = "block";
+   });
+   
+   function closeModal() {
+      document.getElementById("showPopup").style.display = "none";
+   }
+   
+   document.getElementById("addPopupData").addEventListener("click", function() {
+      document.getElementById("popup").style.display = "none";
+   });
+
+   function closeModal() {
+      document.getElementById("popup").style.display = "none";
+   }
+
+   // Sales Partner
+   document.getElementById("showPopupsalespartner").addEventListener("click", function() {
+      document.getElementById("popupsalespartner").style.display = "block";
+   });
+
+   function closeModalsalepartner() {
+      document.getElementById("showPopupsalespartner").style.display = "none";
+   }
+
+   document.getElementById("addPopupsalespartnerData").addEventListener("click", function() {
          document.getElementById("popupsalespartner").style.display = "none";
-       }
-       
+   });
    
-      // Validate Email
-      function validateEmail(input) {
-         var regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-         var submitButton = document.getElementById("checkSubmit");
-          input.addEventListener("input", function(event) {
-              var value = input.value;
-              var newValue = '';
-              for (var i = 0; i < value.length; i++) {
-                  var char = value.charAt(i);
-                  if (/[@._A-Za-z0-9-]/.test(char) || event.shiftKey) {
-                      newValue += char;
-                  }
-              }
-              input.value = newValue;
+   function closeModalsalepartner() {
+      document.getElementById("popupsalespartner").style.display = "none";
+   }
+      
+   // Validate Email
+   function validateEmail(input) {
+      var regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      var submitButton = document.getElementById("checkSubmit");
+         input.addEventListener("input", function(event) {
+            var value = input.value;
+            var newValue = '';
+            for (var i = 0; i < value.length; i++) {
+               var char = value.charAt(i);
+               if (/[@._A-Za-z0-9-]/.test(char) || event.shiftKey) {
+                     newValue += char;
+               }
+            }
+            input.value = newValue;
 
-              var isValid = regex.test(input.value);
-              
-              if (isValid) {
-                  var lastPart = input.value.split('.').pop();
-                  if (lastPart !== 'com' && lastPart !== 'in') {
-                      isValid = false;
-                  }
-              }
+            var isValid = regex.test(input.value);
+            if (isValid) {
+               var lastPart = input.value.split('.').pop();
+               if (lastPart !== 'com' && lastPart !== 'in') {
+                     isValid = false;
+               }
+            }
 
-              if (isValid) {
-                  document.getElementById("validateemails").style.color = "green";
-                  document.getElementById("validateemails").textContent = "Valid email address";
-                  submitButton.disabled = false;
-              } else {
-                  document.getElementById("validateemails").style.color = "red";
-                  document.getElementById("validateemails").textContent = "Invalid email address";
-                  submitButton.disabled = true;
-              }
-          });
-      }
+            if (isValid) {
+               document.getElementById("validateemails").style.color = "green";
+               document.getElementById("validateemails").textContent = "Valid email address";
+               submitButton.disabled = false;
+            } else {
+               document.getElementById("validateemails").style.color = "red";
+               document.getElementById("validateemails").textContent = "Invalid email address";
+               submitButton.disabled = true;
+            }
+         });
+   }
    
-      // Allow Numbers
-      function validateInput(input) {
-         input.value = input.value.replace(/[^0-9.]/g, '');
-      }
+   // Allow Numbers
+   function validateInput(input) {
+      input.value = input.value.replace(/[^0-9.]/g, '');
+   }
    
-      function exitnumbers(input, maxLength) {
-         input.value = input.value.replace(/\D/g, '');
-         if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-         }
+   function exitnumbers(input, maxLength) {
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > maxLength) {
+         input.value = input.value.slice(0, maxLength);
       }
+   }
    
-      // Only Allow 20 Characters
-      function limitAlphabetical(input, maxLength) {
-         input.value = input.value.replace(/[^A-Za-z ]/g, '');
+   // Only Allow 20 Characters
+   function limitAlphabetical(input, maxLength) {
+      input.value = input.value.replace(/[^A-Za-z ]/g, '');
+
+      if (input.value.length > maxLength) {
+         input.value = input.value.slice(0, maxLength);
+      }
+   }
    
-         if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-         }
+   // Sales Commision allow 2 digits
+   function exitsalecommission(input, maxLength) {
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > maxLength) {
+         input.value = input.value.slice(0, maxLength);
       }
-   
-      // Sales Commision allow 2 digits
-      function exitsalecommission(input, maxLength) {
-         input.value = input.value.replace(/\D/g, '');
-         if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-         }
+   }
+
+   // Social Security number 
+   function exitsocialsecurity(input, maxLength) {
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > maxLength) {
+         input.value = input.value.slice(0, maxLength);
       }
+   }
 
-      // Social Security number 
-      function exitsocialsecurity(input, maxLength) {
-         input.value = input.value.replace(/\D/g, '');
-         if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-         }
+   // Routing Number
+   function routingrestrict(input, maxLength) {
+      input.value = input.value.replace(/\D/g, '');
+      if (input.value.length > maxLength) {
+         input.value = input.value.slice(0, maxLength);
       }
+   }
 
-      // Routing Number
-      function routingrestrict(input, maxLength) {
-         input.value = input.value.replace(/\D/g, '');
-         if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-         }
-      }
+   // get Employee select dropdown
+   $(document).ready(function(){
+      $('#selectemployeeTypes').change(function() {
+            var selectedValue = $(this).val();
+            if(selectedValue == 'addEmployees') {
+               $('#employeeForms').css('display', 'block');
+               $('#headpartemployeeadd').css('display', 'block');
 
-      // get Employee select dropdown
-      $(document).ready(function(){
-         $('#selectemployeeTypes').change(function() {
-              var selectedValue = $(this).val();
-              if(selectedValue == 'addEmployees') {
-                  $('#employeeForms').css('display', 'block');
-                  $('#headpartemployeeadd').css('display', 'block');
+               $('#salesPartnerForms').css('display', 'none');
+               $('#headpartsalespartner').css('display', 'none');
+            } else if(selectedValue == 'salesPartner') {
+               $('#salesPartnerForms').css('display', 'block');
+               $('#headpartsalespartner').css('display', 'block');
 
-                  $('#salesPartnerForms').css('display', 'none');
-                  $('#headpartsalespartner').css('display', 'none');
-              } else if(selectedValue == 'salesPartner') {
-                  $('#salesPartnerForms').css('display', 'block');
-                  $('#headpartsalespartner').css('display', 'block');
-
-                  $('#employeeForms').css('display', 'none');
-                  $('#headpartemployeeadd').css('display', 'none');
-              }
-          });
-      });
+               $('#employeeForms').css('display', 'none');
+               $('#headpartemployeeadd').css('display', 'none');
+            }
+         });
+   });
 </script>
 
 <style>

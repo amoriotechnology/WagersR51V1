@@ -52,33 +52,35 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Type <i class="text-danger"></i></label>
+                                <label for="dailybreak" class="col-sm-4 col-form-label">Payroll Frequency <i class="text-danger"></i></label>
                                 <div class="col-sm-6">
-                                    <input id="payroll_type" name="payroll_type" type="text" value="<?= $time_sheet_data[0]['payroll_type'] ; ?>" readonly class="form-control"/>
+                                    <input id="payroll_freq" name="payroll_freq" type="text" value="<?= $time_sheet_data[0]['payroll_freq'] ; ?>" readonly class="form-control"/>
+                                    <input type="hidden" name="payroll_type" value="<?= $time_sheet_data[0]['payroll_type'] ; ?>" class="form-control" id="payroll_type">
                                 </div>
                             </div>
                         </div>
                         <div class="table-responsive work_table col-md-12">
                             <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
                                 <thead>
-                                    <tr> 
+                                    <tr class="btnclr"> 
                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
-                                            <th style='height:25px;' class="col-md-2">Date</th>
-                                            <th style='height:25px;' class="col-md-1">Day</th>
-                                            <th class="col-md-1">Daily Break in mins</th>
-                                            <th style='height:25px;' class="col-md-2">Start Time (HH:MM)</th>
-                                            <th style='height:25px;' class="col-md-2">End Time (HH:MM)</th>
-                                            <th style='height:25px;' class="col-md-5">Hours</th>
-                                            <th style='height:25px;' class="col-md-5">Action</th>
+                                            <th>Date</th>
+                                            <th>Day</th>
+                                            <th>Daily Break in mins</th>
+                                            <th>Start Time (HH:MM)</th>
+                                            <th>End Time (HH:MM)</th>
+                                            <th>Hours</th>
+                                            <th>Action</th>
                                         <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
-                                            <th style='height:25px;' class="col-md-2">Date</th>
-                                            <th style='height:25px;' class="col-md-1">Day</th>
-                                            <th style='height:25px; ' class="col-md-5">Present / Absence</th>
+                                            <th>Date</th>
+                                            <th>Day</th>
+                                            <th>Present / Absence</th>
                                         <?php } elseif ($employee_name[0]['payroll_type'] == 'SalesCommission') { ?>
                                         <?php } ?>
                                     </tr>
                                 </thead>
-                                <?php 
+                           <?php                                 
+
                                 function compareDates($a, $b) {
                                     $dateA = DateTime::createFromFormat('d/m/Y', $a['Date']);
                                     $dateB = DateTime::createFromFormat('d/m/Y', $b['Date']);
@@ -106,6 +108,7 @@
                                         }
                                     }
                                     $time_tot = 0;
+                                    $data_id = 0;
                                     for($i = 0; $i < $get_days; $i++) {
                                         $date = date('m/d/Y', strtotime($start_date .' +'.$i.' day'));
                                         $stru_time = (empty($timesheetdata[$date]['per_hour'])) ? '00:00' : str_replace(['.'], ':', $timesheetdata[$date]['per_hour']);
@@ -127,17 +130,27 @@
                                         </select>
                                     </td>
                                     <td class="start-time">
-                                        <input <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'readonly'; } ?> name="start[]" class="hasTimepicker start" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['start']; ?>" type="time">
+                                        <input <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'readonly'; } ?> name="start[]" data-id="<?= $data_id; ?>" class="hasTimepicker start" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['start']; ?>" type="time">
                                     </td>
                                     <td class="finish-time">
-                                        <input <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'readonly'; } ?> name="end[]" class="hasTimepicker end" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['end']; ?>" type="time">
+                                        <input <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'readonly'; } ?> name="end[]" data-id="<?= $data_id; ?>" class="hasTimepicker end" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['end']; ?>" type="time">
                                     </td>
                                     <td class="hours-worked">
-                                        <input readonly name="sum[]" class="timeSum" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['per_hour']; ?>" type="text">
+                                        <input readonly name="sum[]" class="timeSum hourly_tot_<?= $data_id; ?>" value="<?= empty($timesheetdata[$date]['day']) ? 'readonly' : $timesheetdata[$date]['per_hour']; ?>" type="text">
                                     </td>
                                     <td>
                                         <a style="color:white;" class="delete_day btnclr btn  m-b-5 m-r-2 <?php if ($timesheetdata[$date]['edit'] == 1) { echo 'disabled'; } ?> "><i class="fa fa-trash" aria-hidden="true"></i> </a>
                                     </td>
+
+                                    <?php if($end_week == $timesheetdata[$date]['day']) {
+                                        $week_tot = $time_tot/3600;
+                                        echo '<tr> 
+                                            <td colspan="5" class="text-right" style="font-weight:bold;">Weekly Total Hours:</td> 
+                                            <td> <input type="text" name="hour_weekly_total[]" id="hourly_'.$data_id.'" value="'.$week_tot.'" readonly> </td> 
+                                        </tr>';
+                                        $time_tot = 0; 
+                                        $data_id++;
+                                    } ?>
                                 </tr>                                
                                 <?php } ?>
                             </tbody>
@@ -181,9 +194,7 @@
                                 </td>
                                 <?php } ?>
                             </tr>
-                            <?php
-                            $i++;
-                        } ?>
+                        <?php $i++;} ?>
                 </tbody>
                 <?php } ?>
                 <tfoot>
@@ -244,53 +255,54 @@ var data = {
 var csrfName = '<?= $this->security->get_csrf_token_name();?>';
 var csrfHash = '<?= $this->security->get_csrf_hash();?>';
 $('body').on('input select change','#reportrange',function(){
-var date = $(this).val();
-$('#tBody').empty();
-const myArray = date.split("-");
-var start = myArray[0];
-var s_split=start.split("/");
-var end = myArray[1];
-var e_split=end.split("/");
-const weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-let chosenDate = start; 
-var Date1 = new Date (s_split[2], s_split[0], s_split[1]);
-var Date2 = new Date (e_split[2], e_split[0], e_split[1]);
-var Days = Math.round((Date2.getTime() - Date1.getTime())/(1000*60*60*24));
-console.log(s_split[2]+"/"+ s_split[1]+"/"+ s_split[0]+"/"+Days);
-const validDate = new Date(chosenDate);
-let newDate;
-const monStartWeekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-for(let i = 0; i <= Days; i++) {
-    newDate = new Date(validDate); 
-    newDate.setDate(validDate.getDate() + i); 
-    var date=$('#date_'+i).html();
-    var day=$('#day_'+i).html();
-    $('#tBody').append(
-        `<tr>
-            <td  class="date" id="date_`+i+`"><input type="hidden" value="`+`${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}" name="date[]"   />`+`${newDate.getDate()} / ${newDate.getMonth() + 1} / ${newDate.getFullYear()}</td>
-            <td  class="day" id="day_`+i+`"><input type="hidden" value="`+`${weekDays[newDate.getDay()].slice(0,10)}" name="day[]"   />`+`${weekDays[newDate.getDay()].slice(0,10)}</td>
-        <?php if ($time_sheet_data[0]['payroll_type'] == 'Hourly') { ?>
-            <td style="text-align:center;" class="daily-break_<?= $i; ?>">
-                <select name="dailybreak[]" class="form-control datepicker dailybreak" style="width: 100px; margin: auto; display: block;">
-                    <?php foreach ($dailybreak as $dbd) { ?>
-                        <option value="<?= $dbd['dailybreak_name']; ?>"><?= $dbd['dailybreak_name']; ?></option>
-                    <?php } ?>
-                </select>
-            </td>
-            <td class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
-            <td class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
-            <td class="hours-worked_<?= $i; ?>"><input id="hoursWorked<?= $monStartWeekDays[$i]; ?>" name="sum[]" class="timeSum" readonly type="text" /></td>
-        <?php } elseif ($time_sheet_data[0]['payroll_type'] == 'Fixed') { ?>
-            <td style="display:none;" class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
-            <td style="display:none;" class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
-            <td class="hours-worked_<?= $i; ?>">
-                <input id="hoursWorked<?= $monStartWeekDays[$i]; ?>" name="present[]" class="timeSum present" readonly type="checkbox" style="width: 20px; height: 20px" />
-            </td>
-        <?php } ?>
-            <td>
-                <a style="color:white;" class="delete_day btnclr btn m-b-5 m-r-2"> <i class="fa fa-trash" aria-hidden="true"></i> </a>
-            </td>
-        </tr>`);
+    var date = $(this).val();
+    $('#tBody').empty();
+    const myArray = date.split("-");
+    var start = myArray[0];
+    var s_split=start.split("/");
+    var end = myArray[1];
+    var e_split=end.split("/");
+    const weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    let chosenDate = start; 
+    var Date1 = new Date (s_split[2], s_split[0], s_split[1]);
+    var Date2 = new Date (e_split[2], e_split[0], e_split[1]);
+    var Days = Math.round((Date2.getTime() - Date1.getTime())/(1000*60*60*24));
+    console.log(s_split[2]+"/"+ s_split[1]+"/"+ s_split[0]+"/"+Days);
+    const validDate = new Date(chosenDate);
+    let newDate;
+    const monStartWeekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+    for(let i = 0; i <= Days; i++) {
+        newDate = new Date(validDate); 
+        newDate.setDate(validDate.getDate() + i); 
+        var date=$('#date_'+i).html();
+        var day=$('#day_'+i).html();
+        $('#tBody').append(
+            `<tr>
+                <td  class="date" id="date_`+i+`"><input type="hidden" value="`+`${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}" name="date[]"   />`+`${newDate.getDate()} / ${newDate.getMonth() + 1} / ${newDate.getFullYear()}</td>
+                <td  class="day" id="day_`+i+`"><input type="hidden" value="`+`${weekDays[newDate.getDay()].slice(0,10)}" name="day[]"   />`+`${weekDays[newDate.getDay()].slice(0,10)}</td>
+            <?php if ($time_sheet_data[0]['payroll_type'] == 'Hourly') { ?>
+                <td style="text-align:center;" class="daily-break_<?= $i; ?>">
+                    <select name="dailybreak[]" class="form-control datepicker dailybreak" style="width: 100px; margin: auto; display: block;">
+                        <?php foreach ($dailybreak as $dbd) { ?>
+                            <option value="<?= $dbd['dailybreak_name']; ?>"><?= $dbd['dailybreak_name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+                <td class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
+                <td class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
+                <td class="hours-worked_<?= $i; ?>"><input id="hoursWorked<?= $monStartWeekDays[$i]; ?>" name="sum[]" class="timeSum" readonly type="text" /></td>
+            <?php } elseif ($time_sheet_data[0]['payroll_type'] == 'Fixed') { ?>
+                <td style="display:none;" class="start-time_<?= $i; ?>"><input id="startTime<?= $monStartWeekDays[$i]; ?>" name="start[]" class="hasTimepicker start" type="time" /></td>
+                <td style="display:none;" class="finish-time_<?= $i; ?>"><input id="finishTime<?= $monStartWeekDays[$i]; ?>" name="end[]" class="hasTimepicker end" type="time" /></td>
+                <td class="hours-worked_<?= $i; ?>">
+                    <input id="hoursWorked<?= $monStartWeekDays[$i]; ?>" name="present[]" class="timeSum present" readonly type="checkbox" style="width: 20px; height: 20px" />
+                </td>
+            <?php } ?>
+                <td>
+                    <a style="color:white;" class="delete_day btnclr btn m-b-5 m-r-2"> <i class="fa fa-trash" aria-hidden="true"></i> </a>
+                </td>
+            </tr>`);
     }
 });
 function converToMinutes(s) {
@@ -300,6 +312,15 @@ function converToMinutes(s) {
 function parseTime(s) {
     return Math.floor(parseInt(s) / 60) + "." + parseInt(s) % 60
 }
+
+function convertToTime(hr,min) 
+{
+    let hours = Math.floor(min / 60);
+    let minutes = min % 60;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours+hr}:${minutes}`;
+}
+
 $(document).on('select change', '.end','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
     var $end = $(this).closest('tr').find('.end').val();
@@ -316,25 +337,50 @@ $(document).on('select change', '.end','.dailybreak', function () {
     } else {
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-    var total_net = 0;
+
+    var data_id = $(this).data('id');
+    var total_netH = 0;
+    var total_netM = 0;
+    var week_netH = 0;
+    var week_netM = 0;
+
     $('.table').each(function () {
         var tableTotal = 0;
+        var tableHours = 0;
+        var tableMinutes = 0;
+        var weekTotal = 0;
+        var weekHours = 0;
+        var weekMinutes = 0;
+        console.log(data_id,  'Outer');
+        $(this).find('.hourly_tot_'+data_id).each(function() {
+            console.log(data_id,  'Inner');
+            var total_week = $(this).val();
+            if (!isNaN(total_week) && total_week.length !== 0) {
+                var [weekhour, weekmin] = total_week.split('.').map(parseFloat);
+               
+                weekHours += weekhour;
+                weekMinutes += weekmin;
+            }
+        });
+        week_netH += weekHours;
+        week_netM += weekMinutes;
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
                 var [hours, minutes] = precio.split('.').map(parseFloat);
-                tableTotal += hours + minutes / 100; 
+                
+                tableHours += hours;
+                tableMinutes += minutes;
             }
         });
-        total_net += tableTotal;
+        total_netH += tableHours;
+        total_netM += tableMinutes;
     });
-    var hours = Math.floor(total_net);
-    var minutes = Math.round((total_net % 1) * 100); 
-    if (minutes === 100) {
-        hours += 1;
-        minutes = 0;
-    }
-    $('#total_net').val(hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0')).trigger('change');
+    var timeConvertion = convertToTime(week_netH, week_netM);
+    $('#hourly_'+data_id).val(timeConvertion).trigger('change');
+    var timeConvertion = convertToTime(total_netH, total_netM);
+    $('#total_net').val(timeConvertion).trigger('change');
+
 });
 $(document).on('select change', '.start','.dailybreak', function () {
     var $begin = $(this).closest('tr').find('.start').val();
@@ -352,25 +398,49 @@ $(document).on('select change', '.start','.dailybreak', function () {
     }else{
         $(this).closest('tr').find('.timeSum').val(formattedTime);
     }
-    var total_net = 0;
+    var data_id = $(this).data('id');
+    var total_netH = 0;
+    var total_netM = 0;
+    var week_netH = 0;
+    var week_netM = 0;
+
     $('.table').each(function () {
         var tableTotal = 0;
+        var tableHours = 0;
+        var tableMinutes = 0;
+        var weekTotal = 0;
+        var weekHours = 0;
+        var weekMinutes = 0;
+
+        $(this).find('.hourly_tot_'+data_id).each(function() {
+            var total_week = $(this).val();
+            if (!isNaN(total_week) && total_week.length !== 0) {
+                var [weekhour, weekmin] = total_week.split('.').map(parseFloat);
+                weekHours += weekhour;
+                weekMinutes += weekmin;
+            }
+        });
+        week_netH += weekHours;
+        week_netM += weekMinutes;
+
+
         $(this).find('.timeSum').each(function () {
             var precio = $(this).val();
             if (!isNaN(precio) && precio.length !== 0) {
                 var [hours, minutes] = precio.split('.').map(parseFloat);
-                tableTotal += hours + minutes / 100; 
+                tableHours += hours;
+                tableMinutes += minutes;
             }
         });
-        total_net += tableTotal;
+        total_netH += tableHours;
+        total_netM += tableMinutes;
     });
-    var hours = Math.floor(total_net);
-    var minutes = Math.round((total_net % 1) * 100); 
-    if (minutes === 100) {
-        hours += 1;
-        minutes = 0;
-    }
-    $('#total_net').val(hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0')).trigger('change');
+    var timeConvertion = convertToTime(week_netH, week_netM);
+    $('#hourly_'+data_id).val(timeConvertion).trigger('change');
+
+    var timeConvertion = convertToTime(total_netH,total_netM);
+    $('#total_net').val(timeConvertion).trigger('change');
+
 });
 $(document).on('input','.timeSum', function () {
     var $addtotal = $(this).closest('tr').find('.timeSum').val();
@@ -426,6 +496,7 @@ $(document).on('click','.delete_day',function(){
             }
         });
     });
+
     $('#total_net').val(total_net.toFixed(2)).trigger('change');
     var firstDate = $('.date input').first().val(); 
         var lastDate = $('.date input').last().val(); 
@@ -447,6 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 $(document).ready(function() {
     function updateCounter() {
         var sumOfDays = 0;
@@ -454,11 +526,10 @@ $(document).ready(function() {
         $('#total_net').val(sumOfDays);
     }
     $(document).on('change', 'input[type="checkbox"].present', function() {
-        console.log('active');
         updateCounter();
     });
-    var t=$('#payroll_type').val();
-    if(t !=='Hourly'){
+    var payroll_type = $('#payroll_type').val();
+    if(payroll_type !=='Hourly'){
         updateCounter();
     }
 });
