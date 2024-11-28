@@ -1,4 +1,4 @@
-<?php error_reporting(1); ?>
+
 
 <div class="content-wrapper">
 
@@ -108,9 +108,9 @@
 
 
                         <div class="table-responsive work_table col-md-12">
-		                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
-								<thead class="btnclr">
-									<tr style="text-align:center;">
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="PurList"> 
+                                <thead class="btnclr">
+                                    <tr style="text-align:center;">
                                         <?php if ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                                             <th style='height:25px;' class="col-md-2">Date</th>
                                             <th style='height:25px;' class="col-md-1">Day</th>
@@ -127,14 +127,14 @@
                                             <th style='height:25px; ' class="col-md-5">Present / Absence</th>
                                         <?php } ?>
                                     </tr>
-								</thead>
+                                </thead>
 
 
 
 
                                 <?php   if($employee_name[0]['payroll_type'] == 'Hourly') { ?>
 
-								<tbody id="tBody">
+                                <tbody id="tBody">
                                      <?php
  
     function compareDates($a, $b) {
@@ -420,9 +420,14 @@ elseif ($employee_name[0]['payroll_type'] == 'Hourly') { ?>
                       <!-- id="total_net" -->
 
  <?php 
+function convertToDecimalHours($time) {
+    list($hours, $minutes) = explode(':', $time);
+    return $hours + ($minutes / 60); 
+}
+$total_hours_numeric = convertToDecimalHours($time_sheet_data[0]['total_hours']);
+$work_hour_numeric = convertToDecimalHours($extratime_info[0]['work_hour']);
 
-
- if($time_sheet_data[0]['total_hours'] > $extratime_info[0]['work_hour']) { ?>
+ if($total_hours_numeric > $work_hour_numeric ) { ?>
     <input  type="hidden"   readonly id="above_extra_beforehours"
      value="<?php
      $mins  =  $time_sheet_data[0]['total_hours'] - $extratime_info[0]['work_hour'];
@@ -452,12 +457,12 @@ $total_cost_ytd =round($total_cost_ytd,2);
    ?>
      name="above_extra_beforehours" />
 
-        <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-        <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $total_cost ; ?>" />
-        <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo  $get_value; ?>" />
-        <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $total_cost ; ?>" />
+        <input type="text" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+        <input type="text" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $total_cost ; ?>" />
+        <input type="text" id="above_this_hours" name="above_this_hours" value="<?php echo  $get_value; ?>" />
+        <input type="text" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $total_cost ; ?>" />
         <?php } else{
-                
+                echo "ss";die();
       //For This Period
 $hrate = $employee_name[0]['hrate']; 
 list($hours, $minutes) = explode(':', $get_value);
@@ -477,20 +482,20 @@ $total_hours_ytd = $hours + ($minutes / 60);
 $total_cost_ytd = $total_hours_ytd * $hrate;
 $total_cost_ytd =round($total_cost_ytd,2);
    ?> 
-        <input type="hidden" readonly id="above_extra_beforehours"
+        <input type="text" readonly id="above_extra_beforehours"
         value="<?php   echo $time_sheet_data[0]['total_hours'];
         ?>" name="above_extra_beforehours" />
-        <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-        <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $total_cost_ytd ; ?>" />
-        <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
-        <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $total_cost_ytd; ?>" />
+        <input type="text" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+        <input type="text" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $total_cost_ytd ; ?>" />
+        <input type="text" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
+        <input type="text" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $total_cost_ytd; ?>" />
       
       <?php } ?>
                     <?php } elseif ($employee_name[0]['payroll_type'] == 'Fixed') { ?>
                     <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td>
                       <td style="text-align: center;"> <input  type="text"   readonly id="total_net" value="<?php echo $time_sheet_data[0]['total_hours'] ; ?>" name="total_net" />    </td>
-                  <?php  if($time_sheet_data[0]['total_hours'] > $extratime_info[0]['work_hour']) { ?>
-    <input  type="hidden"   readonly id="above_extra_beforehours"
+                  <?php if($total_hours_numeric > $work_hour_numeric ) { ?>
+    <input  type="text"   readonly id="above_extra_beforehours"
      value="<?php
      echo $time_sheet_data[0]['total_hours'];
 
@@ -501,20 +506,20 @@ $total_cost_ytd =round($total_cost_ytd,2);
      ; ?>"
      name="above_extra_beforehours" />
        
-        <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-        <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $get_value * $employee_name[0]['hrate'] ; ?>" />
-        <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo  $get_value; ?>" />
-        <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $get_value * $employee_name[0]['hrate'] ; ?>" />
+        <input type="text" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+        <input type="text" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $get_value * $employee_name[0]['hrate'] ; ?>" />
+        <input type="text" id="above_this_hours" name="above_this_hours" value="<?php echo  $get_value; ?>" />
+        <input type="text" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $get_value * $employee_name[0]['hrate'] ; ?>" />
        
        
         <?php } else{ ?>
-        <input type="hidden" readonly id="above_extra_beforehours"
+        <input type="text" readonly id="above_extra_beforehours"
         value="<?php   echo $time_sheet_data[0]['total_hours'];
         ?>" name="above_extra_beforehours" />
-        <input type="hidden" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-        <input type="hidden" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate'] ; ?>" />
-        <input type="hidden" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
-        <input type="hidden" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate']; ?>" />
+        <input type="text" id="above_extra_rate" name="above_extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+        <input type="text" id="above_extra_sum" name="above_extra_sum" value="<?php echo  $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate'] ; ?>" />
+        <input type="text" id="above_this_hours" name="above_this_hours" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
+        <input type="text" id="above_extra_ytd" name="above_extra_ytd" value="<?php echo  $time_sheet_data[0]['total_hours'] * $employee_name[0]['hrate']; ?>" />
         <?php } ?>
                   
                   
@@ -522,7 +527,9 @@ $total_cost_ytd =round($total_cost_ytd,2);
                    <?php } ?>
                                  </tr>
                                  <br>
-                                 <?php  if($employee_name[0]['payroll_type']=='Hourly') {if($time_sheet_data[0]['total_hours'] > $extratime_info[0]['work_hour']) {
+      <?php  if($employee_name[0]['payroll_type']=='Hourly') {
+
+       if($total_hours_numeric > $work_hour_numeric ) {
                                     
 $total_hours = $time_sheet_data[0]['total_hours']; // Total hours in hh:mm format
 $work_hour = $extratime_info[0]['work_hour']; // Work hours to subtract in hh:mm format
@@ -558,33 +565,34 @@ $total_cost = $total_hours_decimal * $hourly_rate;
 
 // Optional: Round the total cost
 $total_cost = round($total_cost, 2);
- ?>
-                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo ($time_sheet_data[0]['total_hours'] > $extratime_info[0]['work_hour']) ? ($get_value) : '0'; ?>" />
-                                 <input type="hidden" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount']; ?>" />
-                                 <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo $total_cost; ?>" />
-                                 <input type="hidden" id="extra_this_hour" name="extra_this_hour" value="<?php   echo  ($get_value); ?>" />
+
+?>
+                                 <input type="text" id="extra_hour" name="extra_hour" value="<?php echo ($total_hours_numeric > $work_hour_numeric) ? ($get_value) : '0'; ?>" />
+                                 <input type="text" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate'] * $extratime_info[0]['extra_workamount']; ?>" />
+                                 <input type="text" id="extra_thisrate" name="extra_thisrate" value="<?php echo $total_cost; ?>" />
+                                 <input type="text" id="extra_this_hour" name="extra_this_hour" value="<?php   echo  ($get_value); ?>" />
                                  <input type="hidden" id="extra_ytd" name="extra_ytd" value="<?php echo  $total_cost; ?>"   />
-                                 <?php    }} else{ 
+                                 <?php    } else{ 
                       list($hours, $minutes) = explode(':', $time_sheet_data[0]['total_hours']);
 $total_hours_ytd = (int)$hours + ((int)$minutes / 60); // Ensure minutes are treated as integers
 $total_c = $total_hours_ytd * $employee_name[0]['hrate'];
 $total_c = round($total_c, 2);
                                     ?>
-                                 <input type="hidden" id="extra_hour" name="extra_hour" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
-                                 <input type="hidden" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-                                 <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo ($total_c); ?>" />
-                                 <input type="hidden" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
-                                 <input type="hidden" id="extra_thisrate" name="extra_thisrate" value="<?php echo ($total_c); ?>" />
-                                <?php } ?>
+                                 <input type="text" id="extra_hour" name="extra_hour" value="<?php echo $time_sheet_data[0]['total_hours']; ?>" />
+                                 <input type="text" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+                                 <input type="text" id="extra_thisrate" name="extra_thisrate" value="<?php echo ($total_c); ?>" />
+                                 <input type="text" id="extra_rate" name="extra_rate" value="<?php echo  $employee_name[0]['hrate']; ?>" />
+                                 <input type="text" id="extra_thisrate" name="extra_thisrate" value="<?php echo ($total_c); ?>" />
+                                <?php } }?>
                                 </tfoot>
 
 
-		                    </table>
+                            </table>
 
                                              
                                           
                                         
-		                </div>
+                        </div>
 
 
 

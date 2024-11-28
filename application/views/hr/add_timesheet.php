@@ -469,7 +469,7 @@ $('body').on('input select change','#reportrange',function() {
                 $('#tFoot').append(`
                     <tr style="text-align:end">
                         <td colspan="2" class="text-right" style="font-weight:bold;">No of Days:</td> 
-                        <td><input type="text" id="total_net" class="sumOfDays" name="total_net" readonly /></td>
+                        <td><input type="text" id="total_net" class="sumOfDays" name="total_net" /></td>
                     </tr>`);
             }
             else if (response.includes('Hourly')) {
@@ -490,7 +490,7 @@ $('body').on('input select change','#reportrange',function() {
             $('#tFoot').append(`
                 <tr style="text-align:end">
                     <td colspan="5" class="text-right" style="font-weight:bold;">Total Hours:</td> 
-                    <td><input type="text" id="total_net" class="sumOfDays" name="total_net" readonly /></td>
+                    <td><input type="text" id="total_net" class="sumOfDays" name="total_net" /></td>
                 </tr>`);
         } else if (response.includes('SalesCommission')) {
             $('#tFoot').append(`
